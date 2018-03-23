@@ -14,6 +14,12 @@ object Operation {
   }
   sealed abstract class Ops(val nodes: List[Op]) extends Op {
     this : Ops.Copyable =>
+    def + (op: Op): Ops = op match {
+      case some: Ops if (getClass.equals(some.getClass)) =>
+        copy(nodes ::: some.asInstanceOf[Ops].nodes)
+      case some: Ops if (some.nodes.length == 1) => copy(nodes :+ some.nodes.head)
+      case _ => copy(nodes :+ op)
+    }
   }
   case class Multiply(override val nodes: List[Op]) extends Ops(nodes)
   case class Divide(override val nodes: List[Op]) extends Ops(nodes)
@@ -30,35 +36,20 @@ object Operation {
 
 
   def parsing(text: String): Op = {
-    take("", None, 0, text)
+    parsing("", Plus(Nil), 0, text)
   }
 
-  def sameType[T, U](a: T, b: U)(implicit evidence: T =:= U) = true
-
-  def take(buffer: String, ops: Option[Ops], depth: Int, text: String): Op = {
-    def wrap(ops: Option[Ops], op: Ops): Ops = ops match {
-      case None => op
-      case Some(exist: Ops) =>
-          op.copy(exist :: op.nodes)
-    }
-    if (text.isEmpty) {
-      ops match {
-        case None => Terminal(buffer)
-        case Some(ops) => ops.copy(ops.nodes :+ Terminal(buffer))
-      }
-    } else {
+  def parsing(buffer: String, ops: Ops, depth: Int, text: String): Op = {
+    if (text.isEmpty) ops + Terminal(buffer.trim)
+    else {
       text.head match {
-        case '(' => take(buffer, ops, depth + 1, text.tail)
-        case ')' => take(buffer, ops, depth - 1, text.tail)
-        case '+' if (depth == 0) =>
-          val w = wrap(ops, Plus(parsing(buffer) :: Nil))
-          println('+', ops, buffer, "\n", w)
-          take("", Some(w), depth, text.tail)
-        case '-' if (depth == 0) =>
-          val w = wrap(ops, Minus(parsing(buffer) :: Nil))
-          println('-', ops, buffer, "\n", w)
-          take("", Some(w), depth, text.tail)
-        case c => take(buffer + c, ops, depth, text.tail)
+        case '(' => parsing(buffer, ops, depth + 1, text.tail)
+        case ')' => parsing(buffer, ops, depth - 1, text.tail)
+        case '+' if depth == 0 =>
+          parsing("", Plus(Nil) + (ops + parsing(buffer)), depth, text.tail)
+        case '-' if depth == 0 =>
+          parsing("", Minus(Nil) + (ops + parsing(buffer)), depth, text.tail)
+        case c => parsing(buffer + c, ops, depth, text.tail)
       }
     }
   }
