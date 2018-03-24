@@ -33,6 +33,6 @@ class Transpose extends DoubleMatrix {
     public double valueOf(int idx) {
         int w = idx / super.height();
         int h = idx % super.height();
-        return values()[super.width() * h + w];
+        return super.values()[super.width() * h + w];
     }
 }
