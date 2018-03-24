@@ -7,7 +7,7 @@ class Transpose extends DoubleMatrix {
 
     @Override
     public double valueOf(int height, int width) {
-        return values()[width * super.width() + height];
+        return super.values()[width * super.width() + height];
     }
 
     @Override
@@ -18,6 +18,15 @@ class Transpose extends DoubleMatrix {
     @Override
     public int width() {
         return super.height();
+    }
+
+    @Override
+    public double[] values() {
+        double[] doubles = new double[super.values().length];
+        for (int i = 0; i < doubles.length; i++) {
+            doubles[i] = valueOf(i);
+        }
+        return doubles;
     }
 
     @Override
