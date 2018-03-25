@@ -4,5 +4,6 @@ import java.util.List;
 
 public interface Operators extends Operator {
     List<Operator> getOperators();
-    <T extends Operator> T apply(T applied);
+    void add(Operator operator);
+    <T extends Operator> T invoke(Operator prev);
 }

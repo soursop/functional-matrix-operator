@@ -1,14 +1,19 @@
 package com.github.soursop.matrix.operator;
 
-class DoubleMatrix implements Matrix {
+import java.util.Arrays;
+
+class DoubleMatrix extends AbstractOperator implements Matrix {
+    static DoubleMatrix NONE = new DoubleMatrix(0, 0, new double[0]);
     private final int height;
     private final int width;
     private final double[] values;
+
     protected DoubleMatrix(int height, int width, double[] values) {
         this.values = values;
         this.height = height;
         this.width = width;
     }
+
     protected DoubleMatrix(int width, double[] values) {
         this(values.length / width, width, values);
     }
@@ -17,7 +22,6 @@ class DoubleMatrix implements Matrix {
         this(values.length, 1, values);
     }
 
-    @Override
     public double[] values() {
         return values;
     }
@@ -30,21 +34,6 @@ class DoubleMatrix implements Matrix {
     @Override
     public int width() {
         return width;
-    }
-
-    @Override
-    public Matrix multiply(Matrix matrix) {
-        double[] values = new double[height() * matrix.width()];
-        for (int h = 0; h < height(); h++) {
-            for (int s = 0; s < matrix.width(); s++) {
-                double v = 0;
-                for (int w = 0; w < width(); w++) {
-                    v = v + valueOf(h, w) * matrix.valueOf(w, s);
-                }
-                values[h * matrix.width() + s] = v;
-            }
-        }
-        return new DoubleMatrix(matrix.width(), values);
     }
 
     String multiplyAsDebug(Matrix matrix) {
@@ -88,5 +77,20 @@ class DoubleMatrix implements Matrix {
             builder.append("\n");
         }
         return builder.toString();
+    }
+
+    @Override
+    public DoubleMatrix asDoubleMatrix() {
+        return this;
+    }
+
+    @Override
+    public DoubleOperator asDoubleOperator() {
+        return DoubleOperator.NONE;
+    }
+
+    @Override
+    public CharSequence asSimple(int depth) {
+        return new StringBuilder().append(height()).append(":").append(width());
     }
 }

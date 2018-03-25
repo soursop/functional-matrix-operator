@@ -1,8 +1,11 @@
 package com.github.soursop.matrix.operator;
 
-import java.util.Collections;
 
-public interface Operator {
-    <T extends Operator> T apply();
+public interface Operator extends Printable {
     Operators asOperators();
+    DoubleMatrix asDoubleMatrix();
+    DoubleOperator asDoubleOperator();
+    Multiply multiply(Operator other);
+    Append append(Operator other);
+    boolean isNone();
 }

@@ -3,30 +3,36 @@ package com.github.soursop.matrix.operator;
 import java.util.List;
 
 public class Multiply extends AbstractOperators {
-
     protected Multiply(List<Operator> operators) {
         super(operators);
     }
 
-//    private Matrix apply(List<Matrix> prev) {
-//        double[] values = null;
-//        for (Matrix matrix : prev) {
-//            if (values == null) {
-//                values = matrix.values();
-//            } else {
-//                matrix.apply(values)
-//            }
-//        }
-//        return prev;
-//    }
+    private DoubleMatrix multiply(DoubleMatrix one, DoubleMatrix other) {
+        return product(Sign.MULTIPLY, one, other);
+    }
 
-    @Override
-    public <T extends Operator> T apply() {
-        return null;
+    private DoubleMatrix multiply(DoubleMatrix one, double other) {
+        return assign(Sign.MULTIPLY, one, other);
+    }
+
+    public DoubleMatrix invoke() {
+        return invoke(DoubleMatrix.NONE);
     }
 
     @Override
-    public <T extends Operator> T apply(T prev) {
-        return apply(prev);
+    public DoubleMatrix invoke(Operator prev) {
+        double product = prev.asDoubleOperator().getValue();
+        DoubleMatrix base = prev.asDoubleMatrix();
+        for (Operator op : getOperators()) {
+            base = op.asOperators().invoke(base);
+            base = multiply(base, op.asDoubleMatrix());
+            product = Sign.MULTIPLY.apply(product, op.asDoubleOperator().getValue());
+        }
+        return multiply(base, product);
+    }
+
+    @Override
+    public CharSequence asSimple(int depth) {
+        return asSimple(Sign.MULTIPLY.sign, depth);
     }
 }

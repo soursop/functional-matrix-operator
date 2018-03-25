@@ -28,18 +28,26 @@ public class MatrixTest {
 
     @Test
     public void testMultiply() {
-        Matrix matrix = new DoubleMatrix(2, sample);
+        Matrix one = new DoubleMatrix(2, sample);
         Matrix other = new DoubleMatrix(3, transpose);
-        Matrix result = matrix.multiply(other);
+        DoubleMatrix result = one.multiply(other).invoke();
         assertThat(asList(result.values()), is(multiply));
+    }
+
+    @Test
+    public void testAppend() {
+        DoubleOperator bias = DoubleOperator.of(1l);
+        Matrix one = new DoubleMatrix(2, sample);
+        Matrix another = new DoubleMatrix(2, sample);
+        System.out.println(bias.append(one).append(another).invoke());
     }
 
     @Ignore
     @Test
-    public void test() {
+    public void testAsSimple() {
         DoubleMatrix matrix = new DoubleMatrix(2, sample);
         Matrix other = new DoubleMatrix(3, transpose);
-        System.out.println(matrix.multiplyAsDebug(other));
+        System.out.println(matrix.multiply(other).asSimple(0));
     }
 
     @Test

@@ -75,9 +75,9 @@ object Operation {
   val query = "((2:3 * 3:2)' + 2) - 2"
     //    val query = "- 4 + 2'"
 //    val query = "- 2' - 2'"
-    val words = parsing(query)
+    val ops = parsing(query)
 
-    println(words)
+    println(ops)
   }
 
 }
