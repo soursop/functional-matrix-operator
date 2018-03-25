@@ -35,46 +35,44 @@ object Operation {
   case class Transpose(node: Op) extends Op
   case class Terminal(text: String) extends Op
 
-//  def toTail(op: List[Op]): Ops = this(nodes :: op)
-//  def toHead(op: Op): Ops = this(op :: nodes)
 //  trait Terminal extends Op
 //  case class Matrix(height: Int, width: Int) extends Terminal
 //  case class Vector(size: Int) extends Terminal
 
 
   def parsing(text: String): Op = {
-    parsing("", Plus(Nil), 0, 0, text).unwrap
-  }
-  def parsing(buffer: String, ops: Ops, sign: Int, depth: Int, text: String): Op = {
-    def reduce(next: Ops): Op = {
-      if (depth == 0) parsing("", next, sign + 1, depth, text.tail)
-      else parsing(buffer + text.head, ops, sign + 1, depth, text.tail)
-    }
-    if (text.isEmpty) buffer.trim match {
-      case "" => ops
-      case trim if (trim.endsWith("'")) =>
-        ops + Transpose(if (sign > 0) parsing(trim.init) else Terminal(trim.init))
-      case trim =>
-        ops + (if (sign > 0) parsing(trim) else Terminal(trim))
-    } else {
-      text.head match {
-        case '(' => parsing(buffer, ops, sign, depth + 1, text.tail)
-        case ')' => parsing(buffer, ops, sign, depth - 1, text.tail)
-        case '/' => reduce(Divide(Nil) + (ops + parsing(buffer)))
-        case '*' => reduce(Multiply(Nil) + (ops + parsing(buffer)))
-        case '+' => reduce(Plus(Nil) + (ops + parsing(buffer)))
-        case '-'  =>
-          if (depth == 0) ops + parsing(buffer) + parsing("", Minus(Nil), sign + 1, depth, text.tail)
-          else parsing(buffer + text.head, ops, sign + 1, depth, text.tail)
-        case c => parsing(buffer + c, ops, sign, depth, text.tail)
+    def search(buffer: String, ops: Ops, open: Int, close: Int, idx: Int): Op = {
+      def byTranspose(ops: Ops, value: String): Ops = {
+        def byBracket(value: String): Op = if (open > 0) parsing(value) else Terminal(value)
+        value.trim match {
+          case "" => ops
+          case trim if (trim.endsWith("'")) =>
+            ops + (byBracket(trim.init) match {
+              case result: Ops if text.take(text.lastIndexOf("'")).trim.lastOption.exists(_!=')')
+                => result.copy(result.nodes.init :+ Transpose(result.nodes.last))
+              case result => Transpose(result)
+            })
+          case trim => ops + byBracket(trim)
+        }
+      }
+      if (idx >= text.length) byTranspose(ops, buffer)
+      else text(idx) match {
+        case '(' => search(if (open == close) buffer else buffer + text(idx), ops, open + 1, close, idx + 1)
+        case ')' => search(if (open == close + 1) buffer else buffer + text(idx), ops, open, close + 1, idx + 1)
+        case '/' if open == close => search("", Divide(Nil) + byTranspose(ops, buffer), open, close, idx + 1)
+        case '*' if open == close => search("", Multiply(Nil) + byTranspose(ops, buffer), open, close, idx + 1)
+        case '+' if open == close => search("", Plus(Nil) + byTranspose(ops, buffer), open, close, idx + 1)
+        case '-' if open == close => byTranspose(ops, buffer) + search("", Minus(Nil), open, close, idx + 1)
+        case c => search(buffer + c, ops, open, close, idx + 1)
       }
     }
+    search("", Plus(Nil), 0, 0, 0).unwrap
   }
 
   def main(args: Array[String]): Unit = {
     // build
-    val query = "- ((2:3 * 3:2') - 4) + 2' - 2'"
-//val query = "- ((2:3 * 3:2') - 4)"
+//    val query = "- (- 4 + (2:3 * 3:2')) + 2' - 2'"
+  val query = "((2:3 * 3:2)' + 2) - 2"
     //    val query = "- 4 + 2'"
 //    val query = "- 2' - 2'"
     val words = parsing(query)
