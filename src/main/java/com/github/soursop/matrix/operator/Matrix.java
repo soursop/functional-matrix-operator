@@ -6,4 +6,5 @@ public interface Matrix extends Operator {
     double valueOf(int height, int width);
     double valueOf(int idx);
     Matrix transpose();
+    int size();
 }

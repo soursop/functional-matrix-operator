@@ -40,6 +40,11 @@ public class DoubleOperator extends AbstractOperator {
         for (int i = 0; i < height; i++) {
             doubles[i] = value;
         }
-        return new DoubleMatrix(doubles);
+        return new DenseDoubleMatrix(doubles);
+    }
+
+    @Override
+    public Operators asOperators() {
+        return None;
     }
 }

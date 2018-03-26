@@ -8,34 +8,43 @@ public class Append extends AbstractOperators {
     }
 
     private DoubleMatrix asAppend(DoubleMatrix one, DoubleMatrix another) {
-        int width = one.width() + another.width();
-        double[] doubles = new double[width * one.height()];
-        int i = 0;
-        for (int h = 0; h < one.height(); h++) {
-            for (int o = 0; o < one.width(); o++) {
-                doubles[i++] = one.valueOf(h, o);
-            }
-            for (int a = 0; a < another.width();a++) {
-                doubles[i++] = another.valueOf(h, a);
-            }
-        }
-        return new DoubleMatrix(width, doubles);
+        return new LinkedDoubleMatrix(one, another);
     }
 
-    private DoubleMatrix append(DoubleMatrix base, DoubleMatrix matrix) {
+    private Operator append(DoubleMatrix matrix, DoubleOperator other) {
+        return asAppend(matrix, other.toVector(matrix.height()));
+    }
+
+    private Operator append(DoubleOperator base, DoubleMatrix matrix) {
+        return asAppend(base.toVector(matrix.height()), matrix);
+    }
+
+    private Operator append(DoubleMatrix base, DoubleMatrix matrix) {
         return base.isNone()? matrix : matrix.isNone()? base : asAppend(base, matrix);
+    }
+
+    private Operator option(Operator base, Operator another) {
+        return base.isNone()? another : another.isNone()? base : search(base, another);
+    }
+
+    private Operator search(Operator base, Operator another) {
+        if (base.asDoubleMatrix().isNone()) {
+            return append(base.asDoubleOperator(), another.asDoubleMatrix());
+        }
+        if (another.asDoubleMatrix().isNone()) {
+            return append(base.asDoubleMatrix(), another.asDoubleOperator());
+        }
+        return append(base.asDoubleMatrix(), another.asDoubleMatrix());
     }
 
     @Override
     public DoubleMatrix invoke(Operator prev) {
-        DoubleMatrix base = prev.asDoubleMatrix();
-        List<Operator> operators = getOperators();
-        for (int i = operators.size() - 1; i > -1; i--) {
-            base = operators.get(i).asOperators().invoke(base);
-            base = append(operators.get(i).asDoubleMatrix(), base);
-            base = append(operators.get(i).asDoubleOperator().toVector(base.height()), base);
+        Operator base = prev;
+        for (Operator op : getOperators()) {
+            base = op.asOperators().invoke(base);
+            base = option(base, op);
         }
-        return base;
+        return base.asDoubleMatrix();
     }
 
     public DoubleMatrix invoke() {
@@ -45,5 +54,15 @@ public class Append extends AbstractOperators {
     @Override
     public CharSequence asSimple(int depth) {
         return asSimple("::", depth);
+    }
+
+    @Override
+    public DoubleMatrix asDoubleMatrix() {
+        return DoubleMatrix.NONE;
+    }
+
+    @Override
+    public DoubleOperator asDoubleOperator() {
+        return DoubleOperator.NONE;
     }
 }

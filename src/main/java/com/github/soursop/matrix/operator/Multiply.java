@@ -35,4 +35,14 @@ public class Multiply extends AbstractOperators {
     public CharSequence asSimple(int depth) {
         return asSimple(Sign.MULTIPLY.sign, depth);
     }
+
+    @Override
+    public DoubleMatrix asDoubleMatrix() {
+        return DoubleMatrix.NONE;
+    }
+
+    @Override
+    public DoubleOperator asDoubleOperator() {
+        return DoubleOperator.NONE;
+    }
 }

@@ -35,10 +35,10 @@ abstract class AbstractOperators extends AbstractOperator implements Operators {
 
     private DoubleMatrix asAssign(Sign sign, DoubleMatrix one, DoubleMatrix other) {
         double[] values = new double[one.height() * other.width()];
-        for (int i = 0; i < one.values().length; i++) {
+        for (int i = 0; i < one.size(); i++) {
             values[i] = sign.apply(one.valueOf(i), other.valueOf(i));
         }
-        return new DoubleMatrix(other.width(), values);
+        return new DenseDoubleMatrix(other.width(), values);
     }
 
     protected DoubleMatrix assign(Sign sign, DoubleMatrix one, double other) {
@@ -47,10 +47,10 @@ abstract class AbstractOperators extends AbstractOperator implements Operators {
 
     private DoubleMatrix asAssign(Sign sign, DoubleMatrix one, double other) {
         double[] values = new double[one.height() * one.width()];
-        for (int i = 0; i < one.values().length; i++) {
+        for (int i = 0; i < one.size(); i++) {
             values[i] = sign.apply(one.valueOf(i), other);
         }
-        return new DoubleMatrix(one.width(), values);
+        return new DenseDoubleMatrix(one.width(), values);
     }
 
     protected DoubleMatrix product(Sign sign, DoubleMatrix one, DoubleMatrix other) {
@@ -66,7 +66,7 @@ abstract class AbstractOperators extends AbstractOperator implements Operators {
                 }
             }
         }
-        return new DoubleMatrix(other.width(), values);
+        return new DenseDoubleMatrix(other.width(), values);
     }
 
     protected String asSimple(String sign, int depth) {

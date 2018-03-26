@@ -28,32 +28,39 @@ public class MatrixTest {
 
     @Test
     public void testMultiply() {
-        Matrix one = new DoubleMatrix(2, sample);
-        Matrix other = new DoubleMatrix(3, transpose);
+        Matrix one = new DenseDoubleMatrix(2, sample);
+        Matrix other = new DenseDoubleMatrix(3, transpose);
         DoubleMatrix result = one.multiply(other).invoke();
         assertThat(asList(result.values()), is(multiply));
     }
 
     @Test
-    public void testAppend() {
-        DoubleOperator bias = DoubleOperator.of(1l);
-        Matrix one = new DoubleMatrix(2, sample);
-        Matrix another = new DoubleMatrix(2, sample);
-        System.out.println(bias.append(one).append(another).invoke());
+    public void testAppendToHead() {
+        DoubleOperator head = DoubleOperator.of(1l);
+        Matrix one = new DenseDoubleMatrix(2, sample);
+        Matrix another = new DenseDoubleMatrix(2, sample);
+        System.out.println(head.append(one).append(another).invoke());
+    }
+
+    @Test
+    public void testAppendToTail() {
+        DoubleOperator last = DoubleOperator.of(1l);
+        Matrix one = new DenseDoubleMatrix(2, sample);
+        System.out.println(one.append(last).invoke());
     }
 
     @Ignore
     @Test
     public void testAsSimple() {
-        DoubleMatrix matrix = new DoubleMatrix(2, sample);
-        Matrix other = new DoubleMatrix(3, transpose);
+        DenseDoubleMatrix matrix = new DenseDoubleMatrix(2, sample);
+        Matrix other = new DenseDoubleMatrix(3, transpose);
         System.out.println(matrix.multiply(other).asSimple(0));
     }
 
     @Test
     public void testTranspose() {
-        Matrix transposed = new DoubleMatrix(2, sample).transpose();
-        Matrix expect = new DoubleMatrix(3, transpose);
+        Matrix transposed = new DenseDoubleMatrix(2, sample).transpose();
+        Matrix expect = new DenseDoubleMatrix(3, transpose);
         for (int i = 0; i < transpose.length; i++) {
             assertThat(transposed.valueOf(i), is(expect.valueOf(i)));
         }

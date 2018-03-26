@@ -11,6 +11,11 @@ abstract class AbstractOperator implements Operator {
         }
 
         @Override
+        public DoubleOperator asDoubleOperator() {
+            return DoubleOperator.NONE;
+        }
+
+        @Override
         public String asSimple(int depth) {
             return "";
         }
@@ -18,23 +23,15 @@ abstract class AbstractOperator implements Operator {
         @Override
         public void add(Operator operator) {
         }
+
+        @Override
+        public Operators asOperators() {
+            return None;
+        }
+
+
     }
     ;
-
-    @Override
-    public Operators asOperators() {
-        return None;
-    }
-
-    @Override
-    public DoubleMatrix asDoubleMatrix() {
-        return DoubleMatrix.NONE;
-    }
-
-    @Override
-    public DoubleOperator asDoubleOperator() {
-        return DoubleOperator.NONE;
-    }
 
     @Override
     public boolean isNone() {
