@@ -1,23 +1,21 @@
 package com.github.soursop.matrix.operator;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
-public class LinkedDoubleMatrix extends AbstractMatrix implements DoubleMatrix {
+public class LinkedDoubleMatrix extends DoubleMatrix implements Matrix, Iterable<Double> {
     private final int height;
     private final int width;
-    private List<Matrix> matrixes;
+    private List<DoubleMatrix> matrices;
 
-    protected LinkedDoubleMatrix(Matrix ... matrices) {
+    protected LinkedDoubleMatrix(DoubleMatrix ... matrices) {
         this(Arrays.asList(matrices));
     }
 
-    protected LinkedDoubleMatrix(List<Matrix> matrixes) {
-        this.matrixes = matrixes;
+    protected LinkedDoubleMatrix(List<DoubleMatrix> matrices) {
+        this.matrices = matrices;
         int width = 0;
         int height = 0;
-        for(Matrix matrix : matrixes) {
+        for(DoubleMatrix matrix : matrices) {
             width = width + matrix.width();
             height = Assert.assertSameHeightExceptZero(height, matrix.height());
         }
@@ -35,40 +33,36 @@ public class LinkedDoubleMatrix extends AbstractMatrix implements DoubleMatrix {
         return width;
     }
 
-    public LinkedDoubleMatrix add(Matrix matrix) {
-        List<Matrix> matrices = new ArrayList<>(matrixes);
-        matrices.add(matrix);
-        return new LinkedDoubleMatrix(matrixes);
-    }
-
     @Override
     public double valueOf(int height, int width) {
         int pos = 0;
-        for (Matrix matrix : matrixes) {
+        for (DoubleMatrix matrix : matrices) {
             if (pos + matrix.width() > width) {
                 return matrix.valueOf(height, width - pos);
             } else {
                 pos = pos + matrix.width();
             }
         }
-        throw new Assert.WrongMatrixIndexException("Could't found value of index %d:%d from %s", height, width, toString());
+        throw new Assert.WrongMatrixIndexException("Could't found value of index height:%d width:%d from %s", height, width, asSimple(0));
     }
 
     @Override
     public double valueOf(int idx) {
         int pos = 0;
-        for (Matrix matrix : matrixes) {
-            if (pos + matrix.size() > idx) {
-                return matrix.valueOf(matrix.size() - pos);
+        int height = idx / width();
+        int remain = idx % width();
+        for (DoubleMatrix matrix : matrices) {
+            if (pos + matrix.size() > remain) {
+                return matrix.valueOf(height, remain);
             } else {
                 pos = pos + matrix.size();
             }
         }
-        throw new Assert.WrongMatrixIndexException("Could't found value of index %d from %s", idx, toString());
+        throw new Assert.WrongMatrixIndexException("Could't found value of index:%d from %s", idx, toString());
     }
 
     @Override
-    public Matrix transpose() {
+    public DoubleMatrix transpose() {
         return new LinkedDoubleTransposeMatrix(this);
     }
 
@@ -86,10 +80,53 @@ public class LinkedDoubleMatrix extends AbstractMatrix implements DoubleMatrix {
         return this;
     }
 
-    private static class LinkedDoubleTransposeMatrix extends AbstractTranspose implements DoubleMatrix {
+    @Override
+    public Iterator<Double> iterator() {
+        return new LinkedIterator(matrices.iterator());
+    }
+
+    private class LinkedIterator implements Iterator<Double> {
+        private final List<DoubleMatrix> list = new ArrayList<>();
+        private final Map<Integer, Integer> limit = new HashMap();
+        private int pos = 0;
+        private int index = 0;
+        private final Stack<Iterator<DoubleMatrix>> stack = new Stack<>();
+        public LinkedIterator(Iterator<DoubleMatrix> iterator) {
+            stack.push(iterator);
+        }
+
+        @Override
+        public boolean hasNext() {
+            return pos < size();
+        }
+
+        @Override
+        public Double next() {
+            if (!limit.containsKey(index)) {
+                DoubleMatrix next = stack.peek().next();
+                while (Iterable.class.isAssignableFrom(next.getClass())) {
+                    stack.push(((Iterable<DoubleMatrix>) next).iterator());
+                    next = stack.peek().next();
+                }
+                if (!stack.peek().hasNext()) {
+                    stack.pop();
+                }
+                limit.put(index, index == 0? next.width() : limit.get(index - 1) + next.width());
+                list.add(next);
+            }
+            int w = index == 0? pos % width() : (pos % width) - limit.get(index - 1);
+            Double next = list.get(index).valueOf(pos / width(), w);
+            pos = pos + 1;
+            index = (pos % width()) < limit.get(index)? index : (index + 1) % width();
+            return next;
+        }
+    }
+
+
+    private static class LinkedDoubleTransposeMatrix extends DoubleTranspose implements Matrix {
         private final LinkedDoubleMatrix origin;
-        private LinkedDoubleTransposeMatrix(LinkedDoubleMatrix linkedDoubleMatrix) {
-            origin = linkedDoubleMatrix;
+        private LinkedDoubleTransposeMatrix(LinkedDoubleMatrix origin) {
+            this.origin = origin;
         }
 
         @Override

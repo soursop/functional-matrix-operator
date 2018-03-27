@@ -2,8 +2,8 @@ package com.github.soursop.matrix.operator;
 
 import java.util.List;
 
-public class Append extends AbstractOperators {
-    protected Append(List<Operator> operators) {
+public class Next extends AbstractOperators {
+    protected Next(List<Operator> operators) {
         super(operators);
     }
 
@@ -11,15 +11,15 @@ public class Append extends AbstractOperators {
         return new LinkedDoubleMatrix(one, another);
     }
 
-    private Operator append(DoubleMatrix matrix, DoubleOperator other) {
+    private Operator next(DoubleMatrix matrix, DoubleOperator other) {
         return asAppend(matrix, other.toVector(matrix.height()));
     }
 
-    private Operator append(DoubleOperator base, DoubleMatrix matrix) {
+    private Operator next(DoubleOperator base, DoubleMatrix matrix) {
         return asAppend(base.toVector(matrix.height()), matrix);
     }
 
-    private Operator append(DoubleMatrix base, DoubleMatrix matrix) {
+    private Operator next(DoubleMatrix base, DoubleMatrix matrix) {
         return base.isNone()? matrix : matrix.isNone()? base : asAppend(base, matrix);
     }
 
@@ -29,12 +29,12 @@ public class Append extends AbstractOperators {
 
     private Operator search(Operator base, Operator another) {
         if (base.asDoubleMatrix().isNone()) {
-            return append(base.asDoubleOperator(), another.asDoubleMatrix());
+            return next(base.asDoubleOperator(), another.asDoubleMatrix());
         }
         if (another.asDoubleMatrix().isNone()) {
-            return append(base.asDoubleMatrix(), another.asDoubleOperator());
+            return next(base.asDoubleMatrix(), another.asDoubleOperator());
         }
-        return append(base.asDoubleMatrix(), another.asDoubleMatrix());
+        return next(base.asDoubleMatrix(), another.asDoubleMatrix());
     }
 
     @Override

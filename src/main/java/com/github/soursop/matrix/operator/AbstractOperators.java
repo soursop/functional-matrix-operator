@@ -1,8 +1,10 @@
 package com.github.soursop.matrix.operator;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 
-abstract class AbstractOperators extends AbstractOperator implements Operators {
+abstract class AbstractOperators extends AbstractOperator implements Operators, Iterable<Operator> {
     private final List<Operator> operators;
 
     protected AbstractOperators(List<Operator> operators) {
@@ -85,5 +87,43 @@ abstract class AbstractOperators extends AbstractOperator implements Operators {
             builder.append(")");
         }
         return builder.toString();
+    }
+
+    @Override
+    public Iterator<Operator> iterator() {
+        return new OperatorIterator(operators.iterator());
+    }
+
+    private class OperatorIterator implements Iterator<Operator> {
+        private Stack<Iterator<Operator>> stack = new Stack();
+
+        private OperatorIterator(Iterator<Operator> it) {
+            stack.push(it);
+        }
+
+        @Override
+        public void remove() {
+            stack.peek().remove();
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (stack.peek().hasNext()) {
+                return true;
+            }
+            stack.pop();
+            return !stack.isEmpty() && stack.peek().hasNext();
+        }
+
+        @Override
+        public Operator next() {
+            Operator next = stack.peek().next();
+            if (next.asOperators().isNone()) {
+                return next;
+            } else {
+                stack.push(next.asOperators().getOperators().iterator());
+                return stack.peek().next();
+            }
+        }
     }
 }

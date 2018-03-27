@@ -1,6 +1,8 @@
 package com.github.soursop.matrix.operator;
 
-public class DenseDoubleMatrix extends AbstractMatrix implements DoubleMatrix {
+import java.util.Iterator;
+
+public class DenseDoubleMatrix extends DoubleMatrix implements Matrix {
     private final double[] values;
     private final int height;
     private final int width;
@@ -67,7 +69,7 @@ public class DenseDoubleMatrix extends AbstractMatrix implements DoubleMatrix {
         return builder.toString();
     }
 
-    private static class DenseDoubleTransposeMatrix extends AbstractTranspose implements DoubleMatrix {
+    private static class DenseDoubleTransposeMatrix extends DoubleTranspose implements Matrix {
         private DenseDoubleMatrix origin;
 
         protected DenseDoubleTransposeMatrix(DenseDoubleMatrix origin) {

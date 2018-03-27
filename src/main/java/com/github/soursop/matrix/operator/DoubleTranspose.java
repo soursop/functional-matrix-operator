@@ -1,11 +1,11 @@
 package com.github.soursop.matrix.operator;
 
-abstract class AbstractTranspose extends AbstractMatrix {
+abstract class DoubleTranspose extends DoubleMatrix {
     protected abstract Matrix origin();
 
     @Override
     public double valueOf(int height, int width) {
-        return origin().valueOf(width * origin().width() + height);
+        return origin().valueOf(width, height);
     }
 
     @Override

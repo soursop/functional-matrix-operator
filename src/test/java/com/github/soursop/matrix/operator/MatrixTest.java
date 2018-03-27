@@ -12,6 +12,7 @@ import static org.hamcrest.core.Is.is;
 
 public class MatrixTest {
     private double[] sample = new double[]{ 1l, 2l, 3l, 4l, 5l, 6l };
+    private double[] wideSample = new double[]{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
     private double[] transpose = new double[]{ 1l, 3l, 5l, 2l, 4l, 6l };
     private List<Double> multiply = Arrays.asList(
             1d * 1d + 2d * 2d
@@ -26,6 +27,14 @@ public class MatrixTest {
     )
     ;
 
+    @Ignore
+    @Test
+    public void testMatrix() {
+        DenseDoubleMatrix matrix = new DenseDoubleMatrix(2, wideSample);
+        System.out.println(matrix);
+        System.out.println(matrix.transpose());
+    }
+
     @Test
     public void testMultiply() {
         Matrix one = new DenseDoubleMatrix(2, sample);
@@ -39,14 +48,19 @@ public class MatrixTest {
         DoubleOperator head = DoubleOperator.of(1l);
         Matrix one = new DenseDoubleMatrix(2, sample);
         Matrix another = new DenseDoubleMatrix(2, sample);
-        System.out.println(head.append(one).append(another).invoke());
+        LinkedDoubleMatrix invoke = (LinkedDoubleMatrix) head.next(one).next(another).invoke();
+        for (Double d : invoke) {
+            System.out.println(d);
+        }
+//        System.out.println(head.next(one).next(another).invoke());
+//        System.out.println(head.next(one).next(another).invoke().transpose());
     }
 
     @Test
     public void testAppendToTail() {
         DoubleOperator last = DoubleOperator.of(1l);
         Matrix one = new DenseDoubleMatrix(2, sample);
-        System.out.println(one.append(last).invoke());
+        System.out.println(one.next(last).invoke());
     }
 
     @Ignore

@@ -29,7 +29,6 @@ abstract class AbstractOperator implements Operator {
             return None;
         }
 
-
     }
     ;
 
@@ -44,8 +43,8 @@ abstract class AbstractOperator implements Operator {
     }
 
     @Override
-    public Append append(Operator other) {
-        return new Append(Arrays.asList(this, other));
+    public Next next(Operator other) {
+        return new Next(Arrays.asList(this, other));
     }
 
     protected StringBuilder withPadding(int depth) {

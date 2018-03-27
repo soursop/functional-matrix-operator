@@ -6,6 +6,6 @@ public interface Operator extends Printable {
     DoubleMatrix asDoubleMatrix();
     DoubleOperator asDoubleOperator();
     Multiply multiply(Operator other);
-    Append append(Operator other);
+    Next next(Operator other);
     boolean isNone();
 }
