@@ -26,11 +26,6 @@ abstract class AbstractOperators extends AbstractOperator implements Operators, 
         return prev;
     }
 
-    @Override
-    public void add(Operator operator) {
-        operators.add(operator);
-    }
-
     protected DoubleMatrix assign(Sign sign, DoubleMatrix one, DoubleMatrix other) {
         return one.isNone()? other : other.isNone()? one : asAssign(sign, one, other);
     }
