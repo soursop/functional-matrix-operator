@@ -1,8 +1,8 @@
 package com.github.soursop.matrix.operator;
 
-import java.util.Arrays;
+import java.util.Iterator;
 
-abstract class DoubleMatrix extends AbstractOperator implements Matrix {
+abstract class DoubleMatrix extends AbstractOperator implements Matrix, Iterable<Double> {
     static final DoubleMatrix NONE = new DenseDoubleMatrix(0, 0, new double[0]);
 
     @Override
@@ -21,8 +21,8 @@ abstract class DoubleMatrix extends AbstractOperator implements Matrix {
     }
 
     @Override
-    public Next next(Operator other) {
-        return new Next(Arrays.asList(this, other));
+    public DoubleMatrix asDoubleMatrix() {
+        return this;
     }
 
     @Override
@@ -47,5 +47,41 @@ abstract class DoubleMatrix extends AbstractOperator implements Matrix {
         return height() * width();
     }
 
-    public abstract double[] values();
+    @Override
+    public double valueOf(int idx) {
+        return valueOf(idx / width(), idx % width());
+    }
+
+    @Override
+    public Iterator<Double> iterator() {
+        return new DoubleMatrixIterator(this);
+    }
+
+    public double[] values() {
+        double[] doubles = new double[size()];
+        for (int i = 0; i < size(); i++) {
+            doubles[i] = valueOf(i);
+        }
+        return doubles;
+    }
+
+    private static class DoubleMatrixIterator implements Iterator<Double> {
+        private int idx = 0;
+        private final DoubleMatrix parent;
+        private DoubleMatrixIterator(DoubleMatrix parent) {
+            this.parent = parent;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return idx < parent.size();
+        }
+
+        @Override
+        public Double next() {
+            Double next = parent.valueOf(idx / parent.width(), idx % parent.width());
+            idx++;
+            return next;
+        }
+    }
 }

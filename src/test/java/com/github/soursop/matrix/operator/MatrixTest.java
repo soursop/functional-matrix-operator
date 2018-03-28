@@ -43,17 +43,14 @@ public class MatrixTest {
         assertThat(asList(result.values()), is(multiply));
     }
 
+    @Ignore
     @Test
     public void testAppendToHead() {
         DoubleOperator head = DoubleOperator.of(1l);
         Matrix one = new DenseDoubleMatrix(2, sample);
         Matrix another = new DenseDoubleMatrix(2, sample);
-        LinkedDoubleMatrix invoke = (LinkedDoubleMatrix) head.next(one).next(another).invoke();
-        for (Double d : invoke) {
-            System.out.println(d);
-        }
-//        System.out.println(head.next(one).next(another).invoke());
-//        System.out.println(head.next(one).next(another).invoke().transpose());
+        System.out.println(head.next(one).next(another).invoke());
+        System.out.println(head.next(one).next(another).invoke().transpose());
     }
 
     @Test

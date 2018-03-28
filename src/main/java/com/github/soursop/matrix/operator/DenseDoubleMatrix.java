@@ -1,8 +1,6 @@
 package com.github.soursop.matrix.operator;
 
-import java.util.Iterator;
-
-public class DenseDoubleMatrix extends DoubleMatrix implements Matrix {
+public class DenseDoubleMatrix extends DoubleMatrix {
     private final double[] values;
     private final int height;
     private final int width;
@@ -38,22 +36,12 @@ public class DenseDoubleMatrix extends DoubleMatrix implements Matrix {
 
     @Override
     public DoubleMatrix transpose() {
-        return new DenseDoubleTransposeMatrix(this);
+        return new DoubleMatrixTranspose<>(this);
     }
 
     @Override
     public double valueOf(int height, int width) {
         return values[height * width() + width];
-    }
-
-    @Override
-    public double valueOf(int idx) {
-        return values[idx];
-    }
-
-    @Override
-    public DoubleMatrix asDoubleMatrix() {
-        return this;
     }
 
     String multiplyAsDebug(Matrix matrix) {
@@ -67,44 +55,6 @@ public class DenseDoubleMatrix extends DoubleMatrix implements Matrix {
             }
         }
         return builder.toString();
-    }
-
-    private static class DenseDoubleTransposeMatrix extends DoubleTranspose implements Matrix {
-        private DenseDoubleMatrix origin;
-
-        protected DenseDoubleTransposeMatrix(DenseDoubleMatrix origin) {
-            this.origin = origin;
-        }
-
-        @Override
-        public DenseDoubleMatrix transpose() {
-            return origin;
-        }
-
-        @Override
-        public double[] values() {
-            double[] doubles = new double[origin.size()];
-            for (int i = 0; i < doubles.length; i++) {
-                doubles[i] = valueOf(i);
-            }
-            return doubles;
-        }
-
-        @Override
-        protected Matrix origin() {
-            return origin;
-        }
-
-        @Override
-        public Operators asOperators() {
-            return None;
-        }
-
-        @Override
-        public DoubleMatrix asDoubleMatrix() {
-            return this;
-        }
-
     }
 
 }
