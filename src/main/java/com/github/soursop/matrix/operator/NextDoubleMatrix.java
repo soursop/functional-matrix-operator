@@ -1,17 +1,11 @@
 package com.github.soursop.matrix.operator;
 
-import java.util.*;
-
-public class LinkedDoubleMatrix extends DoubleMatrix {
+public class NextDoubleMatrix extends DoubleMatrix {
     private final int height;
     private final int width;
-    private List<DoubleMatrix> matrices;
+    private DoubleMatrix[] matrices;
 
-    protected LinkedDoubleMatrix(DoubleMatrix... matrices) {
-        this(Arrays.asList(matrices));
-    }
-
-    protected LinkedDoubleMatrix(List<DoubleMatrix> matrices) {
+    protected NextDoubleMatrix(DoubleMatrix... matrices) {
         this.matrices = matrices;
         int width = 0;
         int height = 0;
@@ -43,7 +37,7 @@ public class LinkedDoubleMatrix extends DoubleMatrix {
                 pos = pos + matrix.width();
             }
         }
-        throw new Assert.WrongMatrixIndexException("Could't found value of index height:%d width:%d from %s", height, width, asSimple(0));
+        throw Assert.throwIndexException(height, width, this);
     }
 
     @Override

@@ -1,10 +1,7 @@
 package com.github.soursop.matrix.operator;
 
-import java.util.Arrays;
-import java.util.Collections;
-
 abstract class AbstractOperator implements Operator {
-    static Operators None = new AbstractOperators(Collections.EMPTY_LIST) {
+    static Operators None = new AbstractOperators(new Operator[0]) {
         @Override
         public DoubleMatrix asDoubleMatrix() {
             return DoubleMatrix.NONE;
@@ -18,10 +15,6 @@ abstract class AbstractOperator implements Operator {
         @Override
         public String asSimple(int depth) {
             return "";
-        }
-
-        @Override
-        public void add(Operator operator) {
         }
 
         @Override
@@ -39,12 +32,12 @@ abstract class AbstractOperator implements Operator {
 
     @Override
     public Multiply multiply(Operator operator) {
-        return new Multiply(Arrays.asList(this, operator));
+        return new Multiply(this, operator);
     }
 
     @Override
     public Next next(Operator other) {
-        return new Next(Arrays.asList(this, other));
+        return new Next(this, other);
     }
 
     protected StringBuilder withPadding(int depth) {

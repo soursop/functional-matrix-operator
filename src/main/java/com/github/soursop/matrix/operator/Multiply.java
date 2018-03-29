@@ -1,9 +1,8 @@
 package com.github.soursop.matrix.operator;
 
-import java.util.List;
 
 public class Multiply extends AbstractOperators {
-    protected Multiply(List<Operator> operators) {
+    protected Multiply(Operator... operators) {
         super(operators);
     }
 

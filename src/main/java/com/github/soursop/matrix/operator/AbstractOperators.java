@@ -1,18 +1,17 @@
 package com.github.soursop.matrix.operator;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.Stack;
 
-abstract class AbstractOperators extends AbstractOperator implements Operators, Iterable<Operator> {
-    private final List<Operator> operators;
+abstract class AbstractOperators extends AbstractOperator implements Operators {
+    private final Operator[] operators;
 
-    protected AbstractOperators(List<Operator> operators) {
+    protected AbstractOperators(Operator... operators) {
         this.operators = operators;
     }
 
     @Override
-    public List<Operator> getOperators() {
+    public Operator[] getOperators() {
         return operators;
     }
 
@@ -68,17 +67,17 @@ abstract class AbstractOperators extends AbstractOperator implements Operators, 
 
     protected String asSimple(String sign, int depth) {
         StringBuilder builder = withPadding(depth);
-        List<Operator> operators = getOperators();
-        if (operators.size() > 1) {
+        Operator[] operators = getOperators();
+        if (operators.length > 1) {
             builder.append("(");
         }
-        for (int i = 0; i < operators.size(); i++) {
-            builder.append(operators.get(i).asSimple(depth + 1));
-            if (i + 1 < operators.size()) {
+        for (int i = 0; i < operators.length; i++) {
+            builder.append(operators[i].asSimple(depth + 1));
+            if (i + 1 < operators.length) {
                 builder.append(sign);
             }
         }
-        if (operators.size() > 1) {
+        if (operators.length > 1) {
             builder.append(")");
         }
         return builder.toString();
@@ -86,11 +85,26 @@ abstract class AbstractOperators extends AbstractOperator implements Operators, 
 
     @Override
     public Iterator<Operator> iterator() {
-        return new OperatorIterator(operators.iterator());
+        Iterator<Operator> iterator = new Iterator<Operator>() {
+            private int pos = 0;
+
+            public boolean hasNext() {
+                return operators.length > pos;
+            }
+
+            public Operator next() {
+                return operators[pos++];
+            }
+
+            public void remove() {
+                Assert.assertUnsupportedOperation() ;
+            }
+        };
+        return new OperatorIterator(iterator);
     }
 
     private class OperatorIterator implements Iterator<Operator> {
-        private Stack<Iterator<Operator>> stack = new Stack();
+        private Stack<Iterator<Operator>> stack = new Stack<>();
 
         private OperatorIterator(Iterator<Operator> it) {
             stack.push(it);
@@ -98,7 +112,7 @@ abstract class AbstractOperators extends AbstractOperator implements Operators, 
 
         @Override
         public void remove() {
-            stack.peek().remove();
+            Assert.assertUnsupportedOperation();
         }
 
         @Override
@@ -116,7 +130,7 @@ abstract class AbstractOperators extends AbstractOperator implements Operators, 
             if (next.asOperators().isNone()) {
                 return next;
             } else {
-                stack.push(next.asOperators().getOperators().iterator());
+                stack.push(next.asOperators().iterator());
                 return stack.peek().next();
             }
         }

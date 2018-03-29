@@ -83,5 +83,10 @@ abstract class DoubleMatrix extends AbstractOperator implements Matrix, Iterable
             idx++;
             return next;
         }
+
+        @Override
+        public void remove() {
+            Assert.assertUnsupportedOperation();
+        }
     }
 }

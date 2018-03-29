@@ -1,14 +1,13 @@
 package com.github.soursop.matrix.operator;
 
-import java.util.List;
 
 public class Next extends AbstractOperators {
-    protected Next(List<Operator> operators) {
+    protected Next(Operator ... operators) {
         super(operators);
     }
 
     private DoubleMatrix asAppend(DoubleMatrix one, DoubleMatrix another) {
-        return new LinkedDoubleMatrix(one, another);
+        return new NextDoubleMatrix(one, another);
     }
 
     private Operator next(DoubleMatrix matrix, DoubleOperator other) {
