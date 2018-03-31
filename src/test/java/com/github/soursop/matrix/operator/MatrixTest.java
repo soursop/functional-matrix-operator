@@ -49,6 +49,8 @@ public class MatrixTest {
         DoubleOperator head = DoubleOperator.of(1l);
         Matrix one = new DenseDoubleMatrix(2, sample);
         Matrix another = new DenseDoubleMatrix(2, sample);
+        DoubleMatrix invoke = head.next(one).next(another).invoke();
+        System.out.println(invoke.head());
         System.out.println(head.next(one).next(another).invoke());
         System.out.println(head.next(one).next(another).invoke().transpose());
     }

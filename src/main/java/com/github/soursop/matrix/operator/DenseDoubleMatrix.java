@@ -5,15 +5,15 @@ public class DenseDoubleMatrix extends DoubleMatrix {
     private final int height;
     private final int width;
 
-    public DenseDoubleMatrix(double[] values) {
+    public DenseDoubleMatrix(double... values) {
         this(1, values);
     }
 
-    public DenseDoubleMatrix(int width, double[] values) {
+    public DenseDoubleMatrix(int width, double... values) {
         this(Assert.assertHeight(values.length, width), width, values);
     }
 
-    DenseDoubleMatrix(int height, int width, double[] values) {
+    DenseDoubleMatrix(int height, int width, double... values) {
         this.height = height;
         this.width = width;
         this.values = values;

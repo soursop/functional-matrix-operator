@@ -17,7 +17,7 @@ abstract class DoubleMatrix extends AbstractOperator implements LinkedMatrix<Dou
 
     @Override
     public Operators asOperators() {
-        return None;
+        return AbstractOperator.NONE;
     }
 
     @Override

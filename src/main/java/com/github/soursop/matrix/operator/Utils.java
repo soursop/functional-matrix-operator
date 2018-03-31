@@ -8,10 +8,6 @@ public class Utils {
         return String.format(format, objects);
     }
 
-    public static double[] as(double ... doubles) {
-        return doubles;
-    }
-
     public static List<Double> asList(double ... doubles) {
         List<Double> list = new ArrayList<>();
         for (double v : doubles) {

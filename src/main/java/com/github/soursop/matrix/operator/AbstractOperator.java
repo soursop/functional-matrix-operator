@@ -1,7 +1,7 @@
 package com.github.soursop.matrix.operator;
 
 abstract class AbstractOperator implements Operator {
-    static Operators None = new AbstractOperators(new Operator[0]) {
+    static Operators NONE = new AbstractOperators(new Operator[0]) {
         @Override
         public DoubleMatrix asDoubleMatrix() {
             return DoubleMatrix.NONE;
@@ -19,7 +19,7 @@ abstract class AbstractOperator implements Operator {
 
         @Override
         public Operators asOperators() {
-            return None;
+            return NONE;
         }
 
     }
@@ -27,7 +27,12 @@ abstract class AbstractOperator implements Operator {
 
     @Override
     public boolean isNone() {
-        return this.equals(DoubleOperator.NONE) || this.equals(DoubleMatrix.NONE) || this.equals(None);
+        return this.equals(DoubleOperator.NONE) || this.equals(DoubleMatrix.NONE) || this.equals(NONE);
+    }
+
+    @Override
+    public boolean isSome() {
+        return !isNone();
     }
 
     @Override

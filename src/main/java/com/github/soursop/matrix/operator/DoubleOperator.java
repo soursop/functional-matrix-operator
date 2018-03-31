@@ -35,8 +35,12 @@ public class DoubleOperator extends AbstractOperator {
         return this.equals(NONE)? DoubleMatrix.NONE : new DoubleIterator(value, height);
     }
 
+    public DoubleMatrix toMatrix(DoubleOperator other) {
+        return new DenseDoubleMatrix(2, value, other.value);
+    }
+
     @Override
     public Operators asOperators() {
-        return None;
+        return AbstractOperator.NONE;
     }
 }

@@ -9,4 +9,5 @@ public interface Operator extends Printable, Serializable {
     Multiply multiply(Operator other);
     Next next(Operator other);
     boolean isNone();
+    boolean isSome();
 }

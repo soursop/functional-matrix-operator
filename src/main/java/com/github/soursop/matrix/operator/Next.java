@@ -6,34 +6,26 @@ public class Next extends AbstractOperators {
         super(operators);
     }
 
-    private DoubleMatrix asAppend(DoubleMatrix one, DoubleMatrix another) {
+    private Operator byMatrix(DoubleMatrix one, DoubleMatrix another) {
         return new NextDoubleMatrix(one, another);
     }
 
-    private Operator next(DoubleMatrix matrix, DoubleOperator other) {
-        return asAppend(matrix, other.toIterator(matrix.height()));
+    private Operator byNone(Operator base, Operator another) {
+        return base.isNone()? another : another.isNone()? base : byOperator(base, another);
     }
 
-    private Operator next(DoubleOperator base, DoubleMatrix matrix) {
-        return asAppend(base.toIterator(matrix.height()), matrix);
-    }
-
-    private Operator next(DoubleMatrix base, DoubleMatrix matrix) {
-        return base.isNone()? matrix : matrix.isNone()? base : asAppend(base, matrix);
-    }
-
-    private Operator option(Operator base, Operator another) {
-        return base.isNone()? another : another.isNone()? base : search(base, another);
-    }
-
-    private Operator search(Operator base, Operator another) {
-        if (base.asDoubleMatrix().isNone()) {
-            return next(base.asDoubleOperator(), another.asDoubleMatrix());
+    private Operator byOperator(Operator one, Operator another) {
+        boolean isOne = one.asDoubleOperator().isSome();
+        boolean isAnother = another.asDoubleOperator().isSome();
+        if (isOne && isAnother) {
+            return one.asDoubleOperator().toMatrix(another.asDoubleOperator());
+        } else if (isOne) {
+            return byMatrix(one.asDoubleOperator().toIterator(another.asDoubleMatrix().height()), another.asDoubleMatrix());
+        } else if (isAnother) {
+            return byMatrix(one.asDoubleMatrix(), another.asDoubleOperator().toIterator(one.asDoubleMatrix().height()));
+        } else {
+            return byMatrix(one.asDoubleMatrix(), another.asDoubleMatrix());
         }
-        if (another.asDoubleMatrix().isNone()) {
-            return next(base.asDoubleMatrix(), another.asDoubleOperator());
-        }
-        return next(base.asDoubleMatrix(), another.asDoubleMatrix());
     }
 
     @Override
@@ -41,7 +33,7 @@ public class Next extends AbstractOperators {
         Operator base = prev;
         for (Operator op : getOperators()) {
             base = op.asOperators().invoke(base);
-            base = option(base, op);
+            base = byNone(base, op);
         }
         return base.asDoubleMatrix();
     }
