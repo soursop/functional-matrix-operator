@@ -57,4 +57,13 @@ public class DenseDoubleMatrix extends DoubleMatrix {
         return builder.toString();
     }
 
+    @Override
+    public DoubleMatrix head() {
+        return DoubleMatrix.NONE;
+    }
+
+    @Override
+    public DoubleMatrix tail() {
+        return DoubleMatrix.NONE;
+    }
 }

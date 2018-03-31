@@ -11,11 +11,11 @@ public class Next extends AbstractOperators {
     }
 
     private Operator next(DoubleMatrix matrix, DoubleOperator other) {
-        return asAppend(matrix, other.toVector(matrix.height()));
+        return asAppend(matrix, other.toIterator(matrix.height()));
     }
 
     private Operator next(DoubleOperator base, DoubleMatrix matrix) {
-        return asAppend(base.toVector(matrix.height()), matrix);
+        return asAppend(base.toIterator(matrix.height()), matrix);
     }
 
     private Operator next(DoubleMatrix base, DoubleMatrix matrix) {

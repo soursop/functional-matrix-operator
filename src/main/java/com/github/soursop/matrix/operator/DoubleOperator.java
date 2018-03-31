@@ -31,16 +31,8 @@ public class DoubleOperator extends AbstractOperator {
         return withPadding(depth).append(value);
     }
 
-    public DoubleMatrix toVector(int height) {
-        return this.equals(NONE)? DoubleMatrix.NONE : asVector(height);
-    }
-
-    private DoubleMatrix asVector(int height) {
-        double[] doubles = new double[height];
-        for (int i = 0; i < height; i++) {
-            doubles[i] = value;
-        }
-        return new DenseDoubleMatrix(doubles);
+    public DoubleMatrix toIterator(int height) {
+        return this.equals(NONE)? DoubleMatrix.NONE : new DoubleIterator(value, height);
     }
 
     @Override

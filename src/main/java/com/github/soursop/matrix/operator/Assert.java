@@ -7,6 +7,18 @@ class Assert {
         return new IllegalArgumentException(asFormat("Could't found value of index height:%d width:%d from %s", height, width, matrix.asSimple(0)));
     }
 
+    static void assertIndexException(int height, int width, DoubleMatrix matrix) {
+        if (height >= matrix.height() || width >= matrix.width()) {
+            throw throwIndexException(height, width, matrix);
+        }
+    }
+
+    static void assertOutOfIndex(int idx, int size) {
+        if (size <= idx) {
+            throw new ArrayIndexOutOfBoundsException(asFormat("Could't found value of index:%d from size:%d", idx, size));
+        }
+    }
+
     static int assertSameHeightExceptZero(int one, int another) {
         if (one != 0 && another != 0 && one != another) {
             throw new IllegalArgumentException(asFormat("Illegal matrix height size %d != %d", one, another));
@@ -20,7 +32,12 @@ class Assert {
         }
         return size / width;
     }
+
     static void assertUnsupportedOperation() {
         throw new UnsupportedOperationException("Cannot remove an element of an array.");
+    }
+
+    static UnsupportedOperationException throwUnsupportedOperation(String name, Class<?> clazz) {
+        return new UnsupportedOperationException(asFormat("Cannot suppprt %s from %s", name, clazz.getSimpleName()));
     }
 }

@@ -1,5 +1,7 @@
 package com.github.soursop.matrix.operator;
 
+import java.util.Arrays;
+
 public class NextDoubleMatrix extends DoubleMatrix {
     private final int height;
     private final int width;
@@ -43,5 +45,15 @@ public class NextDoubleMatrix extends DoubleMatrix {
     @Override
     public DoubleMatrix transpose() {
         return new DoubleMatrixTranspose<>(this);
+    }
+
+    @Override
+    public DoubleMatrix head() {
+        return matrices.length == 0? DoubleMatrix.NONE : matrices[0];
+    }
+
+    @Override
+    public DoubleMatrix tail() {
+        return matrices.length == 1? DoubleMatrix.NONE : matrices.length == 2? matrices[1] : new NextDoubleMatrix(Arrays.copyOfRange(matrices, 1, matrices.length));
     }
 }

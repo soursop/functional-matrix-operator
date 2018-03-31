@@ -2,7 +2,7 @@ package com.github.soursop.matrix.operator;
 
 import java.util.Iterator;
 
-abstract class DoubleMatrix extends AbstractOperator implements Matrix, Iterable<Double> {
+abstract class DoubleMatrix extends AbstractOperator implements LinkedMatrix<DoubleMatrix>, Iterable<Double> {
     static final DoubleMatrix NONE = new DenseDoubleMatrix(0, 0, new double[0]);
 
     @Override

@@ -32,4 +32,14 @@ class DoubleMatrixTranspose<T extends DoubleMatrix> extends DoubleMatrix {
     public T transpose() {
         return origin;
     }
+
+    @Override
+    public DoubleMatrix head() {
+        return origin.head();
+    }
+
+    @Override
+    public DoubleMatrix tail() {
+        return origin.tail();
+    }
 }
