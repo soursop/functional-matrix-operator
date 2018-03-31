@@ -26,6 +26,13 @@ class Assert {
         return Math.max(one, another);
     }
 
+    static int assertSameWidthExceptZero(int one, int another) {
+        if (one != 0 && another != 0 && one != another) {
+            throw new IllegalArgumentException(asFormat("Illegal matrix width size %d != %d", one, another));
+        }
+        return Math.max(one, another);
+    }
+
     static int assertHeight(int size, int width) {
         if (size % width != 0) {
             throw new IllegalArgumentException(asFormat("Illegal matrix size %d / %d = %d", size, width, size % width));

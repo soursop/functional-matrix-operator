@@ -1,6 +1,8 @@
 package com.github.soursop.matrix.operator;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 abstract class DoubleMatrix extends AbstractOperator implements LinkedMatrix<DoubleMatrix>, Iterable<Double> {
     static final DoubleMatrix NONE = new DenseDoubleMatrix(0, 0, new double[0]);
@@ -63,6 +65,59 @@ abstract class DoubleMatrix extends AbstractOperator implements LinkedMatrix<Dou
             doubles[i] = valueOf(i);
         }
         return doubles;
+    }
+
+    public List<DoubleMatrix> splitBy(int size) {
+        int repeat = height() / size;
+        List<DoubleMatrix> list = new ArrayList<>();
+        for (int i = 0; i < repeat; i++) {
+            int next = (i + 1) * size;
+            list.add(new LogicalDoubleMatrix(i * size, next >= height()? height() : next, this));
+        }
+        return list;
+    }
+
+    private static class LogicalDoubleMatrix extends DoubleMatrix {
+        private final DoubleMatrix parent;
+        private final int from;
+        private final int to;
+
+        private LogicalDoubleMatrix(int from, int to, DoubleMatrix parent) {
+            this.parent = parent;
+            this.from = from;
+            this.to = to;
+        }
+
+        @Override
+        public DoubleMatrix head() {
+            return DoubleMatrix.NONE;
+        }
+
+        @Override
+        public DoubleMatrix tail() {
+            return DoubleMatrix.NONE;
+        }
+
+        @Override
+        public int height() {
+            return to - from;
+        }
+
+        @Override
+        public int width() {
+            return parent.width();
+        }
+
+        @Override
+        public double valueOf(int height, int width) {
+            Assert.assertIndexException(height, width, this);
+            return parent.valueOf(height + from, width);
+        }
+
+        @Override
+        public Matrix transpose() {
+            return new DoubleMatrixTranspose<>(this);
+        }
     }
 
     private static class DoubleMatrixIterator implements Iterator<Double> {

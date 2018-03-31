@@ -1,13 +1,13 @@
 package com.github.soursop.matrix.operator;
 
 
-public class Next extends AbstractOperators {
-    protected Next(Operator ... operators) {
+public class Tail extends AbstractOperators {
+    protected Tail(Operator ... operators) {
         super(operators);
     }
 
     private Operator byMatrix(DoubleMatrix one, DoubleMatrix another) {
-        return one.isNone()? another : another.isNone()? one : new NextDoubleMatrix(one, another);
+        return one.isNone()? another : another.isNone()? one : new TailDoubleMatrix(one, another);
     }
 
     private Operator byNone(Operator base, Operator another) {
@@ -18,11 +18,11 @@ public class Next extends AbstractOperators {
         boolean isOne = one.asDoubleOperator().isSome();
         boolean isAnother = another.asDoubleOperator().isSome();
         if (isOne && isAnother) {
-            return new DenseDoubleMatrix(2, one.asDoubleOperator().getValue(), another.asDoubleOperator().getValue());
+            return new DenseDoubleMatrix(1, one.asDoubleOperator().getValue(), another.asDoubleOperator().getValue());
         } else if (isOne) {
-            return byMatrix(one.asDoubleOperator().toIterator(another.asDoubleMatrix().height(), 1), another.asDoubleMatrix());
+            return byMatrix(one.asDoubleOperator().toIterator(1, another.asDoubleMatrix().width()), another.asDoubleMatrix());
         } else if (isAnother) {
-            return byMatrix(one.asDoubleMatrix(), another.asDoubleOperator().toIterator(one.asDoubleMatrix().height(), 1));
+            return byMatrix(one.asDoubleMatrix(), another.asDoubleOperator().toIterator(1, one.asDoubleMatrix().width()));
         } else {
             return byMatrix(one.asDoubleMatrix(), another.asDoubleMatrix());
         }
@@ -44,7 +44,7 @@ public class Next extends AbstractOperators {
 
     @Override
     public CharSequence asSimple(int depth) {
-        return asSimple("::", depth);
+        return asSimple("||", depth);
     }
 
     @Override

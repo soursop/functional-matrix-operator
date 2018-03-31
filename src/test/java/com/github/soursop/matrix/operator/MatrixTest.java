@@ -39,7 +39,7 @@ public class MatrixTest {
     public void testMultiply() {
         Matrix one = new DenseDoubleMatrix(2, sample);
         Matrix other = new DenseDoubleMatrix(3, transpose);
-        DoubleMatrix result = one.multiply(other).invoke();
+        DoubleMatrix result = one.multiply(other).multiply(other).multiply(other).multiply(other).invoke();
         assertThat(asList(result.values()), is(multiply));
     }
 

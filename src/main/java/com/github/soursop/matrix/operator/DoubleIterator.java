@@ -5,10 +5,10 @@ class DoubleIterator extends DoubleMatrix {
     private final int width;
     private final double from;
 
-    DoubleIterator(double from, int to) {
+    DoubleIterator(double from, int height, int width) {
         this.from = from;
-        this.height = to;
-        this.width = 1;
+        this.height = height;
+        this.width = width;
     }
     @Override
     public DoubleMatrix head() {
