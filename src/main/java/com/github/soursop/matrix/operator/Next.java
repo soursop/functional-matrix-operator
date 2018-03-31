@@ -7,7 +7,7 @@ public class Next extends AbstractOperators {
     }
 
     private Operator byMatrix(DoubleMatrix one, DoubleMatrix another) {
-        return new NextDoubleMatrix(one, another);
+        return one.isNone()? another : another.isNone()? one : new NextDoubleMatrix(one, another);
     }
 
     private Operator byNone(Operator base, Operator another) {
