@@ -7,11 +7,11 @@ public class Multiply extends AbstractOperators {
     }
 
     private DoubleMatrix multiply(DoubleMatrix one, DoubleMatrix other) {
-        return product(Sign.MULTIPLY, one, other);
+        return withProduct(Sign.MULTIPLY, one, other);
     }
 
     private DoubleMatrix multiply(DoubleMatrix one, double other) {
-        return assign(Sign.MULTIPLY, one, other);
+        return withElement(Sign.MULTIPLY, one, other);
     }
 
     public DoubleMatrix invoke() {

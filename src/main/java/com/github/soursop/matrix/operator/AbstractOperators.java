@@ -25,11 +25,11 @@ abstract class AbstractOperators extends AbstractOperator implements Operators {
         return prev;
     }
 
-    protected DoubleMatrix assign(Sign sign, DoubleMatrix one, DoubleMatrix other) {
-        return one.isNone()? other : other.isNone()? one : asAssign(sign, one, other);
+    protected DoubleMatrix withElement(Sign sign, DoubleMatrix one, DoubleMatrix other) {
+        return one.isNone()? other : other.isNone()? one : asWithElement(sign, one, other);
     }
 
-    private DoubleMatrix asAssign(Sign sign, DoubleMatrix one, DoubleMatrix other) {
+    private DoubleMatrix asWithElement(Sign sign, DoubleMatrix one, DoubleMatrix other) {
         double[] values = new double[one.height() * other.width()];
         for (int i = 0; i < one.size(); i++) {
             values[i] = sign.apply(one.valueOf(i), other.valueOf(i));
@@ -37,11 +37,11 @@ abstract class AbstractOperators extends AbstractOperator implements Operators {
         return new DenseDoubleMatrix(other.width(), values);
     }
 
-    protected DoubleMatrix assign(Sign sign, DoubleMatrix one, double other) {
-        return one.isNone()? one : other == 1l? one : asAssign(sign, one, other);
+    protected DoubleMatrix withElement(Sign sign, DoubleMatrix one, double other) {
+        return one.isNone()? one : other == 1l? one : asWithElement(sign, one, other);
     }
 
-    private DoubleMatrix asAssign(Sign sign, DoubleMatrix one, double other) {
+    private DoubleMatrix asWithElement(Sign sign, DoubleMatrix one, double other) {
         double[] values = new double[one.height() * one.width()];
         for (int i = 0; i < one.size(); i++) {
             values[i] = sign.apply(one.valueOf(i), other);
@@ -49,11 +49,11 @@ abstract class AbstractOperators extends AbstractOperator implements Operators {
         return new DenseDoubleMatrix(one.width(), values);
     }
 
-    protected DoubleMatrix product(Sign sign, DoubleMatrix one, DoubleMatrix other) {
-        return one.isNone()? other : other.isNone()? one : asProduct(sign, one, other);
+    protected DoubleMatrix withProduct(Sign sign, DoubleMatrix one, DoubleMatrix other) {
+        return one.isNone()? other : other.isNone()? one : asWithProduct(sign, one, other);
     }
 
-    private DoubleMatrix asProduct(Sign sign, DoubleMatrix one, DoubleMatrix other) {
+    private DoubleMatrix asWithProduct(Sign sign, DoubleMatrix one, DoubleMatrix other) {
         double[] values = new double[one.height() * other.width()];
         for (int h = 0; h < one.height(); h++) {
             for (int by = 0; by < other.width(); by++) {

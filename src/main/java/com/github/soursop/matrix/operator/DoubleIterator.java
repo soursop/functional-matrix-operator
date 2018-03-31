@@ -1,7 +1,6 @@
 package com.github.soursop.matrix.operator;
 
 class DoubleIterator extends DoubleMatrix {
-
     private final int height;
     private final int width;
     private final double from;
