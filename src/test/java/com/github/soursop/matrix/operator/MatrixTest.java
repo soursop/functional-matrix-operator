@@ -39,7 +39,7 @@ public class MatrixTest {
     public void testMultiply() {
         Matrix one = new DenseDoubleMatrix(2, sample);
         Matrix other = new DenseDoubleMatrix(3, transpose);
-        DoubleMatrix result = one.multiply(other).multiply(other).multiply(other).multiply(other).invoke();
+        DoubleMatrix result = one.multiply(other).invoke();
         assertThat(asList(result.values()), is(multiply));
     }
 
@@ -64,7 +64,7 @@ public class MatrixTest {
 
     @Ignore
     @Test
-    public void testNextToHead() {
+    public void testHeadFromNext() {
         DoubleOperator head = DoubleOperator.of(1l);
         Matrix one = new DenseDoubleMatrix(2, sample);
         Matrix another = new DenseDoubleMatrix(2, sample);
