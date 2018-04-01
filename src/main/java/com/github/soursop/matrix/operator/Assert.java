@@ -7,6 +7,18 @@ class Assert {
         return new IllegalArgumentException(asFormat("Could't found value of index height:%d width:%d from %s", height, width, matrix.asSimple(0)));
     }
 
+    static void assertElementSize(Sign sign, DoubleMatrix one, DoubleMatrix other) {
+        if (one.height() != other.height() || one.width() != one.width()) {
+            throw new IllegalArgumentException(asFormat("Could't match %s of %s and %s", sign.sign, one.asSimple(0), other.asSimple(0)));
+        }
+    }
+
+    static void assertProductSize(Sign sign, DoubleMatrix one, DoubleMatrix other) {
+        if (one.width() != other.height()) {
+            throw new IllegalArgumentException(asFormat("Could't match %s of %s and %s", sign.sign, one.asSimple(0), other.asSimple(0)));
+        }
+    }
+
     static void assertIndexException(int height, int width, DoubleMatrix matrix) {
         if (height >= matrix.height() || width >= matrix.width()) {
             throw throwIndexException(height, width, matrix);

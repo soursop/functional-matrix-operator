@@ -1,17 +1,17 @@
 package com.github.soursop.matrix.operator;
 
 
-public class Multiply extends AbstractOperators {
-    protected Multiply(Operator... operators) {
+public class Plus extends AbstractOperators {
+    protected Plus(Operator... operators) {
         super(operators);
     }
 
-    private DoubleMatrix multiply(DoubleMatrix one, DoubleMatrix other) {
-        return withProduct(Sign.MULTIPLY, one, other);
+    private DoubleMatrix plus(DoubleMatrix one, DoubleMatrix other) {
+        return withProduct(Sign.PLUS, one, other);
     }
 
-    private DoubleMatrix multiply(DoubleMatrix one, double other) {
-        return withElement(Sign.MULTIPLY, one, other);
+    private DoubleMatrix plus(DoubleMatrix one, double other) {
+        return withElement(Sign.PLUS, one, other);
     }
 
     public DoubleMatrix invoke() {
@@ -20,19 +20,19 @@ public class Multiply extends AbstractOperators {
 
     @Override
     public DoubleMatrix invoke(Operator prev) {
-        double product = Sign.MULTIPLY.valueOf(prev.asDoubleOperator());
+        double product = Sign.PLUS.valueOf(prev.asDoubleOperator());
         DoubleMatrix base = prev.asDoubleMatrix();
         for (Operator op : getOperators()) {
             base = op.asOperators().invoke(base);
-            base = multiply(base, op.asDoubleMatrix());
-            product = Sign.MULTIPLY.apply(product, Sign.MULTIPLY.valueOf(op.asDoubleOperator()));
+            base = plus(base, op.asDoubleMatrix());
+            product = Sign.PLUS.apply(product, Sign.PLUS.valueOf(op.asDoubleOperator()));
         }
-        return multiply(base, product);
+        return plus(base, product);
     }
 
     @Override
     public CharSequence asSimple(int depth) {
-        return asSimple(Sign.MULTIPLY.sign, depth);
+        return asSimple(Sign.PLUS.sign, depth);
     }
 
     @Override

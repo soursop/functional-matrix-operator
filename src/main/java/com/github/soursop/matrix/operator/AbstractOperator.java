@@ -46,6 +46,21 @@ abstract class AbstractOperator implements Operator {
     }
 
     @Override
+    public Plus plus(Operator other) {
+        return new Plus(this, other);
+    }
+
+    @Override
+    public Minus minus(Operator other) {
+        return new Minus(this, other);
+    }
+
+    @Override
+    public Divide divide(Operator other) {
+        return new Divide(this, other);
+    }
+
+    @Override
     public Tail tail(Operator other) {
         return new Tail(this, other);
     }

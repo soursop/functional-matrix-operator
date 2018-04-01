@@ -30,6 +30,7 @@ abstract class AbstractOperators extends AbstractOperator implements Operators {
     }
 
     private DoubleMatrix asWithElement(Sign sign, DoubleMatrix one, DoubleMatrix other) {
+        Assert.assertElementSize(sign, one, other);
         double[] values = new double[one.height() * other.width()];
         for (int i = 0; i < one.size(); i++) {
             values[i] = sign.apply(one.valueOf(i), other.valueOf(i));
@@ -54,6 +55,7 @@ abstract class AbstractOperators extends AbstractOperator implements Operators {
     }
 
     private DoubleMatrix asWithProduct(Sign sign, DoubleMatrix one, DoubleMatrix other) {
+        Assert.assertProductSize(sign, one, other);
         double[] values = new double[one.height() * other.width()];
         for (int h = 0; h < one.height(); h++) {
             for (int by = 0; by < other.width(); by++) {

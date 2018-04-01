@@ -44,6 +44,14 @@ abstract class DoubleMatrix extends AbstractOperator implements LinkedMatrix<Dou
         return builder.toString();
     }
 
+    public double sum() {
+        double sum = 0d;
+        for (int i = 0; i < size(); i++) {
+            sum = sum + valueOf(i);
+        }
+        return sum;
+    }
+
     @Override
     public int size() {
         return height() * width();

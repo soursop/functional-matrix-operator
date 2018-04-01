@@ -1,7 +1,7 @@
 package com.github.soursop.matrix.operator;
 
 public class DoubleOperator extends AbstractOperator {
-    static DoubleOperator NONE = of(1l);
+    static DoubleOperator NONE = of(0l);
     private final double value;
 
     public DoubleOperator(double value) {
@@ -12,7 +12,7 @@ public class DoubleOperator extends AbstractOperator {
         return new DoubleOperator(value);
     }
 
-    public double getValue() {
+    double getValue() {
         return value;
     }
 
