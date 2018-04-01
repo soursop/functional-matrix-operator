@@ -54,7 +54,7 @@ public class MatrixTest {
 
     @Ignore
     @Test
-    public void testHead() {
+    public void testTailToHead() {
         DoubleOperator head = DoubleOperator.of(1l);
         Matrix one = new DenseDoubleMatrix(2, sample);
         Matrix another = new DenseDoubleMatrix(2, sample);
@@ -64,7 +64,17 @@ public class MatrixTest {
 
     @Ignore
     @Test
-    public void testAppendTranspose() {
+    public void testNextToHead() {
+        DoubleOperator head = DoubleOperator.of(1l);
+        Matrix one = new DenseDoubleMatrix(2, sample);
+        Matrix another = new DenseDoubleMatrix(2, sample);
+        DoubleMatrix invoke = head.tail(one).tail(another).invoke();
+        System.out.println(invoke.head().head());
+    }
+
+    @Ignore
+    @Test
+    public void testNextTranspose() {
         DoubleOperator head = DoubleOperator.of(1l);
         Matrix one = new DenseDoubleMatrix(2, sample);
         Matrix another = new DenseDoubleMatrix(2, sample);
@@ -72,7 +82,7 @@ public class MatrixTest {
     }
 
     @Test
-    public void testAppendToTail() {
+    public void testNextToLast() {
         DoubleOperator last = DoubleOperator.of(1l);
         Matrix one = new DenseDoubleMatrix(2, sample);
         System.out.println(one.next(last).invoke());

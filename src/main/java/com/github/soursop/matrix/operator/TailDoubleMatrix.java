@@ -7,7 +7,7 @@ public class TailDoubleMatrix extends DoubleMatrix {
     private final int width;
     private DoubleMatrix[] matrices;
 
-    protected TailDoubleMatrix(DoubleMatrix... matrices) {
+    public TailDoubleMatrix(DoubleMatrix... matrices) {
         this.matrices = matrices;
         int width = 0;
         int height = 0;
@@ -33,10 +33,10 @@ public class TailDoubleMatrix extends DoubleMatrix {
     public double valueOf(int height, int width) {
         int pos = 0;
         for (DoubleMatrix matrix : matrices) {
-            if (pos + matrix.width() > width) {
-                return matrix.valueOf(height, width - pos);
+            if (pos + matrix.height() > height) {
+                return matrix.valueOf(height - pos, width);
             } else {
-                pos = pos + matrix.width();
+                pos = pos + matrix.height();
             }
         }
         throw Assert.throwIndexException(height, width, this);

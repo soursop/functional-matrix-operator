@@ -45,6 +45,11 @@ abstract class AbstractOperator implements Operator {
         return new Next(this, other);
     }
 
+    @Override
+    public Tail tail(Operator other) {
+        return new Tail(this, other);
+    }
+
     protected StringBuilder withPadding(int depth) {
         StringBuilder builder = new StringBuilder();
         if (depth > 0) {

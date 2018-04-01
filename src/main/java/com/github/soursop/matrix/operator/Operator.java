@@ -8,6 +8,7 @@ public interface Operator extends Printable, Serializable {
     DoubleOperator asDoubleOperator();
     Multiply multiply(Operator other);
     Next next(Operator other);
+    Tail tail(Operator other);
     boolean isNone();
     boolean isSome();
 }

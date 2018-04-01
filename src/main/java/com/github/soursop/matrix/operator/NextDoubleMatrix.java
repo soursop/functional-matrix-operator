@@ -7,7 +7,7 @@ public class NextDoubleMatrix extends DoubleMatrix {
     private final int width;
     private DoubleMatrix[] matrices;
 
-    protected NextDoubleMatrix(DoubleMatrix... matrices) {
+    public NextDoubleMatrix(DoubleMatrix... matrices) {
         this.matrices = matrices;
         int width = 0;
         int height = 0;
