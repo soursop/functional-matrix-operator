@@ -49,11 +49,11 @@ public class TailDoubleMatrix extends DoubleMatrix {
 
     @Override
     public DoubleMatrix head() {
-        return matrices.length == 0? DoubleMatrix.NONE : matrices[0];
+        return matrices.length == 0? None.DOUBLE_MATRIX : matrices[0];
     }
 
     @Override
     public DoubleMatrix tail() {
-        return matrices.length == 1? DoubleMatrix.NONE : matrices.length == 2? matrices[1] : new TailDoubleMatrix(Arrays.copyOfRange(matrices, 1, matrices.length));
+        return matrices.length == 1? None.DOUBLE_MATRIX : matrices.length == 2? matrices[1] : new TailDoubleMatrix(Arrays.copyOfRange(matrices, 1, matrices.length));
     }
 }

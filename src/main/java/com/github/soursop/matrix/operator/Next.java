@@ -39,7 +39,7 @@ public class Next extends AbstractOperators {
     }
 
     public DoubleMatrix invoke() {
-        return invoke(DoubleMatrix.NONE);
+        return invoke(None.DOUBLE_MATRIX);
     }
 
     @Override
@@ -49,11 +49,11 @@ public class Next extends AbstractOperators {
 
     @Override
     public DoubleMatrix asDoubleMatrix() {
-        return DoubleMatrix.NONE;
+        return None.DOUBLE_MATRIX;
     }
 
     @Override
     public DoubleOperator asDoubleOperator() {
-        return DoubleOperator.NONE;
+        return None.DOUBLE_OPERATOR;
     }
 }

@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 abstract class DoubleMatrix extends AbstractOperator implements LinkedMatrix<DoubleMatrix>, Iterable<Double> {
-    static final DoubleMatrix NONE = new DenseDoubleMatrix(0, 0, new double[0]);
 
     @Override
     public CharSequence asSimple(int depth) {
@@ -14,12 +13,12 @@ abstract class DoubleMatrix extends AbstractOperator implements LinkedMatrix<Dou
 
     @Override
     public DoubleOperator asDoubleOperator() {
-        return DoubleOperator.NONE;
+        return None.DOUBLE_OPERATOR;
     }
 
     @Override
     public Operators asOperators() {
-        return AbstractOperator.NONE;
+        return None.OPERATORS;
     }
 
     @Override
@@ -98,12 +97,12 @@ abstract class DoubleMatrix extends AbstractOperator implements LinkedMatrix<Dou
 
         @Override
         public DoubleMatrix head() {
-            return DoubleMatrix.NONE;
+            return None.DOUBLE_MATRIX;
         }
 
         @Override
         public DoubleMatrix tail() {
-            return DoubleMatrix.NONE;
+            return None.DOUBLE_MATRIX;
         }
 
         @Override

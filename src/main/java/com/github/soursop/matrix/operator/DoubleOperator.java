@@ -1,7 +1,6 @@
 package com.github.soursop.matrix.operator;
 
 public class DoubleOperator extends AbstractOperator {
-    static DoubleOperator NONE = of(0l);
     private final double value;
 
     public DoubleOperator(double value) {
@@ -18,7 +17,7 @@ public class DoubleOperator extends AbstractOperator {
 
     @Override
     public DoubleMatrix asDoubleMatrix() {
-        return DoubleMatrix.NONE;
+        return None.DOUBLE_MATRIX;
     }
 
     @Override
@@ -32,11 +31,11 @@ public class DoubleOperator extends AbstractOperator {
     }
 
     public DoubleMatrix toIterator(int height, int width) {
-        return this.equals(NONE)? DoubleMatrix.NONE : new DoubleIterator(value, height, width);
+        return isNone()? None.DOUBLE_MATRIX : new DoubleIterator(value, height, width);
     }
 
     @Override
     public Operators asOperators() {
-        return AbstractOperator.NONE;
+        return None.OPERATORS;
     }
 }

@@ -1,33 +1,9 @@
 package com.github.soursop.matrix.operator;
 
 abstract class AbstractOperator implements Operator {
-    static Operators NONE = new AbstractOperators(new Operator[0]) {
-        @Override
-        public DoubleMatrix asDoubleMatrix() {
-            return DoubleMatrix.NONE;
-        }
-
-        @Override
-        public DoubleOperator asDoubleOperator() {
-            return DoubleOperator.NONE;
-        }
-
-        @Override
-        public String asSimple(int depth) {
-            return "";
-        }
-
-        @Override
-        public Operators asOperators() {
-            return NONE;
-        }
-
-    }
-    ;
-
     @Override
     public boolean isNone() {
-        return this.equals(DoubleOperator.NONE) || this.equals(DoubleMatrix.NONE) || this.equals(NONE);
+        return None.class.isAssignableFrom(getClass());
     }
 
     @Override

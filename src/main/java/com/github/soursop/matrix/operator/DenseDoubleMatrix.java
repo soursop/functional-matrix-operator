@@ -59,11 +59,11 @@ public class DenseDoubleMatrix extends DoubleMatrix {
 
     @Override
     public DoubleMatrix head() {
-        return DoubleMatrix.NONE;
+        return None.DOUBLE_MATRIX;
     }
 
     @Override
     public DoubleMatrix tail() {
-        return DoubleMatrix.NONE;
+        return None.DOUBLE_MATRIX;
     }
 }

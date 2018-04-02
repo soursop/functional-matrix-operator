@@ -25,48 +25,6 @@ abstract class AbstractOperators extends AbstractOperator implements Operators {
         return prev;
     }
 
-    protected DoubleMatrix withElement(Sign sign, DoubleMatrix one, DoubleMatrix other) {
-        return one.isNone()? other : other.isNone()? one : asWithElement(sign, one, other);
-    }
-
-    private DoubleMatrix asWithElement(Sign sign, DoubleMatrix one, DoubleMatrix other) {
-        Assert.assertElementSize(sign, one, other);
-        double[] values = new double[one.height() * other.width()];
-        for (int i = 0; i < one.size(); i++) {
-            values[i] = sign.apply(one.valueOf(i), other.valueOf(i));
-        }
-        return new DenseDoubleMatrix(other.width(), values);
-    }
-
-    protected DoubleMatrix withElement(Sign sign, DoubleMatrix one, double other) {
-        return one.isNone()? one : other == 1l? one : asWithElement(sign, one, other);
-    }
-
-    private DoubleMatrix asWithElement(Sign sign, DoubleMatrix one, double other) {
-        double[] values = new double[one.height() * one.width()];
-        for (int i = 0; i < one.size(); i++) {
-            values[i] = sign.apply(one.valueOf(i), other);
-        }
-        return new DenseDoubleMatrix(one.width(), values);
-    }
-
-    protected DoubleMatrix withProduct(Sign sign, DoubleMatrix one, DoubleMatrix other) {
-        return one.isNone()? other : other.isNone()? one : asWithProduct(sign, one, other);
-    }
-
-    private DoubleMatrix asWithProduct(Sign sign, DoubleMatrix one, DoubleMatrix other) {
-        Assert.assertProductSize(sign, one, other);
-        double[] values = new double[one.height() * other.width()];
-        for (int h = 0; h < one.height(); h++) {
-            for (int by = 0; by < other.width(); by++) {
-                for (int w = 0; w < one.width(); w++) {
-                    values[h * other.width() + by] += sign.apply(one.valueOf(h, w), other.valueOf(w, by));
-                }
-            }
-        }
-        return new DenseDoubleMatrix(other.width(), values);
-    }
-
     protected String asSimple(String sign, int depth) {
         StringBuilder builder = withPadding(depth);
         Operator[] operators = getOperators();
