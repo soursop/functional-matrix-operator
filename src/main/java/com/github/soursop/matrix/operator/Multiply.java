@@ -1,12 +1,7 @@
 package com.github.soursop.matrix.operator;
 
-public class Multiply extends MatrixOperators {
+public class Multiply extends AbstractSignOperators {
     protected Multiply(Operator... operators) {
-        super(operators);
-    }
-
-    @Override
-    protected Sign sign() {
-        return Sign.MULTIPLY;
+        super(Sign.MULTIPLY, operators);
     }
 }

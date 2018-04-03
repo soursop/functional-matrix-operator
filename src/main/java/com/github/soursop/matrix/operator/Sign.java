@@ -53,60 +53,7 @@ public enum Sign {
             return some;
         }
     }
-    , MINUS("-") {
-        @Override
-        double apply(double v1, double v2) {
-            return v1 - v2;
-        }
-
-        @Override
-        protected DoubleMatrix some(DoubleMatrix one, DoubleMatrix other) {
-            return elementWise(this, one, other);
-        }
-
-        @Override
-        protected DoubleMatrix none(DoubleMatrix none, DoubleMatrix some) {
-            return elementWise(this, new DoubleIterator(0, some.height(), some.width()), some);
-        }
-
-        @Override
-        protected DoubleOperator some(DoubleOperator one, DoubleOperator other) {
-            return new DoubleOperator(apply(one.getValue(), other.getValue()));
-        }
-
-        @Override
-        protected DoubleOperator none(DoubleOperator none, DoubleOperator some) {
-            return new DoubleOperator(apply(0, some.getValue()));
-        }
-    }
-    , DIVIDE("/") {
-        @Override
-        double apply(double v1, double v2) {
-            return v1 / v2;
-        }
-
-        @Override
-        protected DoubleMatrix some(DoubleMatrix one, DoubleMatrix other) {
-            return elementWise(this, one, other);
-        }
-
-        @Override
-        protected DoubleMatrix none(DoubleMatrix none, DoubleMatrix some) {
-            return elementWise(this, new DoubleIterator(1, some.height(), some.width()), some);
-        }
-
-        @Override
-        protected DoubleOperator some(DoubleOperator one, DoubleOperator other) {
-            return new DoubleOperator(apply(one.getValue(), one.getValue()));
-        }
-
-        @Override
-        protected DoubleOperator none(DoubleOperator none, DoubleOperator some) {
-            return new DoubleOperator(apply(1d, some.getValue()));
-        }
-    }
     ;
-
     public final String sign;
     Sign(String sign) {
         this.sign = sign;

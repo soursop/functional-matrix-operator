@@ -1,7 +1,7 @@
 package com.github.soursop.matrix.operator;
 
 
-public class Next extends AbstractOperators {
+public class Next extends AbstractDoubleMatrixOperators {
     protected Next(Operator ... operators) {
         super(operators);
     }
@@ -38,6 +38,7 @@ public class Next extends AbstractOperators {
         return base.asDoubleMatrix();
     }
 
+    @Override
     public DoubleMatrix invoke() {
         return invoke(None.DOUBLE_MATRIX);
     }
@@ -47,13 +48,4 @@ public class Next extends AbstractOperators {
         return asSimple("::", depth);
     }
 
-    @Override
-    public DoubleMatrix asDoubleMatrix() {
-        return None.DOUBLE_MATRIX;
-    }
-
-    @Override
-    public DoubleOperator asDoubleOperator() {
-        return None.DOUBLE_OPERATOR;
-    }
 }

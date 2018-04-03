@@ -1,13 +1,8 @@
 package com.github.soursop.matrix.operator;
 
 
-public class Plus extends MatrixOperators {
+public class Plus extends AbstractSignOperators {
     protected Plus(Operator... operators) {
-        super(operators);
-    }
-
-    @Override
-    protected Sign sign() {
-        return Sign.PLUS;
+        super(Sign.PLUS, operators);
     }
 }

@@ -26,6 +26,16 @@ public class DoubleOperator extends AbstractOperator {
     }
 
     @Override
+    public DoubleOperator minus() {
+        return new DoubleOperator(-value);
+    }
+
+    @Override
+    public DoubleOperator divide() {
+        return new DoubleOperator(1 / value);
+    }
+
+    @Override
     public CharSequence asSimple(int depth) {
         return withPadding(depth).append(value);
     }

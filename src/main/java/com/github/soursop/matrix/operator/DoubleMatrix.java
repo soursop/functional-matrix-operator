@@ -52,6 +52,16 @@ abstract class DoubleMatrix extends AbstractOperator implements LinkedMatrix<Dou
     }
 
     @Override
+    public DoubleMatrix minus() {
+        return new MinusDoubleMatrix<>(this);
+    }
+
+    @Override
+    public DoubleMatrix divide() {
+        return new DivideDoubleMatrix<>(this);
+    }
+
+    @Override
     public int size() {
         return height() * width();
     }

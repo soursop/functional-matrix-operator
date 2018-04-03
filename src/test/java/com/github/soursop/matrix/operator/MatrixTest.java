@@ -3,10 +3,6 @@ package com.github.soursop.matrix.operator;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static com.github.soursop.matrix.operator.Utils.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
@@ -14,18 +10,6 @@ public class MatrixTest {
     private double[] sample = new double[]{ 1l, 2l, 3l, 4l, 5l, 6l };
     private double[] wideSample = new double[]{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
     private double[] transpose = new double[]{ 1l, 3l, 5l, 2l, 4l, 6l };
-    private List<Double> multiply = Arrays.asList(
-            1d * 1d + 2d * 2d
-            , 1d * 3d + 2d * 4d
-            , 1d * 5d + 2d * 6d
-            , 3d * 1d + 4d * 2d
-            , 3d * 3d + 4d * 4d
-            , 3d * 5d + 4d * 6d
-            , 5d * 1d + 6d * 2d
-            , 5d * 3d + 6d * 4d
-            , 5d * 5d + 6d * 6d
-    )
-    ;
 
     @Ignore
     @Test
@@ -33,14 +17,6 @@ public class MatrixTest {
         DenseDoubleMatrix matrix = new DenseDoubleMatrix(2, wideSample);
         System.out.println(matrix);
         System.out.println(matrix.transpose());
-    }
-
-    @Test
-    public void testMultiply() {
-        Matrix one = new DenseDoubleMatrix(2, sample);
-        Matrix other = new DenseDoubleMatrix(3, transpose);
-        DoubleMatrix result = one.multiply(other).invoke();
-        assertThat(asList(result.values()), is(multiply));
     }
 
     @Ignore

@@ -29,6 +29,16 @@ public interface None {
         }
 
         @Override
+        public Operator minus() {
+            return this;
+        }
+
+        @Override
+        public Operator divide() {
+            return this;
+        }
+
+        @Override
         public String asSimple(int depth) {
             return "";
         }
@@ -36,6 +46,11 @@ public interface None {
         @Override
         public Operators asOperators() {
             return OPERATORS;
+        }
+
+        @Override
+        public Operator invoke(Operator prev) {
+            return prev;
         }
     }
 }

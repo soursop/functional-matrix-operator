@@ -27,13 +27,13 @@ abstract class AbstractOperator implements Operator {
     }
 
     @Override
-    public Minus minus(Operator other) {
-        return new Minus(this, other);
+    public Plus minus(Operator other) {
+        return new Plus(this, other.minus());
     }
 
     @Override
-    public Divide divide(Operator other) {
-        return new Divide(this, other);
+    public Multiply divide(Operator other) {
+        return new Multiply(this, other.divide());
     }
 
     @Override

@@ -20,11 +20,6 @@ abstract class AbstractOperators extends AbstractOperator implements Operators {
         return this;
     }
 
-    @Override
-    public Operator invoke(Operator prev) {
-        return prev;
-    }
-
     protected String asSimple(String sign, int depth) {
         StringBuilder builder = withPadding(depth);
         Operator[] operators = getOperators();
