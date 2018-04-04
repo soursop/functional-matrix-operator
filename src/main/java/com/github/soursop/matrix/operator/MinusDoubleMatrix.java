@@ -4,7 +4,7 @@ package com.github.soursop.matrix.operator;
  * @author soursop
  * @created 2018. 4. 3.
  */
-public class MinusDoubleMatrix<T extends DoubleMatrix> extends DoubleMatrix {
+public class MinusDoubleMatrix<T extends DoubleMatrix> extends AbstractDoubleMatrix {
     private final T origin;
     MinusDoubleMatrix(T origin) {
         this.origin = origin;
@@ -17,7 +17,7 @@ public class MinusDoubleMatrix<T extends DoubleMatrix> extends DoubleMatrix {
 
     @Override
     public int width() {
-        return origin.height();
+        return origin.width();
     }
 
     @Override
@@ -26,7 +26,7 @@ public class MinusDoubleMatrix<T extends DoubleMatrix> extends DoubleMatrix {
     }
 
     @Override
-    public Matrix transpose() {
+    public DoubleMatrix transpose() {
         return new DoubleMatrixTranspose<>(this);
     }
 
@@ -44,4 +44,5 @@ public class MinusDoubleMatrix<T extends DoubleMatrix> extends DoubleMatrix {
     public DoubleMatrix minus() {
         return origin;
     }
+
 }

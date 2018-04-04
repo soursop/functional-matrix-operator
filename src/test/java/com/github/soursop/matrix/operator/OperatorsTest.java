@@ -17,8 +17,8 @@ public class OperatorsTest {
 
     @Test
     public void testMultiplyWithMatrix() {
-        Matrix one = new DenseDoubleMatrix(2, sample);
-        Matrix other = new DenseDoubleMatrix(3, transpose);
+        DoubleMatrix one = new DenseDoubleMatrix(2, sample);
+        DoubleMatrix other = new DenseDoubleMatrix(3, transpose);
         DoubleMatrix result = one.multiply(other).invoke();
         assertThat(asList(result.values()), is(asList(
                 1d * 1d + 2d * 2d
@@ -35,8 +35,8 @@ public class OperatorsTest {
 
     @Test
     public void testPlusWithMatrix() {
-        Matrix one = new DenseDoubleMatrix(2, sample);
-        Matrix other = new DenseDoubleMatrix(2, sample);
+        DoubleMatrix one = new DenseDoubleMatrix(2, sample);
+        DoubleMatrix other = new DenseDoubleMatrix(2, sample);
         DoubleMatrix result = one.plus(other).invoke();
         assertThat(asList(result.values()), is(asList(
                 1d + 1d
@@ -50,8 +50,8 @@ public class OperatorsTest {
 
     @Test
     public void testMinusWithMatrix() {
-        Matrix one = new DenseDoubleMatrix(2, sample);
-        Matrix other = new DenseDoubleMatrix(2, sample);
+        DoubleMatrix one = new DenseDoubleMatrix(2, sample);
+        DoubleMatrix other = new DenseDoubleMatrix(2, sample);
         DoubleMatrix result = one.minus(other).invoke();
         assertThat(asList(result.values()), is(asList(
                 1d - 1d
@@ -60,6 +60,20 @@ public class OperatorsTest {
                 , 4d - 4d
                 , 5d - 5d
                 , 6d - 6d
+        )));
+    }
+
+    @Test
+    public void testDivideWithOperator() {
+        DoubleMatrix one = new DenseDoubleMatrix(2, sample);
+        DoubleMatrix result = one.divide(new DoubleOperator(2)).invoke();
+        assertThat(asList(result.values()), is(asList(
+                1d / 2d
+                , 2d / 2d
+                , 3d / 2d
+                , 4d / 2d
+                , 5d / 2d
+                , 6d / 2d
         )));
     }
 

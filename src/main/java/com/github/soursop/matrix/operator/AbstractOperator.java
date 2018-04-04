@@ -17,6 +17,11 @@ abstract class AbstractOperator implements Operator {
     }
 
     @Override
+    public <T extends Operator> T as(T t) {
+        return (T) this;
+    }
+
+    @Override
     public Next next(Operator other) {
         return new Next(this, other);
     }
@@ -32,7 +37,7 @@ abstract class AbstractOperator implements Operator {
     }
 
     @Override
-    public Multiply divide(Operator other) {
+    public Multiply divide(DoubleOperator other) {
         return new Multiply(this, other.divide());
     }
 

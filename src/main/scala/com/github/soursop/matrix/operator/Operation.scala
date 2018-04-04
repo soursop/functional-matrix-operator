@@ -36,7 +36,7 @@ object Operation {
   case class Terminal(text: String) extends Op
 
 //  trait Terminal extends Op
-//  case class Matrix(height: Int, width: Int) extends Terminal
+//  case class DoubleMatrix(height: Int, width: Int) extends Terminal
 //  case class Vector(size: Int) extends Terminal
 
 

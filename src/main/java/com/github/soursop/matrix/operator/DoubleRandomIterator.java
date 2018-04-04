@@ -2,7 +2,7 @@ package com.github.soursop.matrix.operator;
 
 import java.util.Random;
 
-public class DoubleRandomIterator extends DoubleMatrix {
+public class DoubleRandomIterator extends AbstractDoubleMatrix {
     private final Random random;
     private final int height;
     private final int width;
@@ -44,7 +44,7 @@ public class DoubleRandomIterator extends DoubleMatrix {
     }
 
     @Override
-    public Matrix transpose() {
+    public DoubleMatrix transpose() {
         return new DoubleMatrixTranspose<>(this);
     }
 }

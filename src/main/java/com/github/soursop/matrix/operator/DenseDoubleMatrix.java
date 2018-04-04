@@ -1,6 +1,6 @@
 package com.github.soursop.matrix.operator;
 
-public class DenseDoubleMatrix extends DoubleMatrix {
+public class DenseDoubleMatrix extends AbstractDoubleMatrix {
     private final double[] values;
     private final int height;
     private final int width;
@@ -44,7 +44,7 @@ public class DenseDoubleMatrix extends DoubleMatrix {
         return values[height * width() + width];
     }
 
-    String multiplyAsDebug(Matrix matrix) {
+    String multiplyAsDebug(DoubleMatrix matrix) {
         StringBuilder builder = new StringBuilder();
         for (int h = 0; h < height(); h++) {
             for (int s = 0; s < matrix.width(); s++) {
@@ -55,15 +55,5 @@ public class DenseDoubleMatrix extends DoubleMatrix {
             }
         }
         return builder.toString();
-    }
-
-    @Override
-    public DoubleMatrix head() {
-        return None.DOUBLE_MATRIX;
-    }
-
-    @Override
-    public DoubleMatrix tail() {
-        return None.DOUBLE_MATRIX;
     }
 }

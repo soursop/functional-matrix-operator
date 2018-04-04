@@ -23,8 +23,8 @@ public class MatrixTest {
     @Test
     public void testAppendToHead() {
         DoubleOperator head = DoubleOperator.of(1l);
-        Matrix one = new DenseDoubleMatrix(2, sample);
-        Matrix another = new DenseDoubleMatrix(2, sample);
+        DoubleMatrix one = new DenseDoubleMatrix(2, sample);
+        DoubleMatrix another = new DenseDoubleMatrix(2, sample);
         System.out.println(head.next(one).next(another).invoke());
     }
 
@@ -32,8 +32,8 @@ public class MatrixTest {
     @Test
     public void testTailToHead() {
         DoubleOperator head = DoubleOperator.of(1l);
-        Matrix one = new DenseDoubleMatrix(2, sample);
-        Matrix another = new DenseDoubleMatrix(2, sample);
+        DoubleMatrix one = new DenseDoubleMatrix(2, sample);
+        DoubleMatrix another = new DenseDoubleMatrix(2, sample);
         DoubleMatrix invoke = head.next(one).next(another).invoke();
         System.out.println(invoke.head().head());
     }
@@ -42,8 +42,8 @@ public class MatrixTest {
     @Test
     public void testHeadFromNext() {
         DoubleOperator head = DoubleOperator.of(1l);
-        Matrix one = new DenseDoubleMatrix(2, sample);
-        Matrix another = new DenseDoubleMatrix(2, sample);
+        DoubleMatrix one = new DenseDoubleMatrix(2, sample);
+        DoubleMatrix another = new DenseDoubleMatrix(2, sample);
         DoubleMatrix invoke = head.tail(one).tail(another).invoke();
         System.out.println(invoke.head().head());
     }
@@ -52,15 +52,15 @@ public class MatrixTest {
     @Test
     public void testNextTranspose() {
         DoubleOperator head = DoubleOperator.of(1l);
-        Matrix one = new DenseDoubleMatrix(2, sample);
-        Matrix another = new DenseDoubleMatrix(2, sample);
+        DoubleMatrix one = new DenseDoubleMatrix(2, sample);
+        DoubleMatrix another = new DenseDoubleMatrix(2, sample);
         System.out.println(head.next(one).next(another).invoke().transpose());
     }
 
     @Test
     public void testNextToLast() {
         DoubleOperator last = DoubleOperator.of(1l);
-        Matrix one = new DenseDoubleMatrix(2, sample);
+        DoubleMatrix one = new DenseDoubleMatrix(2, sample);
         System.out.println(one.next(last).invoke());
     }
 
@@ -68,14 +68,14 @@ public class MatrixTest {
     @Test
     public void testAsSimple() {
         DenseDoubleMatrix matrix = new DenseDoubleMatrix(2, sample);
-        Matrix other = new DenseDoubleMatrix(3, transpose);
+        DoubleMatrix other = new DenseDoubleMatrix(3, transpose);
         System.out.println(matrix.multiply(other).asSimple(0));
     }
 
     @Test
     public void testTranspose() {
-        Matrix transposed = new DenseDoubleMatrix(2, sample).transpose();
-        Matrix expect = new DenseDoubleMatrix(3, transpose);
+        DoubleMatrix transposed = new DenseDoubleMatrix(2, sample).transpose();
+        DoubleMatrix expect = new DenseDoubleMatrix(3, transpose);
         for (int i = 0; i < transpose.length; i++) {
             assertThat(transposed.valueOf(i), is(expect.valueOf(i)));
         }

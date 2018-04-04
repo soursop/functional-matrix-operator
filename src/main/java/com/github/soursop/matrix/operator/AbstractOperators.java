@@ -5,9 +5,11 @@ import java.util.Stack;
 
 abstract class AbstractOperators extends AbstractOperator implements Operators {
     private final Operator[] operators;
+    private final Applier applier;
 
-    protected AbstractOperators(Operator... operators) {
+    protected AbstractOperators(Applier applier, Operator... operators) {
         this.operators = operators;
+        this.applier = applier;
     }
 
     @Override
@@ -16,8 +18,62 @@ abstract class AbstractOperators extends AbstractOperator implements Operators {
     }
 
     @Override
+    public DoubleMatrix invoke() {
+        return invoke(None.DOUBLE_MATRIX);
+    }
+
+    private Operator apply(Operator one, Operator other) {
+        boolean isOne = one.asDoubleMatrix().isSome();
+        boolean isOther = other.asDoubleMatrix().isSome();
+        if (isOne && isOther) {
+            return applier.apply(one.asDoubleMatrix(), other.asDoubleMatrix());
+        } else if (isOne) {
+            return applier.apply(one.asDoubleMatrix(), other.asDoubleOperator());
+        } else if (isOther) {
+            return applier.apply(one.asDoubleOperator(), other.asDoubleMatrix());
+        } else {
+            return applier.apply(one.asDoubleOperator(), other.asDoubleOperator());
+        }
+    }
+
+    @Override
+    public DoubleMatrix invoke(Operator prev) {
+        Operator base = prev;
+        for (Operator op : getOperators()) {
+            base = op.asOperators().invoke(base);
+            base = apply(base, op);
+        }
+        return base.asDoubleMatrix();
+    }
+
+    @Override
     public Operators asOperators() {
         return this;
+    }
+
+    @Override
+    public DoubleMatrix asDoubleMatrix() {
+        return None.DOUBLE_MATRIX;
+    }
+
+    @Override
+    public DoubleOperator asDoubleOperator() {
+        return None.DOUBLE_OPERATOR;
+    }
+
+    @Override
+    public Operators minus() {
+        return MinusInvoker.of(this);
+    }
+
+    @Override
+    public Operators divide() {
+        return DivideInvoker.of(this);
+    }
+
+    @Override
+    public CharSequence asSimple(int depth) {
+        return asSimple(applier.symbol(), depth);
     }
 
     protected String asSimple(String sign, int depth) {

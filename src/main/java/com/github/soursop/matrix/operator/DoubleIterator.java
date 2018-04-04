@@ -1,6 +1,6 @@
 package com.github.soursop.matrix.operator;
 
-class DoubleIterator extends DoubleMatrix {
+class DoubleIterator extends AbstractDoubleMatrix {
     private final int height;
     private final int width;
     private final double from;
@@ -37,7 +37,7 @@ class DoubleIterator extends DoubleMatrix {
     }
 
     @Override
-    public Matrix transpose() {
+    public DoubleMatrix transpose() {
         return new DoubleMatrixTranspose<>(this);
     }
 }

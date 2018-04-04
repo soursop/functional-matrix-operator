@@ -10,8 +10,9 @@ public interface Operator extends Printable, Serializable {
     Next next(Operator other);
     Plus plus(Operator other);
     Plus minus(Operator other);
-    Multiply divide(Operator other);
+    Multiply divide(DoubleOperator other);
     Tail tail(Operator other);
+    <T extends Operator> T as(T t);
     Operator minus();
     Operator divide();
     boolean isNone();

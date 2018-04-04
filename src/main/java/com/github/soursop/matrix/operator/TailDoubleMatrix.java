@@ -2,7 +2,7 @@ package com.github.soursop.matrix.operator;
 
 import java.util.Arrays;
 
-public class TailDoubleMatrix extends DoubleMatrix {
+public class TailDoubleMatrix extends AbstractDoubleMatrix implements DoubleMatrix {
     private final int height;
     private final int width;
     private DoubleMatrix[] matrices;

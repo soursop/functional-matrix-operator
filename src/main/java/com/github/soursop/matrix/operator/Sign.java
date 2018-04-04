@@ -1,6 +1,6 @@
 package com.github.soursop.matrix.operator;
 
-public enum Sign {
+public enum Sign implements Applier {
     MULTIPLY("*") {
         @Override
         double apply(double v1, double v2) {
@@ -65,14 +65,28 @@ public enum Sign {
     protected abstract DoubleOperator some(DoubleOperator one, DoubleOperator other);
     protected abstract DoubleOperator none(DoubleOperator none, DoubleOperator some);
 
+
+    @Override
+    public String symbol() {
+        return sign;
+    }
+
+    @Override
     public DoubleMatrix apply(DoubleMatrix one, DoubleMatrix other) {
         return other.isNone()? (one.isNone()? one : none(other, one)) : (one.isNone()? none(one, other) : some(one, other));
     }
 
+    @Override
     public DoubleMatrix apply(DoubleMatrix one, DoubleOperator other) {
         return other.isNone()? one : one.isNone()? one : elementWise(this, one, other);
     }
 
+    @Override
+    public DoubleMatrix apply(DoubleOperator one, DoubleMatrix other) {
+        return apply(other, one);
+    }
+
+    @Override
     public DoubleOperator apply(DoubleOperator one, DoubleOperator other) {
         return other.isNone()? (one.isNone()? one : none(other, one)) : (one.isNone()? none(one, other) : some(one, other));
     }
