@@ -36,8 +36,10 @@ public class DoubleOperator extends AbstractOperator {
     }
 
     @Override
-    public CharSequence asSimple(int depth) {
-        return withPadding(depth).append(value);
+    protected CharSequence _asSimple(int depth) {
+        withPadding(depth);
+        append(value);
+        return getBuilder();
     }
 
     public DoubleMatrix toIterator(int height, int width) {

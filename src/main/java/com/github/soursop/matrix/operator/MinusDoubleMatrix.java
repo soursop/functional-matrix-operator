@@ -45,4 +45,13 @@ public class MinusDoubleMatrix<T extends DoubleMatrix> extends AbstractDoubleMat
         return origin;
     }
 
+    @Override
+    protected CharSequence _asSimple(int depth) {
+        withPadding();
+        append("-");
+        append(height());
+        append(":");
+        append(width());
+        return getBuilder();
+    }
 }

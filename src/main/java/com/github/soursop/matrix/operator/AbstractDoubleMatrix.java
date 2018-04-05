@@ -7,8 +7,12 @@ import java.util.List;
 abstract class AbstractDoubleMatrix extends AbstractOperator implements DoubleMatrix, Iterable<Double> {
 
     @Override
-    public CharSequence asSimple(int depth) {
-        return new StringBuilder().append(height()).append(":").append(width());
+    protected CharSequence _asSimple(int depth) {
+        withPadding();
+        append(height());
+        append(":");
+        append(width());
+        return getBuilder();
     }
 
     @Override

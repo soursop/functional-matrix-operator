@@ -77,26 +77,29 @@ abstract class AbstractOperators extends AbstractOperator implements Operators {
     }
 
     @Override
-    public CharSequence asSimple(int depth) {
+    protected CharSequence _asSimple(int depth) {
         return asSimple(applier.symbol(), depth);
     }
 
-    protected String asSimple(String sign, int depth) {
-        StringBuilder builder = withPadding(depth);
+    protected CharSequence asSimple(String sign, int depth) {
         Operator[] operators = getOperators();
+        withPadding();
         if (operators.length > 1) {
-            builder.append("(");
+            append("(\n");
         }
         for (int i = 0; i < operators.length; i++) {
-            builder.append(operators[i].asSimple(depth + 1));
+            append(operators[i].asSimple(depth + 1));
             if (i + 1 < operators.length) {
-                builder.append(sign);
+                append("\n");
+                withPadding(sign);
+                append("\n");
             }
         }
         if (operators.length > 1) {
-            builder.append(")");
+            append("\n");
+            withPadding(")");
         }
-        return builder.toString();
+        return getBuilder();
     }
 
     @Override

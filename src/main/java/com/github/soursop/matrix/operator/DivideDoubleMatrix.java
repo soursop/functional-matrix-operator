@@ -44,4 +44,14 @@ public class DivideDoubleMatrix<T extends DoubleMatrix> extends AbstractDoubleMa
     public DoubleMatrix divide() {
         return origin;
     }
+
+    @Override
+    protected CharSequence _asSimple(int depth) {
+        withPadding();
+        append("1/");
+        append(height());
+        append(":");
+        append(width());
+        return getBuilder();
+    }
 }

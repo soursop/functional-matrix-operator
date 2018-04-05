@@ -1,5 +1,6 @@
 package com.github.soursop.matrix.operator;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 
@@ -103,5 +104,14 @@ public class OperatorsTest {
                 , 1/5d
                 , 1/6d
         )));
+    }
+
+    @Ignore
+    @Test
+    public void testAsSimple() {
+        DenseDoubleMatrix one = new DenseDoubleMatrix(2, sample);
+        DenseDoubleMatrix other = new DenseDoubleMatrix(2, sample);
+        Plus minus = one.divide().minus(other).plus(other);
+        System.out.println(minus.asSimple(0));
     }
 }

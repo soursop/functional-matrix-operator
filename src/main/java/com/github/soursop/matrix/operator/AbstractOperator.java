@@ -1,6 +1,9 @@
 package com.github.soursop.matrix.operator;
 
 abstract class AbstractOperator implements Operator {
+    private StringBuilder builder;
+    private int depth = 0;
+
     @Override
     public boolean isNone() {
         return None.class.isAssignableFrom(getClass());
@@ -46,14 +49,53 @@ abstract class AbstractOperator implements Operator {
         return new Under(this, other);
     }
 
-    protected StringBuilder withPadding(int depth) {
-        StringBuilder builder = new StringBuilder();
-        if (depth > 0) {
-            builder.append("\n");
-        }
+    @Override
+    public CharSequence asSimple(int depth) {
+        initBuilder(depth);
+        return _asSimple(depth);
+    }
+
+    abstract protected CharSequence _asSimple(int depth);
+
+    protected void initBuilder(int depth) {
+        this.depth = depth;
+        this.builder = new StringBuilder();
+    }
+
+    protected void withPadding() {
         for (int i = 0; i < depth; i++) {
             builder.append(" ");
         }
+    }
+
+    protected void append(double value) {
+        builder.append(value);
+    }
+
+    protected void append(int value) {
+        builder.append(value);
+    }
+
+    protected void append(CharSequence value) {
+        builder.append(value);
+    }
+
+    protected void withPadding(int value) {
+        withPadding();
+        builder.append(value);
+    }
+
+    protected void withPadding(CharSequence value) {
+        withPadding();
+        builder.append(value);
+    }
+
+    protected void withLine(CharSequence value) {
+        withPadding(value);
+        builder.append("\n");
+    }
+
+    protected StringBuilder getBuilder() {
         return builder;
     }
 }
