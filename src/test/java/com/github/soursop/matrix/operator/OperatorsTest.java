@@ -90,4 +90,18 @@ public class OperatorsTest {
                 , -6d
         )));
     }
+
+    @Test
+    public void testDivideWithIdentity() {
+        DenseDoubleMatrix one = new DenseDoubleMatrix(2, sample);
+        DoubleMatrix result = one.divide();
+        assertThat(asList(result.values()), is(asList(
+                1/1d
+                , 1/2d
+                , 1/3d
+                , 1/4d
+                , 1/5d
+                , 1/6d
+        )));
+    }
 }

@@ -12,6 +12,11 @@ abstract class AbstractOperators extends AbstractOperator implements Operators {
         this.applier = applier;
     }
 
+    private AbstractOperators(AbstractOperators origin) {
+        this.operators = origin.operators;
+        this.applier = origin.applier;
+    }
+
     @Override
     public Operator[] getOperators() {
         return operators;
@@ -39,7 +44,7 @@ abstract class AbstractOperators extends AbstractOperator implements Operators {
     @Override
     public DoubleMatrix invoke(Operator prev) {
         Operator base = prev;
-        for (Operator op : getOperators()) {
+        for (Operator op : operators) {
             base = op.asOperators().invoke(base);
             base = apply(base, op);
         }
@@ -63,12 +68,12 @@ abstract class AbstractOperators extends AbstractOperator implements Operators {
 
     @Override
     public Operators minus() {
-        return MinusInvoker.of(this);
+        return new MinusOperators(this);
     }
 
     @Override
     public Operators divide() {
-        return DivideInvoker.of(this);
+        return new DivideOperators(this);
     }
 
     @Override
@@ -100,11 +105,11 @@ abstract class AbstractOperators extends AbstractOperator implements Operators {
             private int pos = 0;
 
             public boolean hasNext() {
-                return operators.length > pos;
+                return getOperators().length > pos;
             }
 
             public Operator next() {
-                return operators[pos++];
+                return getOperators()[pos++];
             }
 
             public void remove() {
@@ -146,4 +151,53 @@ abstract class AbstractOperators extends AbstractOperator implements Operators {
             }
         }
     }
+
+    private class DivideOperators extends AbstractOperators {
+        private final Operators origin;
+        private DivideOperators(AbstractOperators origin) {
+            super(origin);
+            this.origin = origin;
+        }
+
+        @Override
+        public DoubleMatrix invoke(Operator prev) {
+            DoubleMatrix invoke = super.invoke(prev);
+            return new DivideDoubleMatrix<>(invoke);
+        }
+
+        @Override
+        public Operators divide() {
+            return origin;
+        }
+
+        @Override
+        public CharSequence asSimple(int depth) {
+            return "1/" + super.asSimple(depth);
+        }
+    }
+
+    private class MinusOperators extends AbstractOperators {
+        private final Operators origin;
+        private MinusOperators(AbstractOperators origin) {
+            super(origin);
+            this.origin = origin;
+        }
+
+        @Override
+        public DoubleMatrix invoke(Operator prev) {
+            DoubleMatrix invoke = super.invoke(prev);
+            return new MinusDoubleMatrix<>(invoke);
+        }
+
+        @Override
+        public Operators minus() {
+            return origin;
+        }
+
+        @Override
+        public CharSequence asSimple(int depth) {
+            return "-" + super.asSimple(depth);
+        }
+    }
+
 }
