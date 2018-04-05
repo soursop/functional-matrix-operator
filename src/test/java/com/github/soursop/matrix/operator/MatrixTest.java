@@ -40,11 +40,11 @@ public class MatrixTest {
 
     @Ignore
     @Test
-    public void testHeadFromNext() {
+    public void testHeadFromUnder() {
         DoubleOperator head = DoubleOperator.of(1l);
         DoubleMatrix one = new DenseDoubleMatrix(2, sample);
         DoubleMatrix another = new DenseDoubleMatrix(2, sample);
-        DoubleMatrix invoke = head.tail(one).tail(another).invoke();
+        DoubleMatrix invoke = head.under(one).under(another).invoke();
         System.out.println(invoke.head().head());
     }
 

@@ -12,7 +12,7 @@ enum Conjunction implements Applier {
             return one.toIterator(other.height(), 1);
         }
     }
-    , TAIL(";") {
+    , UNDER(";") {
         @Override
         protected DoubleMatrix some(DoubleMatrix one, DoubleMatrix other) {
             return new TailDoubleMatrix(one, other);

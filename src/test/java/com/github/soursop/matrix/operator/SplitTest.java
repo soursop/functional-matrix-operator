@@ -74,7 +74,7 @@ public class SplitTest {
             for (SplitMatrix split : results) {
                 result[i++] = split.join();
             }
-            return new Tail(result).invoke();
+            return new Under(result).invoke();
         }
 
         private List<SplitMatrix> create() {
