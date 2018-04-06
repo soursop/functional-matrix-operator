@@ -2,12 +2,12 @@ package com.github.soursop.matrix.operator;
 
 import java.util.Arrays;
 
-public class TailDoubleMatrix extends AbstractDoubleMatrix implements DoubleMatrix {
+public class UnderDoubleMatrix extends AbstractDoubleMatrix implements DoubleMatrix {
     private final int height;
     private final int width;
     private DoubleMatrix[] matrices;
 
-    public TailDoubleMatrix(DoubleMatrix... matrices) {
+    public UnderDoubleMatrix(DoubleMatrix... matrices) {
         this.matrices = matrices;
         int width = 0;
         int height = 0;
@@ -54,6 +54,6 @@ public class TailDoubleMatrix extends AbstractDoubleMatrix implements DoubleMatr
 
     @Override
     public DoubleMatrix tail() {
-        return matrices.length == 1? None.DOUBLE_MATRIX : matrices.length == 2? matrices[1] : new TailDoubleMatrix(Arrays.copyOfRange(matrices, 1, matrices.length));
+        return matrices.length == 1? None.DOUBLE_MATRIX : matrices.length == 2? matrices[1] : new UnderDoubleMatrix(Arrays.copyOfRange(matrices, 1, matrices.length));
     }
 }

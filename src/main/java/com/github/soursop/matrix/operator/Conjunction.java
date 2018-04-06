@@ -15,7 +15,7 @@ enum Conjunction implements Applier {
     , UNDER(";") {
         @Override
         protected DoubleMatrix some(DoubleMatrix one, DoubleMatrix other) {
-            return new TailDoubleMatrix(one, other);
+            return new UnderDoubleMatrix(one, other);
         }
 
         @Override
