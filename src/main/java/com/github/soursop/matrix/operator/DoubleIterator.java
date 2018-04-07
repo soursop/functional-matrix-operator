@@ -1,11 +1,11 @@
 package com.github.soursop.matrix.operator;
 
-class DoubleIterator extends AbstractDoubleMatrix {
+public class DoubleIterator extends AbstractDoubleMatrix {
     private final int height;
     private final int width;
     private final double from;
 
-    DoubleIterator(double from, int height, int width) {
+    public DoubleIterator(double from, int height, int width) {
         this.from = from;
         this.height = height;
         this.width = width;
