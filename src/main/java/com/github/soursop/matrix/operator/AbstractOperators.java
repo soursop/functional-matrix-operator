@@ -45,8 +45,8 @@ abstract class AbstractOperators extends AbstractOperator implements Operators {
     public DoubleMatrix invoke(Operator prev) {
         Operator base = prev;
         for (Operator op : operators) {
-            base = op.asOperators().invoke(base);
-            base = apply(base, op);
+            Operator next = op.asOperators().isSome()? op.asOperators().invoke() : op;
+            base = apply(base, next);
         }
         return base.asDoubleMatrix();
     }
