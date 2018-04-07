@@ -3,7 +3,7 @@ package com.github.soursop.matrix.operator;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Utils {
+public class Functions {
     public static String asFormat(String format, Object ... objects) {
         return String.format(format, objects);
     }

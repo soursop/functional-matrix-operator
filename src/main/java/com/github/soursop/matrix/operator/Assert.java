@@ -1,6 +1,6 @@
 package com.github.soursop.matrix.operator;
 
-import static com.github.soursop.matrix.operator.Utils.asFormat;
+import static com.github.soursop.matrix.operator.Functions.asFormat;
 
 class Assert {
     static IllegalArgumentException throwIndexException(int height, int width, DoubleMatrix matrix) {
