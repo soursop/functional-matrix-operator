@@ -91,12 +91,18 @@ abstract class AbstractDoubleMatrix extends AbstractOperator implements DoubleMa
 
     @Override
     public DoubleMatrix head() {
-        return None.DOUBLE_MATRIX;
+        if (width() < 1) {
+            return None.DOUBLE_MATRIX;
+        }
+        return new VectorDoubleMatrix(0, 1, this);
     }
 
     @Override
     public DoubleMatrix tail() {
-        return None.DOUBLE_MATRIX;
+        if (width() < 2) {
+            return None.DOUBLE_MATRIX;
+        }
+        return new VectorDoubleMatrix(1, width(), this);
     }
 
     @Override
@@ -105,17 +111,17 @@ abstract class AbstractDoubleMatrix extends AbstractOperator implements DoubleMa
         List<DoubleMatrix> list = new ArrayList<>();
         for (int i = 0; i < repeat; i++) {
             int next = (i + 1) * size;
-            list.add(new LogicalDoubleMatrix(i * size, next >= height()? height() : next, this));
+            list.add(new SplitDoubleMatrix(i * size, next >= height()? height() : next, this));
         }
         return list;
     }
 
-    private static class LogicalDoubleMatrix extends AbstractDoubleMatrix {
+    private static class SplitDoubleMatrix extends AbstractDoubleMatrix {
         private final DoubleMatrix parent;
         private final int from;
         private final int to;
 
-        private LogicalDoubleMatrix(int from, int to, DoubleMatrix parent) {
+        private SplitDoubleMatrix(int from, int to, DoubleMatrix parent) {
             this.parent = parent;
             this.from = from;
             this.to = to;
@@ -135,6 +141,39 @@ abstract class AbstractDoubleMatrix extends AbstractOperator implements DoubleMa
         public double valueOf(int height, int width) {
             Assert.assertIndexException(height, width, this);
             return parent.valueOf(height + from, width);
+        }
+
+        @Override
+        public DoubleMatrix transpose() {
+            return new DoubleMatrixTranspose<>(this);
+        }
+    }
+
+    private static class VectorDoubleMatrix extends AbstractDoubleMatrix {
+        private final DoubleMatrix parent;
+        private final int from;
+        private final int to;
+
+        private VectorDoubleMatrix(int from, int to, DoubleMatrix parent) {
+            this.parent = parent;
+            this.from = from;
+            this.to = to;
+        }
+
+        @Override
+        public int height() {
+            return parent.height();
+        }
+
+        @Override
+        public int width() {
+            return to - from;
+        }
+
+        @Override
+        public double valueOf(int height, int width) {
+            Assert.assertIndexException(height, width, this);
+            return parent.valueOf(height, width + from);
         }
 
         @Override
