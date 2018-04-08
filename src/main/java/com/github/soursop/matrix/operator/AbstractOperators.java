@@ -3,7 +3,7 @@ package com.github.soursop.matrix.operator;
 import java.util.Iterator;
 import java.util.Stack;
 
-abstract class AbstractOperators extends AbstractOperator implements Operators {
+abstract class AbstractOperators extends AbstractOperator implements Operators, Transposable<Operators> {
     private final Operator[] operators;
     private final Applier applier;
 
@@ -74,6 +74,26 @@ abstract class AbstractOperators extends AbstractOperator implements Operators {
     @Override
     public Operators divide() {
         return new DivideOperators(this);
+    }
+
+    @Override
+    public Operators pow(final int pow) {
+        return new LazyOperators("pow", new Function() {
+            @Override
+            public double apply(double v) {
+                return Math.pow(v, pow);
+            }
+        }, this);
+    }
+
+    @Override
+    public Operators transpose() {
+        return new TransposeOperators(this);
+    }
+
+    @Override
+    public Operators apply(Function function) {
+        return new LazyOperators(function, this);
     }
 
     @Override
@@ -152,6 +172,56 @@ abstract class AbstractOperators extends AbstractOperator implements Operators {
                 stack.push(next.asOperators().iterator());
                 return stack.peek().next();
             }
+        }
+    }
+
+    private class LazyOperators extends AbstractOperators {
+        private final String sign;
+        private final Function function;
+
+        private LazyOperators(Function function, AbstractOperators origin) {
+            this("func", function, origin);
+        }
+
+        private LazyOperators(String sign, Function function, AbstractOperators origin) {
+            super(origin);
+            this.sign = sign;
+            this.function = function;
+        }
+
+        @Override
+        public DoubleMatrix invoke(Operator prev) {
+            DoubleMatrix invoke = super.invoke(prev);
+            return new LazyDoubleMatrix<>(sign, function, invoke);
+        }
+
+        @Override
+        public CharSequence asSimple(int depth) {
+            return sign + super.asSimple(depth);
+        }
+    }
+
+    private class TransposeOperators extends AbstractOperators {
+        private final Operators origin;
+        private TransposeOperators(AbstractOperators origin) {
+            super(origin);
+            this.origin = origin;
+        }
+
+        @Override
+        public DoubleMatrix invoke(Operator prev) {
+            DoubleMatrix invoke = super.invoke(prev);
+            return new DoubleMatrixTranspose<>(invoke);
+        }
+
+        @Override
+        public Operators transpose() {
+            return origin;
+        }
+
+        @Override
+        public CharSequence asSimple(int depth) {
+            return super.asSimple(depth) + "'";
         }
     }
 

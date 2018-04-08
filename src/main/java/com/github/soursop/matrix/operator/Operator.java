@@ -15,6 +15,8 @@ public interface Operator extends Printable, Serializable {
     <T extends Operator> T as(T t);
     Operator minus();
     Operator divide();
+    Operator pow(int pow);
+    Operator apply(Function function);
     boolean isNone();
     boolean isSome();
 }

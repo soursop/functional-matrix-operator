@@ -56,4 +56,14 @@ public class NextDoubleMatrix extends AbstractDoubleMatrix implements DoubleMatr
     public DoubleMatrix tail() {
         return matrices.length == 1? None.DOUBLE_MATRIX : matrices.length == 2? matrices[1] : new NextDoubleMatrix(Arrays.copyOfRange(matrices, 1, matrices.length));
     }
+
+    @Override
+    public DoubleMatrix last() {
+        return matrices.length == 0? None.DOUBLE_MATRIX : matrices[matrices.length - 1];
+    }
+
+    @Override
+    public DoubleMatrix init() {
+        return matrices.length == 1? None.DOUBLE_MATRIX : matrices.length == 2? matrices[0] : new NextDoubleMatrix(Arrays.copyOfRange(matrices, 0, matrices.length - 1));
+    }
 }

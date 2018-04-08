@@ -36,9 +36,19 @@ public class DoubleOperator extends AbstractOperator {
     }
 
     @Override
+    public Operator pow(int pow) {
+        return new DoubleOperator(Math.pow(value, pow));
+    }
+
+    @Override
+    public Operator apply(Function function) {
+        return new DoubleOperator(function.apply(value));
+    }
+
+    @Override
     protected CharSequence _asSimple(int depth) {
-        withPadding(depth);
-        append(value);
+        withPadding();
+        append(String.format("%.4f", value));
         return getBuilder();
     }
 

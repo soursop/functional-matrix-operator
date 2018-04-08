@@ -47,12 +47,18 @@ abstract class AbstractDoubleMatrix extends AbstractOperator implements DoubleMa
         return builder.toString();
     }
 
+    @Override
     public double sum() {
         double sum = 0d;
         for (int i = 0; i < size(); i++) {
             sum = sum + valueOf(i);
         }
         return sum;
+    }
+
+    @Override
+    public double avg() {
+        return sum() / size();
     }
 
     @Override
@@ -63,6 +69,21 @@ abstract class AbstractDoubleMatrix extends AbstractOperator implements DoubleMa
     @Override
     public DoubleMatrix divide() {
         return new DivideDoubleMatrix<>(this);
+    }
+
+    @Override
+    public DoubleMatrix pow(final int pow) {
+        return apply(new Function() {
+            @Override
+            public double apply(double v) {
+                return Math.pow(v, pow);
+            }
+        });
+    }
+
+    @Override
+    public DoubleMatrix apply(Function function) {
+        return new LazyDoubleMatrix<>(function, this);
     }
 
     @Override
@@ -103,6 +124,22 @@ abstract class AbstractDoubleMatrix extends AbstractOperator implements DoubleMa
             return None.DOUBLE_MATRIX;
         }
         return new VectorDoubleMatrix(1, width(), this);
+    }
+
+    @Override
+    public DoubleMatrix last() {
+        if (width() < 1) {
+            return None.DOUBLE_MATRIX;
+        }
+        return new VectorDoubleMatrix(width() - 1, width(), this);
+    }
+
+    @Override
+    public DoubleMatrix init() {
+        if (width() < 2) {
+            return None.DOUBLE_MATRIX;
+        }
+        return new VectorDoubleMatrix(0, width() - 1, this);
     }
 
     @Override
