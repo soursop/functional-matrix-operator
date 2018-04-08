@@ -28,13 +28,13 @@ public class GradientDecentTest {
         DoubleOperator alpha = DoubleOperator.of(0.01d);
         int repeat = 1500;
         for (int i = 0; i < repeat; i++) {
-            theta = gradient(input, output, theta, size, alpha);
+            theta = gradientDecent(input, output, theta, size, alpha);
         }
         System.out.println(String.format("Expected theta values (approx) :"));
         System.out.println(String.format("-3.6303\t1.1664 : %f\t%f", theta.valueOf(0), theta.valueOf(1)));
     }
 
-    private DoubleMatrix gradient(Next input, DoubleMatrix output, DoubleMatrix theta, DoubleOperator size, DoubleOperator alpha) {
+    private DoubleMatrix gradientDecent(Next input, DoubleMatrix output, DoubleMatrix theta, DoubleOperator size, DoubleOperator alpha) {
         Multiply hypothesis = input.multiply(theta);
         Plus cost = hypothesis.minus(output);
         Multiply gradient = cost.multiply(alpha).divide(size);
