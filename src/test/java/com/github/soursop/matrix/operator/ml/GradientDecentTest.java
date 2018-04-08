@@ -21,9 +21,9 @@ public class GradientDecentTest {
         int DERIVATIVE_OF_POW = 2;
         DoubleMatrix theta = new DoubleIterator(0d, 2, 1);
         Multiply hypothesis = input.multiply(theta);
-        Plus gradient = hypothesis.minus(output);
-        double cost = gradient.pow(DERIVATIVE_OF_POW).invoke().avg() / DERIVATIVE_OF_POW;
-        print("Expected cost value (approx) 32.07 : %f", cost);
+        Plus cost = hypothesis.minus(output);
+        double squaredError = cost.pow(DERIVATIVE_OF_POW).invoke().avg() / DERIVATIVE_OF_POW;
+        print("Expected cost value (approx) 32.07 : %f", squaredError);
 
         DoubleOperator alpha = DoubleOperator.of(0.01d);
         int repeat = 1500;
@@ -36,8 +36,9 @@ public class GradientDecentTest {
 
     private DoubleMatrix gradient(Next input, DoubleMatrix output, DoubleMatrix theta, DoubleOperator size, DoubleOperator alpha) {
         Multiply hypothesis = input.multiply(theta);
-        Plus gradient = hypothesis.minus(output);
-        Operators decent = input.transpose().multiply(gradient).multiply(alpha).divide(size);
+        Plus cost = hypothesis.minus(output);
+        Multiply gradient = cost.multiply(alpha).divide(size);
+        Operators decent = input.transpose().multiply(gradient);
         return theta.minus(decent).invoke();
     }
 
