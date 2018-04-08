@@ -55,6 +55,11 @@ abstract class AbstractOperator implements Operator {
         return _asSimple(depth);
     }
 
+    @Override
+    public String toString() {
+        return asSimple(0).toString();
+    }
+
     abstract protected CharSequence _asSimple(int depth);
 
     protected void initBuilder(int depth) {
