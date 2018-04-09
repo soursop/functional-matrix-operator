@@ -13,7 +13,7 @@ public class StdOperator extends DoubleOperator {
         for (int i = 0; i < doubleMatrix.size(); i++) {
             result += Math.pow(doubleMatrix.valueOf(i) - avg.getValue(), 2);
         }
-        double std = result / doubleMatrix.size();
+        double std = Math.sqrt(result / doubleMatrix.size());
         return new StdOperator(avg, std);
     }
 
