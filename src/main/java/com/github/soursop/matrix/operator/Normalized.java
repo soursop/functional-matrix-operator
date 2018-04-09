@@ -1,7 +1,7 @@
 package com.github.soursop.matrix.operator;
 
 public class Normalized extends NextDoubleMatrix {
-    public Normalized of(DoubleMatrix one) {
+    public static Normalized of(DoubleMatrix one) {
         DoubleMatrix[] transformed = new DoubleMatrix[one.width()];
         for (int i = 0; one.isSome(); i++) {
             DoubleMatrix head = one.head();

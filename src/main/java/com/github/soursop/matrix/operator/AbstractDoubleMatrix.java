@@ -68,6 +68,11 @@ abstract class AbstractDoubleMatrix extends AbstractOperator implements DoubleMa
     }
 
     @Override
+    public Normalized normalize() {
+        return Normalized.of(this);
+    }
+
+    @Override
     public DoubleMatrix apply(Function function) {
         return new LazyDoubleMatrix<>(function, this);
     }
