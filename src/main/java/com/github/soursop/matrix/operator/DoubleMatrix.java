@@ -15,6 +15,4 @@ public interface DoubleMatrix extends Operator, Transposable<DoubleMatrix> {
     DoubleMatrix tail();
     DoubleMatrix last();
     DoubleMatrix init();
-    double sum();
-    double avg();
 }

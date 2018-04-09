@@ -1,6 +1,6 @@
 package com.github.soursop.matrix.operator;
 
-public enum Sign implements Applier {
+public enum Calculation implements With {
     MULTIPLY("*") {
         @Override
         double apply(double v1, double v2) {
@@ -55,7 +55,7 @@ public enum Sign implements Applier {
     }
     ;
     public final String sign;
-    Sign(String sign) {
+    Calculation(String sign) {
         this.sign = sign;
     }
 
@@ -64,7 +64,6 @@ public enum Sign implements Applier {
     protected abstract DoubleMatrix none(DoubleMatrix none, DoubleMatrix some);
     protected abstract DoubleOperator some(DoubleOperator one, DoubleOperator other);
     protected abstract DoubleOperator none(DoubleOperator none, DoubleOperator some);
-
 
     @Override
     public String symbol() {
@@ -91,7 +90,7 @@ public enum Sign implements Applier {
         return other.isNone()? (one.isNone()? one : none(other, one)) : (one.isNone()? none(one, other) : some(one, other));
     }
 
-    protected DoubleMatrix elementWise(Sign sign, DoubleMatrix one, DoubleOperator other) {
+    protected DoubleMatrix elementWise(Calculation sign, DoubleMatrix one, DoubleOperator other) {
         double[] values = new double[one.height() * one.width()];
         for (int i = 0; i < one.size(); i++) {
             values[i] = sign.apply(one.valueOf(i), other.getValue());
@@ -99,7 +98,7 @@ public enum Sign implements Applier {
         return new DenseDoubleMatrix(one.width(), values);
     }
 
-    protected DoubleMatrix elementWise(Sign sign, DoubleMatrix one, DoubleMatrix other) {
+    protected DoubleMatrix elementWise(Calculation sign, DoubleMatrix one, DoubleMatrix other) {
         Assert.assertElementSize(sign, one, other);
         double[] values = new double[one.height() * other.width()];
         for (int i = 0; i < one.size(); i++) {
@@ -108,7 +107,7 @@ public enum Sign implements Applier {
         return new DenseDoubleMatrix(other.width(), values);
     }
 
-    protected DoubleMatrix innerProduct(Sign sign, DoubleMatrix one, DoubleMatrix other) {
+    protected DoubleMatrix innerProduct(Calculation sign, DoubleMatrix one, DoubleMatrix other) {
         Assert.assertProductSize(sign, one, other);
         double[] values = new double[one.height() * other.width()];
         for (int h = 0; h < one.height(); h++) {

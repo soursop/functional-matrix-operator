@@ -3,7 +3,7 @@ package com.github.soursop.matrix.operator;
 public interface None {
     DoubleMatrix DOUBLE_MATRIX = new NoneDoubleMatrix(0,0, new double[0]);
     DoubleOperator DOUBLE_OPERATOR = new NoneDoubleOperator(0l);
-    Operators OPERATORS = new NoneOperators(new Applier() {
+    Operators OPERATORS = new NoneOperators(new With() {
         @Override
         public String symbol() {
             return "";
@@ -43,8 +43,8 @@ public interface None {
     }
 
     class NoneOperators extends AbstractOperators implements None {
-        protected NoneOperators(Applier applier, Operator... operators) {
-            super(applier, operators);
+        protected NoneOperators(With appliers, Operator... operators) {
+            super(appliers, operators);
         }
 
         @Override

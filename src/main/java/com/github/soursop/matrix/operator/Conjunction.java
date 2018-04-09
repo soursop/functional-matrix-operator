@@ -1,6 +1,6 @@
 package com.github.soursop.matrix.operator;
 
-enum Conjunction implements Applier {
+enum Conjunction implements With {
     NEXT("::") {
         @Override
         protected DoubleMatrix some(DoubleMatrix one, DoubleMatrix other) {

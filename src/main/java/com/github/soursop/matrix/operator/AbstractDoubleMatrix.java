@@ -48,20 +48,6 @@ abstract class AbstractDoubleMatrix extends AbstractOperator implements DoubleMa
     }
 
     @Override
-    public double sum() {
-        double sum = 0d;
-        for (int i = 0; i < size(); i++) {
-            sum = sum + valueOf(i);
-        }
-        return sum;
-    }
-
-    @Override
-    public double avg() {
-        return sum() / size();
-    }
-
-    @Override
     public DoubleMatrix minus() {
         return new MinusDoubleMatrix<>(this);
     }

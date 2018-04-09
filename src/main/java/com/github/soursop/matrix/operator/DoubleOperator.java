@@ -11,7 +11,7 @@ public class DoubleOperator extends AbstractOperator {
         return new DoubleOperator(value);
     }
 
-    double getValue() {
+    public double getValue() {
         return value;
     }
 

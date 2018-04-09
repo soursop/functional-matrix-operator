@@ -5,15 +5,15 @@ class Assert {
         return new IllegalArgumentException(String.format("Could't found value of index height:%d width:%d from %s", height, width, matrix.asSimple(0)));
     }
 
-    static void assertElementSize(Sign sign, DoubleMatrix one, DoubleMatrix other) {
+    static void assertElementSize(Applier applier, DoubleMatrix one, DoubleMatrix other) {
         if (one.height() != other.height() || one.width() != one.width()) {
-            throw new IllegalArgumentException(String.format("Could't match %s of %s and %s", sign.sign, one.asSimple(0), other.asSimple(0)));
+            throw new IllegalArgumentException(String.format("Could't match %s of %s and %s", applier.symbol(), one.asSimple(0), other.asSimple(0)));
         }
     }
 
-    static void assertProductSize(Sign sign, DoubleMatrix one, DoubleMatrix other) {
+    static void assertProductSize(Applier applier, DoubleMatrix one, DoubleMatrix other) {
         if (one.width() != other.height()) {
-            throw new IllegalArgumentException(String.format("Could't match %s of %s and %s", sign.sign, one.asSimple(0), other.asSimple(0)));
+            throw new IllegalArgumentException(String.format("Could't match %s of %s and %s", applier.symbol(), one.asSimple(0), other.asSimple(0)));
         }
     }
 

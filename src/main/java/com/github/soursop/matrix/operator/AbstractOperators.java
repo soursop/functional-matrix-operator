@@ -5,16 +5,16 @@ import java.util.Stack;
 
 abstract class AbstractOperators extends AbstractOperator implements Operators, Transposable<Operators> {
     private final Operator[] operators;
-    private final Applier applier;
+    private final With with;
 
-    protected AbstractOperators(Applier applier, Operator... operators) {
+    protected AbstractOperators(With with, Operator... operators) {
         this.operators = operators;
-        this.applier = applier;
+        this.with = with;
     }
 
     private AbstractOperators(AbstractOperators origin) {
         this.operators = origin.operators;
-        this.applier = origin.applier;
+        this.with = origin.with;
     }
 
     @Override
@@ -31,13 +31,13 @@ abstract class AbstractOperators extends AbstractOperator implements Operators, 
         boolean isOne = one.asDoubleMatrix().isSome();
         boolean isOther = other.asDoubleMatrix().isSome();
         if (isOne && isOther) {
-            return applier.apply(one.asDoubleMatrix(), other.asDoubleMatrix());
+            return with.apply(one.asDoubleMatrix(), other.asDoubleMatrix());
         } else if (isOne) {
-            return applier.apply(one.asDoubleMatrix(), other.asDoubleOperator());
+            return with.apply(one.asDoubleMatrix(), other.asDoubleOperator());
         } else if (isOther) {
-            return applier.apply(one.asDoubleOperator(), other.asDoubleMatrix());
+            return with.apply(one.asDoubleOperator(), other.asDoubleMatrix());
         } else {
-            return applier.apply(one.asDoubleOperator(), other.asDoubleOperator());
+            return with.apply(one.asDoubleOperator(), other.asDoubleOperator());
         }
     }
 
@@ -98,7 +98,7 @@ abstract class AbstractOperators extends AbstractOperator implements Operators, 
 
     @Override
     protected CharSequence _asSimple(int depth) {
-        return asSimple(applier.symbol(), depth);
+        return asSimple(with.symbol(), depth);
     }
 
     protected CharSequence asSimple(String sign, int depth) {
