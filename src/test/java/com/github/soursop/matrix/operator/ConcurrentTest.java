@@ -11,7 +11,7 @@ import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveTask;
 
 
-public class SplitTest {
+public class ConcurrentTest {
 
     @Test
     public void testSplit() {
@@ -26,10 +26,10 @@ public class SplitTest {
     @Ignore
     @Test
     public void testForkAndJoin() {
-        int height = 1000_000;
+        int height = 2_000_000;
         int width = 20;
         int size = 30;
-        int split = 100_000;
+        int split = 200_000;
 
         double[] values1 = new DoubleRandomIterator(height, width, 0).values();
         double[] values2 = new DoubleRandomIterator(width, size, 0).values();
@@ -43,52 +43,8 @@ public class SplitTest {
 
         long s2 = System.currentTimeMillis();
         ForkJoinPool pool = new ForkJoinPool(4);
-        DoubleMatrix resultBySplit = pool.invoke(new SplitMatrix(one, multiply, split));
+        DoubleMatrix resultBySplit = pool.invoke(new SplitDoubleMatrix(one, multiply, split));
         System.out.println("thread result size: " + resultBySplit.size());
         System.out.println("thread elaps time: " + (System.currentTimeMillis() - s2));
-    }
-
-    class SplitMatrix extends RecursiveTask<DoubleMatrix> {
-        private final int size;
-        private final DoubleMatrix origin;
-        private final Multiply multiply;
-        SplitMatrix(DoubleMatrix origin, Multiply multiply, int size) {
-            this.origin = origin;
-            this.multiply = multiply;
-            this.size = size;
-        }
-
-
-        @Override
-        protected DoubleMatrix compute() {
-            if (origin.height() > size) {
-                return combine(ForkJoinTask.invokeAll(create()));
-            } else {
-                return invoke(origin);
-            }
-        }
-
-        private DoubleMatrix combine(Collection<SplitMatrix> results) {
-            DoubleMatrix[] result = new DoubleMatrix[results.size()];
-            int i = 0;
-            for (SplitMatrix split : results) {
-                result[i++] = split.join();
-            }
-            return new Under(result).invoke();
-        }
-
-        private List<SplitMatrix> create() {
-            List<DoubleMatrix> doubleMatrices = origin.splitBy(size);
-            ArrayList<SplitMatrix> list = new ArrayList<>();
-            for (DoubleMatrix doubleMatrix : doubleMatrices) {
-                list.add(new SplitMatrix(doubleMatrix, multiply, size));
-            }
-            return list;
-        }
-
-        private DoubleMatrix invoke(DoubleMatrix matrix) {
-            return multiply.invoke(matrix);
-        }
-
     }
 }
