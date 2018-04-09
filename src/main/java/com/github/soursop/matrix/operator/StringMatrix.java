@@ -16,11 +16,11 @@ public class StringMatrix {
     }
 
     public void set(int h, int w, String value) {
-        String s = valueOf(h, w);
-        if (s == null) {
-            s = value;
+        int idx = h * width + w;
+        if (values[idx] == null) {
+            values[idx] = value;
         } else {
-            s += value;
+            values[idx] += value;
         }
     }
 
