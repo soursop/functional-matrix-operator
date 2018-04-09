@@ -30,8 +30,8 @@ public class GradientDecentTest {
         for (int i = 0; i < repeat; i++) {
             theta = gradientDecent(input, output, theta, size, alpha);
         }
-        System.out.println(String.format("Expected theta values (approx) :"));
-        System.out.println(String.format("-3.6303\t1.1664 : %f\t%f", theta.valueOf(0), theta.valueOf(1)));
+        print("Expected theta values (approx) :");
+        print("-3.6303\t1.1664 : %f\t%f", theta.valueOf(0), theta.valueOf(1));
     }
 
     private DoubleMatrix gradientDecent(Next input, DoubleMatrix output, DoubleMatrix theta, DoubleOperator size, DoubleOperator alpha) {
