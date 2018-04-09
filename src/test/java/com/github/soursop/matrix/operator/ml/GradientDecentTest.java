@@ -46,7 +46,15 @@ public class GradientDecentTest {
     public void testMulti() throws IOException {
         double[] data = read("ml/ex01/data2.txt");
         DenseDoubleMatrix matrix = new DenseDoubleMatrix(3, data);
-        DoubleMatrix input = matrix.init();
+        Next input = new DoubleOperator(1d).next(matrix.init().normalize());
         DoubleMatrix output = matrix.last();
+
+        int DERIVATIVE_OF_POW = 2;
+        DoubleMatrix theta = new DoubleIterator(0d, 3, 1);
+        Multiply hypothesis = input.multiply(theta);
+        Plus cost = hypothesis.minus(output);
+        double squaredError = AvgOperator.of(cost.pow(DERIVATIVE_OF_POW).invoke()).getValue() / DERIVATIVE_OF_POW;
+        print("Expected cost value (approx) 2108900000 : %f", squaredError);
+
     }
 }
