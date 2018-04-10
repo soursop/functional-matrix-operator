@@ -5,11 +5,6 @@ public interface None {
     DoubleOperator DOUBLE_OPERATOR = new NoneDoubleOperator(0l);
     Operators OPERATORS = new NoneOperators(new With() {
         @Override
-        public String symbol() {
-            return "";
-        }
-
-        @Override
         public DoubleMatrix apply(DoubleMatrix one, DoubleMatrix other) {
             return one;
         }

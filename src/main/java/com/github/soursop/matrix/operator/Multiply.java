@@ -1,7 +1,7 @@
 package com.github.soursop.matrix.operator;
 
-public class Multiply extends AbstractOperators {
+public class Multiply extends AbstractOperators implements Sign.Multiply {
     protected Multiply(Operator... operators) {
-        super(Calculation.MULTIPLY, operators);
+        super(with, operators);
     }
 }

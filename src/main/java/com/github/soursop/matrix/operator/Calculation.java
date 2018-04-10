@@ -1,74 +1,12 @@
 package com.github.soursop.matrix.operator;
 
-public enum Calculation implements With {
-    MULTIPLY("*") {
-        @Override
-        double apply(double v1, double v2) {
-            return v1 * v2;
-        }
-
-        @Override
-        protected DoubleMatrix some(DoubleMatrix one, DoubleMatrix other) {
-            return innerProduct(this, one, other);
-        }
-
-        @Override
-        protected DoubleMatrix none(DoubleMatrix none, DoubleMatrix some) {
-            return some;
-        }
-
-        @Override
-        protected DoubleOperator some(DoubleOperator one, DoubleOperator other) {
-            return new DoubleOperator(apply(one.getValue(), other.getValue()));
-        }
-
-        @Override
-        protected DoubleOperator none(DoubleOperator none, DoubleOperator some) {
-            return some;
-        }
-    }
-    , PLUS("+") {
-        @Override
-        double apply(double v1, double v2) {
-            return v1 + v2;
-        }
-
-        @Override
-        protected DoubleMatrix some(DoubleMatrix one, DoubleMatrix other) {
-            return elementWise(this, one, other);
-        }
-
-        @Override
-        protected DoubleMatrix none(DoubleMatrix none, DoubleMatrix some) {
-            return some;
-        }
-
-        @Override
-        protected DoubleOperator some(DoubleOperator one, DoubleOperator other) {
-            return new DoubleOperator(apply(one.getValue(), other.getValue()));
-        }
-
-        @Override
-        protected DoubleOperator none(DoubleOperator none, DoubleOperator some) {
-            return some;
-        }
-    }
-    ;
-    public final String sign;
-    Calculation(String sign) {
-        this.sign = sign;
-    }
+abstract class Calculation implements With {
 
     abstract double apply(double v1, double v2);
     protected abstract DoubleMatrix some(DoubleMatrix one, DoubleMatrix other);
     protected abstract DoubleMatrix none(DoubleMatrix none, DoubleMatrix some);
     protected abstract DoubleOperator some(DoubleOperator one, DoubleOperator other);
     protected abstract DoubleOperator none(DoubleOperator none, DoubleOperator some);
-
-    @Override
-    public String symbol() {
-        return sign;
-    }
 
     @Override
     public DoubleMatrix apply(DoubleMatrix one, DoubleMatrix other) {

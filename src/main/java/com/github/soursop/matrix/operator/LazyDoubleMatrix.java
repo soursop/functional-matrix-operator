@@ -3,14 +3,10 @@ package com.github.soursop.matrix.operator;
 class LazyDoubleMatrix<T extends DoubleMatrix> extends AbstractDoubleMatrix {
     protected final T origin;
     private final Function function;
-    private final String sign;
+
     LazyDoubleMatrix(Function function, T origin) {
-        this("func", function, origin);
-    }
-    LazyDoubleMatrix(String sign, Function function, T origin) {
         this.origin = origin;
         this.function = function;
-        this.sign = sign;
     }
 
     @Override
@@ -35,26 +31,20 @@ class LazyDoubleMatrix<T extends DoubleMatrix> extends AbstractDoubleMatrix {
 
     @Override
     public DoubleMatrix head() {
-        return origin.head().isNone()? origin.head() : new LazyDoubleMatrix<>(sign, function, origin.head());
+        return origin.head().isNone()? origin.head() : create(origin.head());
     }
 
     @Override
     public DoubleMatrix tail() {
-        return origin.tail().isNone()? origin.tail() : new LazyDoubleMatrix<>(sign, function, origin.tail());
+        return origin.tail().isNone()? origin.tail() : create(origin.tail());
     }
 
     @Override
     public DoubleMatrix last() {
-        return origin.last().isNone()? origin.last() : new LazyDoubleMatrix<>(sign, function, origin.last());
+        return origin.last().isNone()? origin.last() : create(origin.last());
     }
 
-    @Override
-    protected CharSequence _asSimple(int depth) {
-        withPadding();
-        append(sign);
-        append(height());
-        append(":");
-        append(width());
-        return getBuilder();
+    protected LazyDoubleMatrix create(DoubleMatrix origin) {
+        return new LazyDoubleMatrix(function, origin);
     }
 }

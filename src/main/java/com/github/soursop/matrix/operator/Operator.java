@@ -12,11 +12,11 @@ public interface Operator extends Printable, Serializable {
     Plus minus(Operator other);
     Multiply divide(DoubleOperator other);
     Under under(Operator other);
-    <T extends Operator> T as(T t);
     Operator minus();
     Operator divide();
     Operator pow(int pow);
     Operator apply(Function function);
+    <T extends Operator> T as(T t);
     boolean isNone();
     boolean isSome();
 }

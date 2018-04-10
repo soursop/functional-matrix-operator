@@ -1,6 +1,6 @@
 package com.github.soursop.matrix.operator;
 
-public interface With extends Applier {
+public interface With {
     DoubleMatrix apply(DoubleMatrix one, DoubleMatrix other);
     DoubleMatrix apply(DoubleMatrix one, DoubleOperator other);
     DoubleMatrix apply(DoubleOperator one, DoubleMatrix other);

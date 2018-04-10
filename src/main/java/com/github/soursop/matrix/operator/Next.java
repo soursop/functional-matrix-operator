@@ -1,7 +1,7 @@
 package com.github.soursop.matrix.operator;
 
-public class Next extends AbstractOperators {
+public class Next extends AbstractOperators implements Sign.Next {
     protected Next(Operator ... operators) {
-        super(Conjunction.NEXT, operators);
+        super(with, operators);
     }
 }

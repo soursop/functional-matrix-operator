@@ -1,6 +1,6 @@
 package com.github.soursop.matrix.operator;
 
-class DoubleMatrixTranspose<T extends DoubleMatrix> extends AbstractDoubleMatrix {
+class DoubleMatrixTranspose<T extends DoubleMatrix> extends AbstractDoubleMatrix implements Sign.Transpose {
     private final T origin;
     DoubleMatrixTranspose(T origin) {
         this.origin = origin;
@@ -35,11 +35,11 @@ class DoubleMatrixTranspose<T extends DoubleMatrix> extends AbstractDoubleMatrix
 
     @Override
     public DoubleMatrix head() {
-        return origin.head();
+        return new DoubleMatrixTranspose<>(origin.head());
     }
 
     @Override
     public DoubleMatrix tail() {
-        return origin.tail();
+        return new DoubleMatrixTranspose<>(origin.tail());
     }
 }

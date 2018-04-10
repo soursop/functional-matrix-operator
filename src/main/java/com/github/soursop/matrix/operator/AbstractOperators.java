@@ -12,11 +12,6 @@ abstract class AbstractOperators extends AbstractOperator implements Operators, 
         this.with = with;
     }
 
-    private AbstractOperators(AbstractOperators origin) {
-        this.operators = origin.operators;
-        this.with = origin.with;
-    }
-
     @Override
     public Operator[] getOperators() {
         return operators;
@@ -45,7 +40,7 @@ abstract class AbstractOperators extends AbstractOperator implements Operators, 
     public DoubleMatrix invoke(Operator prev) {
         Operator base = prev;
         for (Operator op : operators) {
-            Operator next = op.asOperators().isSome()? op.asOperators().invoke() : op;
+            Operator next = op.asOperators().isSome() ? op.asOperators().invoke() : op;
             base = apply(base, next);
         }
         return base.asDoubleMatrix();
@@ -68,42 +63,38 @@ abstract class AbstractOperators extends AbstractOperator implements Operators, 
 
     @Override
     public Operators minus() {
-        return new MinusOperators(this);
+        return new MinusOperators(with, operators);
     }
 
     @Override
     public Operators divide() {
-        return new DivideOperators(this);
+        return new DivideOperators(with, operators);
     }
 
     @Override
-    public Operators pow(final int pow) {
-        return new LazyOperators("pow", new Function() {
-            @Override
-            public double apply(double v) {
-                return Math.pow(v, pow);
-            }
-        }, this);
-    }
-
-    @Override
-    public Operators transpose() {
-        return new TransposeOperators(this);
+    public Operators pow(int pow) {
+        return new PowOperators(pow, with, operators);
     }
 
     @Override
     public Operators apply(Function function) {
-        return new LazyOperators(function, this);
+        return new FunctionOperators(function, with, operators);
+    }
+
+    @Override
+    public Operators transpose() {
+        return new TransposeOperators(with, operators);
     }
 
     @Override
     protected CharSequence _asSimple(int depth) {
-        return asSimple(with.symbol(), depth);
+        return asSimple("", depth);
     }
 
-    protected CharSequence asSimple(String sign, int depth) {
+    protected CharSequence asSimple(String prefix, int depth) {
         Operator[] operators = getOperators();
         withPadding();
+        append(prefix);
         if (operators.length > 1) {
             append("(\n");
         }
@@ -111,7 +102,7 @@ abstract class AbstractOperators extends AbstractOperator implements Operators, 
             append(operators[i].asSimple(depth + 1));
             if (i + 1 < operators.length) {
                 append("\n");
-                withPadding(sign);
+                withPadding(Sign.sign(getClass()));
                 append("\n");
             }
         }
@@ -136,7 +127,7 @@ abstract class AbstractOperators extends AbstractOperator implements Operators, 
             }
 
             public void remove() {
-                Assert.assertUnsupportedOperation() ;
+                Assert.assertUnsupportedOperation();
             }
         };
         return new OperatorIterator(iterator);
@@ -172,104 +163,6 @@ abstract class AbstractOperators extends AbstractOperator implements Operators, 
                 stack.push(next.asOperators().iterator());
                 return stack.peek().next();
             }
-        }
-    }
-
-    private class LazyOperators extends AbstractOperators {
-        private final String sign;
-        private final Function function;
-
-        private LazyOperators(Function function, AbstractOperators origin) {
-            this("func", function, origin);
-        }
-
-        private LazyOperators(String sign, Function function, AbstractOperators origin) {
-            super(origin);
-            this.sign = sign;
-            this.function = function;
-        }
-
-        @Override
-        public DoubleMatrix invoke(Operator prev) {
-            DoubleMatrix invoke = super.invoke(prev);
-            return new LazyDoubleMatrix<>(sign, function, invoke);
-        }
-
-        @Override
-        public CharSequence asSimple(int depth) {
-            return sign + super.asSimple(depth);
-        }
-    }
-
-    private class TransposeOperators extends AbstractOperators {
-        private final Operators origin;
-        private TransposeOperators(AbstractOperators origin) {
-            super(origin);
-            this.origin = origin;
-        }
-
-        @Override
-        public DoubleMatrix invoke(Operator prev) {
-            DoubleMatrix invoke = super.invoke(prev);
-            return new DoubleMatrixTranspose<>(invoke);
-        }
-
-        @Override
-        public Operators transpose() {
-            return origin;
-        }
-
-        @Override
-        public CharSequence asSimple(int depth) {
-            return super.asSimple(depth) + "'";
-        }
-    }
-
-    private class DivideOperators extends AbstractOperators {
-        private final Operators origin;
-        private DivideOperators(AbstractOperators origin) {
-            super(origin);
-            this.origin = origin;
-        }
-
-        @Override
-        public DoubleMatrix invoke(Operator prev) {
-            DoubleMatrix invoke = super.invoke(prev);
-            return new DivideDoubleMatrix<>(invoke);
-        }
-
-        @Override
-        public Operators divide() {
-            return origin;
-        }
-
-        @Override
-        public CharSequence asSimple(int depth) {
-            return "1/" + super.asSimple(depth);
-        }
-    }
-
-    private class MinusOperators extends AbstractOperators {
-        private final Operators origin;
-        private MinusOperators(AbstractOperators origin) {
-            super(origin);
-            this.origin = origin;
-        }
-
-        @Override
-        public DoubleMatrix invoke(Operator prev) {
-            DoubleMatrix invoke = super.invoke(prev);
-            return new MinusDoubleMatrix<>(invoke);
-        }
-
-        @Override
-        public Operators minus() {
-            return origin;
-        }
-
-        @Override
-        public CharSequence asSimple(int depth) {
-            return "-" + super.asSimple(depth);
         }
     }
 

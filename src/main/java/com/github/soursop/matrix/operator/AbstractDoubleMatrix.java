@@ -9,6 +9,7 @@ abstract class AbstractDoubleMatrix extends AbstractOperator implements DoubleMa
     @Override
     protected CharSequence _asSimple(int depth) {
         withPadding();
+        append(Sign.sign(getClass()));
         append(height());
         append(":");
         append(width());
@@ -59,7 +60,7 @@ abstract class AbstractDoubleMatrix extends AbstractOperator implements DoubleMa
 
     @Override
     public DoubleMatrix pow(final int pow) {
-        return apply(new Function() {
+        return apply(new Sign.Pow.PowFunction() {
             @Override
             public double apply(double v) {
                 return Math.pow(v, pow);

@@ -1,41 +1,9 @@
 package com.github.soursop.matrix.operator;
 
-enum Conjunction implements With {
-    NEXT("::") {
-        @Override
-        protected DoubleMatrix some(DoubleMatrix one, DoubleMatrix other) {
-            return new NextDoubleMatrix(one, other);
-        }
-
-        @Override
-        protected DoubleMatrix asIterator(DoubleOperator one, DoubleMatrix other) {
-            return one.toIterator(other.height(), 1);
-        }
-    }
-    , UNDER(";") {
-        @Override
-        protected DoubleMatrix some(DoubleMatrix one, DoubleMatrix other) {
-            return new UnderDoubleMatrix(one, other);
-        }
-
-        @Override
-        protected DoubleMatrix asIterator(DoubleOperator one, DoubleMatrix other) {
-            return one.toIterator(1, other.width());
-        }
-    }
-    ;
-    public final String sign;
-    Conjunction(String sign) {
-        this.sign = sign;
-    }
+abstract class Conjunction implements With {
 
     protected abstract DoubleMatrix some(DoubleMatrix one, DoubleMatrix other);
     protected abstract DoubleMatrix asIterator(DoubleOperator one, DoubleMatrix other);
-
-    @Override
-    public String symbol() {
-        return sign;
-    }
 
     @Override
     public DoubleMatrix apply(DoubleMatrix one, DoubleMatrix other) {

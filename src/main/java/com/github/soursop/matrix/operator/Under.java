@@ -1,8 +1,8 @@
 package com.github.soursop.matrix.operator;
 
 
-public class Under extends AbstractOperators {
+class Under extends AbstractOperators implements Sign.Under {
     protected Under(Operator ... operators) {
-        super(Conjunction.UNDER, operators);
+        super(with, operators);
     }
 }
