@@ -1,8 +1,8 @@
 package com.github.soursop.matrix.operator;
 
-class DivideOperators extends AbstractOperators implements Sign.Divide {
-    protected DivideOperators(With with, Operator... operators) {
-        super(with, operators);
+class DivideOperators extends LazyOperators implements Sign.Divide {
+    protected DivideOperators(AbstractOperators origin) {
+        super(origin);
     }
 
     @Override

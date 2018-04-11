@@ -1,8 +1,13 @@
 package com.github.soursop.matrix.operator;
 
-class TransposeOperators extends AbstractOperators implements Sign.Transpose {
-    protected TransposeOperators(With with, Operator... operators) {
-        super(with, operators);
+class TransposeOperators extends LazyOperators implements Sign.Transpose {
+    protected TransposeOperators(AbstractOperators origin) {
+        super(origin);
+    }
+
+    @Override
+    public DoubleMatrix invoke() {
+        return super.invoke().transpose();
     }
 
     @Override
@@ -12,6 +17,6 @@ class TransposeOperators extends AbstractOperators implements Sign.Transpose {
 
     @Override
     protected CharSequence _asSimple(int depth) {
-        return asSimple(Sign.sign(getClass()), depth);
+        return super.asSimple(Sign.sign(getClass()), depth);
     }
 }

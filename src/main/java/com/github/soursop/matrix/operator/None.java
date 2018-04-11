@@ -37,7 +37,7 @@ public interface None {
         }
     }
 
-    class NoneOperators extends AbstractOperators implements None {
+    class NoneOperators extends WithOperators implements None {
         protected NoneOperators(With appliers, Operator... operators) {
             super(appliers, operators);
         }
