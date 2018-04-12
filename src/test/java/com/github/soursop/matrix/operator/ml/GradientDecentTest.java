@@ -48,13 +48,22 @@ public class GradientDecentTest {
         DenseDoubleMatrix matrix = new DenseDoubleMatrix(3, data);
         Next input = new DoubleOperator(1d).next(matrix.init().normalize());
         DoubleMatrix output = matrix.last();
+        DoubleOperator size = new DoubleOperator(matrix.height());
 
         int DERIVATIVE_OF_POW = 2;
         DoubleMatrix theta = new DoubleIterator(0d, 3, 1);
+        DoubleOperator alpha = DoubleOperator.of(0.01d);
+        int repeat = 400;
+        for (int i = 0; i < repeat; i++) {
+            theta = gradientDecent(input, output, theta, size, alpha);
+        }
+        print("Expected theta values (approx) :");
+        print("334300\t100090\t3673.5 : %f\t%f\t%f", theta.valueOf(0), theta.valueOf(1), theta.valueOf(2));
+
         Multiply hypothesis = input.multiply(theta);
         Plus cost = hypothesis.minus(output);
         double squaredError = AvgOperator.of(cost.pow(DERIVATIVE_OF_POW).invoke()).getValue() / DERIVATIVE_OF_POW;
         print("Expected cost value (approx) 2108900000 : %f", squaredError);
-
     }
+
 }
