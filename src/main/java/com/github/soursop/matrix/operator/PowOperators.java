@@ -16,4 +16,9 @@ class PowOperators extends LazyOperators implements Sign.Pow {
     public DoubleMatrix invoke() {
         return super.invoke().pow(pow).asDoubleMatrix();
     }
+
+    @Override
+    public CharSequence asSimple(int depth) {
+        return super.asSimple(Sign.sign(getClass()), depth);
+    }
 }

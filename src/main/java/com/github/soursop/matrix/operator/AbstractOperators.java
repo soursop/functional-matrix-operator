@@ -21,11 +21,12 @@ abstract class AbstractOperators extends AbstractOperator implements Operators, 
     }
 
     @Override
-    protected CharSequence _asSimple(int depth) {
+    public CharSequence asSimple(int depth) {
         return asSimple("", depth);
     }
 
     protected CharSequence asSimple(String prefix, int depth) {
+        initBuilder(depth);
         Operator[] operators = getOperators();
         withPadding();
         append(prefix);

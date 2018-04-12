@@ -16,7 +16,7 @@ class TransposeOperators extends LazyOperators implements Sign.Transpose {
     }
 
     @Override
-    protected CharSequence _asSimple(int depth) {
+    public CharSequence asSimple(int depth) {
         return super.asSimple(Sign.sign(getClass()), depth);
     }
 }

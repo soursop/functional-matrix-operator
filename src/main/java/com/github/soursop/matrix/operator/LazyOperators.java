@@ -49,12 +49,6 @@ abstract class LazyOperators extends AbstractOperators {
 
     @Override
     protected CharSequence asSimple(String prefix, int depth) {
-        append(orgin.asSimple(prefix, depth));
-        return getBuilder();
-    }
-
-    @Override
-    protected CharSequence _asSimple(int depth) {
-        return asSimple("", depth);
+        return orgin.asSimple(prefix, depth);
     }
 }

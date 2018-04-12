@@ -46,7 +46,8 @@ public class DoubleOperator extends AbstractOperator {
     }
 
     @Override
-    protected CharSequence _asSimple(int depth) {
+    public CharSequence asSimple(int depth) {
+        initBuilder(depth);
         withPadding();
         append(String.format("%.4f", value));
         return getBuilder();
