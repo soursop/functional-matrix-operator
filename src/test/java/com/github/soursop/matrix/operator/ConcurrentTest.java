@@ -26,10 +26,10 @@ public class ConcurrentTest {
     @Ignore
     @Test
     public void testForkAndJoin() {
-        int height = 2_000_000;
+        int height = 1_000_000;
         int width = 20;
         int size = 30;
-        int split = 200_000;
+        int split = 100_000;
 
         double[] values1 = new DoubleRandomIterator(height, width, 0).values();
         double[] values2 = new DoubleRandomIterator(width, size, 0).values();
