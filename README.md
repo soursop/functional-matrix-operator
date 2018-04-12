@@ -19,7 +19,7 @@ Transforming
  - Next
  - Under
    - you can do the following:
-```
+```java
 double[] sample = new double[]{ 1l, 2l, 3l, 4l, 5l, 6l };
 DoubleOperator head = DoubleOperator.of(1l);
 DoubleMatrix one = new DenseDoubleMatrix(2, sample);
@@ -38,7 +38,7 @@ Subset
  - Init
  - Last
    - you can do the following:
-```
+```java
 double[] sample = new double[]{ 1l, 2l, 3l, 4l, 5l, 6l };
 DoubleMatrix one = new DenseDoubleMatrix(2, sample);
 System.out.println(one.head());
@@ -59,7 +59,7 @@ Operations
  - Traspose
    - you can do the following:
    
-```
+```java
 double[] sample = new double[]{ 1l, 2l, 3l, 4l, 5l, 6l };
 double[] transpose = new double[]{ 1l, 3l, 5l, 2l, 4l, 6l };
 
@@ -77,7 +77,7 @@ result :
 
 Concurrent
 ========
-```
+```java
 int height = 1_000_000;
 int width = 20;
 int size = 30;
