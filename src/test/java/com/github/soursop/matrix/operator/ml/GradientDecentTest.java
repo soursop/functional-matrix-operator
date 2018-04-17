@@ -46,7 +46,7 @@ public class GradientDecentTest {
     public void testMulti() throws IOException {
         double[] data = read("ml/ex01/data2.txt");
         DenseDoubleMatrix matrix = new DenseDoubleMatrix(3, data);
-        Next input = new DoubleOperator(1d).next(matrix.init().normalize());
+        Next input = new DoubleOperator(1d).next(Normalized.of(matrix.init()));
         DoubleMatrix output = matrix.last();
         DoubleOperator size = new DoubleOperator(matrix.height());
 
