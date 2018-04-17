@@ -2,7 +2,7 @@ package com.github.soursop.matrix.operator;
 
 class Sign {
     interface Plus {
-        With with = new Calculation() {
+        Calculation with = new Calculation() {
             @Override
             double apply(double v1, double v2) {
                 return v1 + v2;
@@ -49,7 +49,7 @@ class Sign {
     }
 
     interface Multiply {
-        With with = new Calculation() {
+        Calculation with = new Calculation() {
             @Override
             double apply(double v1, double v2) {
                 return v1 * v2;
@@ -114,6 +114,18 @@ class Sign {
 
     }
 
+    interface Sum {
+
+    }
+
+    interface NextSum extends Sum {
+
+    }
+
+    interface UnderSum extends Sum {
+
+    }
+
     public static String sign(Class<?> clazz) {
         if (Plus.class.isAssignableFrom(clazz)) {
             return "+";
@@ -131,6 +143,14 @@ class Sign {
             return "pow";
         } else if (Transpose.class.isAssignableFrom(clazz)) {
             return "'";
+        } else if (Sum.class.isAssignableFrom(clazz)) {
+            if (NextSum.class.isAssignableFrom(clazz)) {
+                return "▶sum";
+            } else if (UnderSum.class.isAssignableFrom(clazz)) {
+                return "▼sum";
+            } else {
+                return "sum";
+            }
         }
         return "";
     }

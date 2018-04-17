@@ -44,6 +44,21 @@ abstract class WithOperators extends AbstractOperators {
     }
 
     @Override
+    public SumOperator sum() {
+        return SumOperator.of(invoke());
+    }
+
+    @Override
+    public AvgOperator avg() {
+        return AvgOperator.of(invoke());
+    }
+
+    @Override
+    public StdOperator std() {
+        return StdOperator.of(invoke());
+    }
+
+    @Override
     public Operators minus() {
         return new MinusOperators(this);
     }

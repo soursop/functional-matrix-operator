@@ -22,7 +22,7 @@ public class GradientDecentTest {
         DoubleMatrix theta = new DoubleIterator(0d, 2, 1);
         Multiply hypothesis = input.multiply(theta);
         Plus cost = hypothesis.minus(output);
-        double squaredError = AvgOperator.of(cost.pow(DERIVATIVE_OF_POW).invoke()).getValue() / DERIVATIVE_OF_POW;
+        double squaredError = cost.pow(DERIVATIVE_OF_POW).avg().getValue() / DERIVATIVE_OF_POW;
         print("Expected cost value (approx) 32.07 : %f", squaredError);
 
         DoubleOperator alpha = DoubleOperator.of(0.01d);
@@ -62,7 +62,7 @@ public class GradientDecentTest {
 
         Multiply hypothesis = input.multiply(theta);
         Plus cost = hypothesis.minus(output);
-        double squaredError = AvgOperator.of(cost.pow(DERIVATIVE_OF_POW).invoke()).getValue() / DERIVATIVE_OF_POW;
+        double squaredError = cost.pow(DERIVATIVE_OF_POW).avg().getValue() / DERIVATIVE_OF_POW;
         print("Expected cost value (approx) 2108900000 : %f", squaredError);
     }
 

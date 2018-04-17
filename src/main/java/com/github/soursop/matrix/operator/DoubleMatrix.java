@@ -2,7 +2,7 @@ package com.github.soursop.matrix.operator;
 
 import java.util.List;
 
-public interface DoubleMatrix extends Matrix, Operator, Transposable<DoubleMatrix>, Transformer {
+public interface DoubleMatrix extends Matrix, Operator, Transposable<DoubleMatrix>, Reducible {
     double valueOf(int height, int width);
     double valueOf(int idx);
     double[] values();

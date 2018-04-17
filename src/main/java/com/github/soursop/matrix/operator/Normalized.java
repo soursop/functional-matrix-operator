@@ -1,11 +1,12 @@
 package com.github.soursop.matrix.operator;
 
 public class Normalized extends NextDoubleMatrix {
+
     public static Normalized of(DoubleMatrix one) {
         DoubleMatrix[] transformed = new DoubleMatrix[one.width()];
         for (int i = 0; one.isSome(); i++) {
             DoubleMatrix head = one.head();
-            StdOperator std = StdOperator.of(head);
+            StdOperator std = head.std();
             transformed[i] = head.minus(std.avg()).divide(std).invoke();
             one = one.tail();
         }
@@ -15,4 +16,5 @@ public class Normalized extends NextDoubleMatrix {
     private Normalized(DoubleMatrix... matrices) {
         super(matrices);
     }
+
 }

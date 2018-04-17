@@ -48,6 +48,21 @@ abstract class LazyOperators extends AbstractOperators {
     }
 
     @Override
+    public SumOperator sum() {
+        return SumOperator.of(invoke());
+    }
+
+    @Override
+    public AvgOperator avg() {
+        return AvgOperator.of(invoke());
+    }
+
+    @Override
+    public StdOperator std() {
+        return StdOperator.of(invoke());
+    }
+
+    @Override
     protected CharSequence asSimple(String prefix, int depth) {
         return orgin.asSimple(prefix, depth);
     }

@@ -50,6 +50,21 @@ abstract class AbstractDoubleMatrix extends AbstractOperator implements DoubleMa
     }
 
     @Override
+    public SumOperator sum() {
+        return SumOperator.of(this);
+    }
+
+    @Override
+    public AvgOperator avg() {
+        return AvgOperator.of(this);
+    }
+
+    @Override
+    public StdOperator std() {
+        return StdOperator.of(this);
+    }
+
+    @Override
     public DoubleMatrix minus() {
         return new MinusDoubleMatrix<>(this);
     }
@@ -67,11 +82,6 @@ abstract class AbstractDoubleMatrix extends AbstractOperator implements DoubleMa
                 return Math.pow(v, pow);
             }
         });
-    }
-
-    @Override
-    public Normalized normalize() {
-        return Normalized.of(this);
     }
 
     @Override

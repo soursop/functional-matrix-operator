@@ -1,6 +1,6 @@
 package com.github.soursop.matrix.operator;
 
-public class SumOperator extends DoubleOperator {
+public class SumOperator extends DoubleOperator implements Sign.Sum {
     private final DoubleMatrix origin;
 
     public static SumOperator of(DoubleMatrix origin) {
