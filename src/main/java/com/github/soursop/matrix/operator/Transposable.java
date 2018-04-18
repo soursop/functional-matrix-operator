@@ -1,5 +1,5 @@
 package com.github.soursop.matrix.operator;
 
-interface Transposable<T> {
+public interface Transposable<T extends Operator> extends Operator {
     T transpose();
 }
