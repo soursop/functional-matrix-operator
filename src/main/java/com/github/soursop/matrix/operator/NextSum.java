@@ -7,7 +7,7 @@ package com.github.soursop.matrix.operator;
 public class NextSum extends AbstractDoubleMatrix implements Sign.UnderSum {
     private final double[] values;
 
-    public NextSum of(DoubleMatrix origin) {
+    public static NextSum of(DoubleMatrix origin) {
         double[] doubles = new double[origin.height()];
         for (int h = 0; h < origin.height(); h++) {
             double sum = 0d;
@@ -38,8 +38,4 @@ public class NextSum extends AbstractDoubleMatrix implements Sign.UnderSum {
         return values[height * width() + width];
     }
 
-    @Override
-    public DoubleMatrix transpose() {
-        return new DoubleMatrixTranspose<>(this);
-    }
 }

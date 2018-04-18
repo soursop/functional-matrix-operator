@@ -35,11 +35,6 @@ public class DenseDoubleMatrix extends AbstractDoubleMatrix {
     }
 
     @Override
-    public DoubleMatrix transpose() {
-        return new DoubleMatrixTranspose<>(this);
-    }
-
-    @Override
     public double valueOf(int height, int width) {
         return values[height * width() + width];
     }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-abstract class AbstractDoubleMatrix extends AbstractOperator implements DoubleMatrix, Iterable<Double> {
+public abstract class AbstractDoubleMatrix extends AbstractOperator implements DoubleMatrix, Iterable<Double> {
 
     @Override
     public CharSequence asSimple(int depth) {
@@ -47,6 +47,11 @@ abstract class AbstractDoubleMatrix extends AbstractOperator implements DoubleMa
             }
         }
         return builder.toString();
+    }
+
+    @Override
+    public DoubleMatrix transpose() {
+        return new DoubleMatrixTranspose<>(this);
     }
 
     @Override
@@ -182,11 +187,6 @@ abstract class AbstractDoubleMatrix extends AbstractOperator implements DoubleMa
             Assert.assertIndexException(height, width, this);
             return parent.valueOf(height + from, width);
         }
-
-        @Override
-        public DoubleMatrix transpose() {
-            return new DoubleMatrixTranspose<>(this);
-        }
     }
 
     private static class VectorDoubleMatrix extends AbstractDoubleMatrix {
@@ -216,10 +216,6 @@ abstract class AbstractDoubleMatrix extends AbstractOperator implements DoubleMa
             return parent.valueOf(height, width + from);
         }
 
-        @Override
-        public DoubleMatrix transpose() {
-            return new DoubleMatrixTranspose<>(this);
-        }
     }
 
     private static class DoubleMatrixIterator implements Iterator<Double> {

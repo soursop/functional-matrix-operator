@@ -36,8 +36,4 @@ public class DoubleIterator extends AbstractDoubleMatrix {
         return from;
     }
 
-    @Override
-    public DoubleMatrix transpose() {
-        return new DoubleMatrixTranspose<>(this);
-    }
 }

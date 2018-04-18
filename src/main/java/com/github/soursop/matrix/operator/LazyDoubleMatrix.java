@@ -25,11 +25,6 @@ class LazyDoubleMatrix<T extends DoubleMatrix> extends AbstractDoubleMatrix {
     }
 
     @Override
-    public DoubleMatrix transpose() {
-        return new DoubleMatrixTranspose<>(this);
-    }
-
-    @Override
     public DoubleMatrix head() {
         return origin.head().isNone()? origin.head() : create(origin.head());
     }

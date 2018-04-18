@@ -43,11 +43,6 @@ public class UnderDoubleMatrix extends AbstractDoubleMatrix implements DoubleMat
     }
 
     @Override
-    public DoubleMatrix transpose() {
-        return new DoubleMatrixTranspose<>(this);
-    }
-
-    @Override
     public DoubleMatrix head() {
         return matrices.length == 0? None.DOUBLE_MATRIX : matrices[0];
     }

@@ -33,8 +33,4 @@ public class DoubleRandomIterator extends AbstractDoubleMatrix {
         return random.nextDouble();
     }
 
-    @Override
-    public DoubleMatrix transpose() {
-        return new DoubleMatrixTranspose<>(this);
-    }
 }
