@@ -10,7 +10,6 @@ public class Hypothesis {
     private static int DERIVATIVE_OF_POW = 2;
     private final Transposable input;
     private final Transposable output;
-    private final Gradient gradient = new Gradient(None.DOUBLE_MATRIX);
 
     public Hypothesis(Transposable input, Transposable output) {
         this.input = input;
@@ -28,11 +27,6 @@ public class Hypothesis {
     public double error(DoubleMatrix theta) {
         Plus cost = cost(theta);
         return cost.pow(DERIVATIVE_OF_POW).avg().getValue() / DERIVATIVE_OF_POW;
-    }
-
-    public Gradient gradient(DoubleMatrix theta) {
-        gradient.theta = theta;
-        return gradient;
     }
 
     public Prepare repeat(int repeat) {
@@ -57,24 +51,13 @@ public class Hypothesis {
 
             public DoubleMatrix decent(DoubleOperator ratio) {
                 for (int i = 0; i < repeat; i++) {
-                    theta = gradient(theta).decent(ratio);
+                    Plus cost = cost(theta);
+                    Multiply gradient = cost.multiply(ratio);
+                    Operators decent = input.transpose().multiply(gradient);
+                    theta = theta.minus(decent).invoke();
                 }
                 return theta;
             }
-        }
-    }
-
-    public class Gradient {
-        private DoubleMatrix theta;
-        private Gradient(DoubleMatrix theta) {
-            this.theta = theta;
-        }
-
-        public DoubleMatrix decent(DoubleOperator ratio) {
-            Plus cost = cost(theta);
-            Multiply gradient = cost.multiply(ratio);
-            Operators decent = input.transpose().multiply(gradient);
-            return theta.minus(decent).invoke();
         }
     }
 }
