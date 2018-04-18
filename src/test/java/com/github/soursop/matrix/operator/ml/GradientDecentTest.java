@@ -14,32 +14,18 @@ public class GradientDecentTest {
     public void testSingle() throws IOException {
         double[] data = read("ml/ex01/data1.txt");
         DenseDoubleMatrix matrix = new DenseDoubleMatrix(2, data);
-        DoubleOperator size = new DoubleOperator(matrix.height());
         Next input = new DoubleOperator(1d).next(matrix.head());
         DoubleMatrix output = matrix.tail();
 
-        int DERIVATIVE_OF_POW = 2;
         DoubleMatrix theta = new DoubleIterator(0d, 2, 1);
-        Multiply hypothesis = input.multiply(theta);
-        Plus cost = hypothesis.minus(output);
-        double squaredError = cost.pow(DERIVATIVE_OF_POW).avg().getValue() / DERIVATIVE_OF_POW;
-        print("Expected cost value (approx) 32.07 : %f", squaredError);
+        Hypothesis hypothesis = new Hypothesis(input, output);
+        print("Expected cost value (approx) 32.07 : %f", hypothesis.error(theta));
 
-        DoubleOperator alpha = DoubleOperator.of(0.01d);
-        int repeat = 1500;
-        for (int i = 0; i < repeat; i++) {
-            theta = gradientDecent(input, output, theta, size, alpha);
-        }
+        double alpha = 0.01d;
+        DoubleOperator ratio = DoubleOperator.of(alpha / matrix.height());
+        DoubleMatrix decent = hypothesis.repeat(1500).theta(theta).decent(ratio);
         print("Expected theta values (approx) :");
-        print("-3.6303\t1.1664 : %f\t%f", theta.valueOf(0), theta.valueOf(1));
-    }
-
-    private DoubleMatrix gradientDecent(Next input, DoubleMatrix output, DoubleMatrix theta, DoubleOperator size, DoubleOperator alpha) {
-        Multiply hypothesis = input.multiply(theta);
-        Plus cost = hypothesis.minus(output);
-        Multiply gradient = cost.multiply(alpha).divide(size);
-        Operators decent = input.transpose().multiply(gradient);
-        return theta.minus(decent).invoke();
+        print("-3.6303\t1.1664 : %f\t%f", decent.valueOf(0), decent.valueOf(1));
     }
 
     @Test
@@ -48,22 +34,15 @@ public class GradientDecentTest {
         DenseDoubleMatrix matrix = new DenseDoubleMatrix(3, data);
         Next input = new DoubleOperator(1d).next(Normalized.of(matrix.init()));
         DoubleMatrix output = matrix.last();
-        DoubleOperator size = new DoubleOperator(matrix.height());
 
-        int DERIVATIVE_OF_POW = 2;
         DoubleMatrix theta = new DoubleIterator(0d, 3, 1);
-        DoubleOperator alpha = DoubleOperator.of(0.01d);
-        int repeat = 400;
-        for (int i = 0; i < repeat; i++) {
-            theta = gradientDecent(input, output, theta, size, alpha);
-        }
+        DoubleOperator ratio = DoubleOperator.of(0.01d / matrix.height());
+        Hypothesis hypothesis = new Hypothesis(input, output);
+        DoubleMatrix decent = hypothesis.repeat(400).theta(theta).decent(ratio);
         print("Expected theta values (approx) :");
-        print("334300\t100090\t3673.5 : %f\t%f\t%f", theta.valueOf(0), theta.valueOf(1), theta.valueOf(2));
+        print("334300\t100090\t3673.5 : %f\t%f\t%f", decent.valueOf(0), decent.valueOf(1), decent.valueOf(2));
 
-        Multiply hypothesis = input.multiply(theta);
-        Plus cost = hypothesis.minus(output);
-        double squaredError = cost.pow(DERIVATIVE_OF_POW).avg().getValue() / DERIVATIVE_OF_POW;
-        print("Expected cost value (approx) 2108900000 : %f", squaredError);
+        print("Expected cost value (approx) 2108900000 : %f", hypothesis.error(decent));
     }
 
 }
