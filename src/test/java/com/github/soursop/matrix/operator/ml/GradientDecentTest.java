@@ -12,7 +12,7 @@ public class GradientDecentTest {
 
     @Test
     public void testSingle() throws IOException {
-        double[] data = read("ml/ex01/data1.txt");
+        double[] data = read("ml/1x_house.txt");
         DenseDoubleMatrix matrix = new DenseDoubleMatrix(2, data);
         Next input = new DoubleOperator(1d).next(matrix.head());
         DoubleMatrix output = matrix.tail();
@@ -30,7 +30,7 @@ public class GradientDecentTest {
 
     @Test
     public void testMulti() throws IOException {
-        double[] data = read("ml/ex01/data2.txt");
+        double[] data = read("ml/2x_house.txt");
         DenseDoubleMatrix matrix = new DenseDoubleMatrix(3, data);
         Next input = new DoubleOperator(1d).next(Normalized.of(matrix.init()));
         DoubleMatrix output = matrix.last();
