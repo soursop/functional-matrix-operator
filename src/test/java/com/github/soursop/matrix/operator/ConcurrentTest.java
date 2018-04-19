@@ -3,12 +3,8 @@ package com.github.soursop.matrix.operator;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.ForkJoinTask;
-import java.util.concurrent.RecursiveTask;
 
 
 public class ConcurrentTest {
@@ -34,16 +30,16 @@ public class ConcurrentTest {
         double[] values1 = new DoubleRandomIterator(height, width, 0).values();
         double[] values2 = new DoubleRandomIterator(width, size, 0).values();
         final DenseDoubleMatrix one = new DenseDoubleMatrix(width, values1);
-        final Multiply multiply = new Multiply(new DenseDoubleMatrix(size, values2));
+        final Product product = new Product(new DenseDoubleMatrix(size, values2));
 
         long s1 = System.currentTimeMillis();
-        DoubleMatrix resultAll = multiply.invoke(one);
+        DoubleMatrix resultAll = product.invoke(one);
         System.out.println("single result size: " + resultAll.size());
         System.out.println("single elaps time: " + (System.currentTimeMillis() - s1));
 
         long s2 = System.currentTimeMillis();
         ForkJoinPool pool = new ForkJoinPool(4);
-        DoubleMatrix resultBySplit = pool.invoke(new SplitDoubleMatrix(one, multiply, split));
+        DoubleMatrix resultBySplit = pool.invoke(new SplitDoubleMatrix(one, product, split));
         System.out.println("thread result size: " + resultBySplit.size());
         System.out.println("thread elaps time: " + (System.currentTimeMillis() - s2));
     }

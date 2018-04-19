@@ -16,8 +16,8 @@ public class Hypothesis {
         this.output = output;
     }
 
-    private Multiply hypothesis(DoubleMatrix theta) {
-        return input.multiply(theta);
+    private Product hypothesis(DoubleMatrix theta) {
+        return input.product(theta);
     }
 
     public Plus cost(DoubleMatrix theta) {
@@ -52,8 +52,8 @@ public class Hypothesis {
             public DoubleMatrix decent(DoubleOperator ratio) {
                 for (int i = 0; i < repeat; i++) {
                     Plus cost = cost(theta);
-                    Multiply gradient = cost.multiply(ratio);
-                    Operators decent = input.transpose().multiply(gradient);
+                    Product gradient = cost.product(ratio);
+                    Operators decent = input.transpose().product(gradient);
                     theta = theta.minus(decent).invoke();
                 }
                 return theta;

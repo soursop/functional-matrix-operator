@@ -15,8 +15,8 @@ abstract class AbstractOperator implements Operator {
     }
 
     @Override
-    public Multiply multiply(Operator operator) {
-        return new Multiply(this, operator);
+    public Product product(Operator operator) {
+        return new Product(this, operator);
     }
 
     @Override
@@ -40,8 +40,8 @@ abstract class AbstractOperator implements Operator {
     }
 
     @Override
-    public Multiply divide(DoubleOperator other) {
-        return new Multiply(this, other.divide());
+    public Product divide(DoubleOperator other) {
+        return new Product(this, other.divide());
     }
 
     @Override

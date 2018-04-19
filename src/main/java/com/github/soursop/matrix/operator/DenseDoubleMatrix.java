@@ -39,7 +39,7 @@ public class DenseDoubleMatrix extends AbstractDoubleMatrix {
         return values[height * width() + width];
     }
 
-    String multiplyAsDebug(DoubleMatrix matrix) {
+    String productAsDebug(DoubleMatrix matrix) {
         StringBuilder builder = new StringBuilder();
         for (int h = 0; h < height(); h++) {
             for (int s = 0; s < matrix.width(); s++) {

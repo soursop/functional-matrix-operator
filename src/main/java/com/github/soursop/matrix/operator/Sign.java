@@ -48,7 +48,7 @@ class Sign {
         };
     }
 
-    interface Multiply {
+    interface Product {
         Calculation with = new Calculation() {
             @Override
             double apply(double v1, double v2) {
@@ -133,7 +133,7 @@ class Sign {
             return "-";
         } else if (Divide.class.isAssignableFrom(clazz)) {
             return "1/";
-        } else if (Multiply.class.isAssignableFrom(clazz)) {
+        } else if (Product.class.isAssignableFrom(clazz)) {
             return "*";
         } else if (Next.class.isAssignableFrom(clazz)) {
             return "::";

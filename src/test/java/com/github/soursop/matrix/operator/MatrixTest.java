@@ -69,7 +69,7 @@ public class MatrixTest {
     public void testAsSimple() {
         DenseDoubleMatrix matrix = new DenseDoubleMatrix(2, sample);
         DoubleMatrix other = new DenseDoubleMatrix(3, transpose);
-        System.out.println(matrix.multiply(other).asSimple(0));
+        System.out.println(matrix.product(other).asSimple(0));
     }
 
     @Test

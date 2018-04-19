@@ -13,11 +13,11 @@ import java.util.concurrent.RecursiveTask;
 public class SplitDoubleMatrix extends RecursiveTask<DoubleMatrix> {
     private final int size;
     private final DoubleMatrix origin;
-    private final Multiply multiply;
+    private final Product product;
 
-    public SplitDoubleMatrix(DoubleMatrix origin, Multiply multiply, int size) {
+    public SplitDoubleMatrix(DoubleMatrix origin, Product product, int size) {
         this.origin = origin;
-        this.multiply = multiply;
+        this.product = product;
         this.size = size;
     }
 
@@ -43,13 +43,13 @@ public class SplitDoubleMatrix extends RecursiveTask<DoubleMatrix> {
         List<DoubleMatrix> doubleMatrices = origin.splitBy(size);
         ArrayList<SplitDoubleMatrix> list = new ArrayList<>();
         for (DoubleMatrix doubleMatrix : doubleMatrices) {
-            list.add(new SplitDoubleMatrix(doubleMatrix, multiply, size));
+            list.add(new SplitDoubleMatrix(doubleMatrix, product, size));
         }
         return list;
     }
 
     private DoubleMatrix invoke(DoubleMatrix matrix) {
-        return multiply.invoke(matrix);
+        return product.invoke(matrix);
     }
 
 }

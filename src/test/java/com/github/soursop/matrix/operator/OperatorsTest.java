@@ -17,10 +17,10 @@ public class OperatorsTest {
     private double[] transpose = new double[]{ 1l, 3l, 5l, 2l, 4l, 6l };
 
     @Test
-    public void testMultiplyWithMatrix() {
+    public void testProductWithMatrix() {
         DoubleMatrix one = new DenseDoubleMatrix(2, sample);
         DoubleMatrix other = new DenseDoubleMatrix(3, transpose);
-        DoubleMatrix result = one.multiply(other).invoke();
+        DoubleMatrix result = one.product(other).invoke();
         assertThat(asList(result.values()), is(asList(
                 1d * 1d + 2d * 2d
                 , 1d * 3d + 2d * 4d
