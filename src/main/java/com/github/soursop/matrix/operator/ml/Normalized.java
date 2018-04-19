@@ -1,4 +1,8 @@
-package com.github.soursop.matrix.operator;
+package com.github.soursop.matrix.operator.ml;
+
+import com.github.soursop.matrix.operator.DoubleMatrix;
+import com.github.soursop.matrix.operator.NextDoubleMatrix;
+import com.github.soursop.matrix.operator.StdOperator;
 
 public class Normalized extends NextDoubleMatrix {
 
