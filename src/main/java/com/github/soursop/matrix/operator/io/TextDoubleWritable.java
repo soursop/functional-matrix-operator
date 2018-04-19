@@ -1,5 +1,6 @@
 package com.github.soursop.matrix.operator.io;
 
+import com.google.common.base.Splitter;
 import org.apache.hadoop.io.Writable;
 
 import java.io.DataInput;
@@ -13,7 +14,7 @@ import java.util.List;
  * @created 2018. 4. 6.
  */
 public class TextDoubleWritable implements Writable {
-    private List<Double> list = new ArrayList<>();
+    private final DoubleBuffer buffer = new DoubleBuffer();
     private double[] array;
     private boolean hasNext = true;
 
@@ -23,10 +24,9 @@ public class TextDoubleWritable implements Writable {
 
     @Override
     public void write(DataOutput out) throws IOException {
-        int i = 0;
-        for (double d : array) {
-            out.writeBytes(String.valueOf(d));
-            if (++i < array.length) {
+        for (int i = 0; i < array.length; i++) {
+            out.writeBytes(String.valueOf(array[i]));
+            if (i + 1 < array.length) {
                 out.writeBytes(",");
             }
         }
@@ -39,9 +39,9 @@ public class TextDoubleWritable implements Writable {
             hasNext = false;
             return;
         }
-        String[] split = line.split(",");
-        for (String s : split) {
-            list.add(Double.valueOf(s));
+        Iterable<String> iterator = Splitter.on(",").split(line);
+        for(String s : iterator) {
+            buffer.add(Double.parseDouble(s));
         }
     }
 
@@ -50,12 +50,35 @@ public class TextDoubleWritable implements Writable {
     }
 
     public double[] getValues() {
-        if (array == null) {
-            array = new double[list.size()];
-            for (int i = 0; i < list.size(); i++) {
-                array[i] = list.get(i);
+        return array == null? buffer.values() : array;
+    }
+
+    public static class DoubleBuffer {
+        private static int BUFFER = 100_000;
+        private List<double[]> list = new ArrayList<>();
+        private int size = 0;
+        private int idx = 0;
+        private double[] buffer = new double[BUFFER];
+
+        public void add(double d) {
+            if (idx == BUFFER) {
+                idx = 0;
+                size = size + BUFFER;
+                list.add(buffer);
+                buffer = new double[BUFFER];
             }
+            buffer[idx++] = d;
         }
-        return array;
+
+        public double[] values() {
+            int total  = list.size() * BUFFER + idx;
+            double[] out = new double[total];
+            for (int i = 0; i < list.size(); i++) {
+                double[] values = list.get(i);
+                System.arraycopy(values, 0, out, i * BUFFER, values.length);
+            }
+            System.arraycopy(buffer, 0, out, list.size() * BUFFER, idx);
+            return out;
+        }
     }
 }
