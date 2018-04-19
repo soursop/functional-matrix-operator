@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
+import static com.github.soursop.matrix.operator.Functions.asArray;
 import static com.github.soursop.matrix.operator.utils.Utils.*;
 /**
  * @author soursop
@@ -20,6 +21,9 @@ public class NeuralNetworkTest {
 
         DenseDoubleMatrix theta1 = new DenseDoubleMatrix(size, read("ml/400_mnist_theta01.csv"));
         DenseDoubleMatrix theta2 = new DenseDoubleMatrix(theta1.height(), read("ml/400_mnist_theta02.csv"));
+        DenseDoubleMatrix[] thetas = asArray(theta1, theta2);
+
+        Hypothesis hypothesis = new Hypothesis(input, output);
 
     }
 }
