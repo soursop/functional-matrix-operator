@@ -7,6 +7,7 @@ public interface Operator extends Printable, Serializable {
     DoubleMatrix asDoubleMatrix();
     DoubleOperator asDoubleOperator();
     Product product(Operator other);
+    Multiply multiply(Operator other);
     Next next(Operator other);
     Plus plus(Operator other);
     Plus minus(Operator other);

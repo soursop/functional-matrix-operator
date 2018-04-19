@@ -45,6 +45,11 @@ abstract class AbstractOperator implements Operator {
     }
 
     @Override
+    public Multiply multiply(Operator other) {
+        return new Multiply(this, other);
+    }
+
+    @Override
     public Under under(Operator other) {
         return new Under(this, other);
     }

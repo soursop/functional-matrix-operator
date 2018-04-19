@@ -35,6 +35,20 @@ public class OperatorsTest {
     }
 
     @Test
+    public void testMultiplyWithMatrix() {
+        DoubleMatrix one = new DenseDoubleMatrix(2, sample);
+        DoubleMatrix result = one.multiply(one).invoke();
+        assertThat(asList(result.values()), is(asList(
+                1d * 1d
+                , 2d * 2d
+                , 3d * 3d
+                , 4d * 4d
+                , 5d * 5d
+                , 6d * 6d
+        )));
+    }
+
+    @Test
     public void testPlusWithMatrix() {
         DoubleMatrix one = new DenseDoubleMatrix(2, sample);
         DoubleMatrix other = new DenseDoubleMatrix(2, sample);

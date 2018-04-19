@@ -77,6 +77,35 @@ class Sign {
         };
     }
 
+    interface Multiply {
+        Calculation with = new Calculation() {
+            @Override
+            double apply(double v1, double v2) {
+                return v1 * v2;
+            }
+
+            @Override
+            protected DoubleMatrix some(DoubleMatrix one, DoubleMatrix other) {
+                return elementWise(this, one, other);
+            }
+
+            @Override
+            protected DoubleMatrix none(DoubleMatrix none, DoubleMatrix some) {
+                return some;
+            }
+
+            @Override
+            protected DoubleOperator some(DoubleOperator one, DoubleOperator other) {
+                return new DoubleOperator(apply(one.getValue(), other.getValue()));
+            }
+
+            @Override
+            protected DoubleOperator none(DoubleOperator none, DoubleOperator some) {
+                return some;
+            }
+        };
+    }
+
     interface Pow {
         interface PowFunction extends Pow, Function {
         }
@@ -135,6 +164,8 @@ class Sign {
             return "1/";
         } else if (Product.class.isAssignableFrom(clazz)) {
             return "*";
+        } else if (Multiply.class.isAssignableFrom(clazz)) {
+            return ".*";
         } else if (Next.class.isAssignableFrom(clazz)) {
             return "::";
         } else if (Under.class.isAssignableFrom(clazz)) {
