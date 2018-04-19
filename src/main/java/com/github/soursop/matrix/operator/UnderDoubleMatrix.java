@@ -1,6 +1,5 @@
 package com.github.soursop.matrix.operator;
 
-import java.util.Arrays;
 
 public class UnderDoubleMatrix extends AbstractDoubleMatrix implements DoubleMatrix {
     private final int height;
@@ -42,23 +41,4 @@ public class UnderDoubleMatrix extends AbstractDoubleMatrix implements DoubleMat
         throw Assert.throwIndexException(height, width, this);
     }
 
-    @Override
-    public DoubleMatrix head() {
-        return matrices.length == 0? None.DOUBLE_MATRIX : matrices[0];
-    }
-
-    @Override
-    public DoubleMatrix tail() {
-        return matrices.length == 1? None.DOUBLE_MATRIX : matrices.length == 2? matrices[1] : new UnderDoubleMatrix(Arrays.copyOfRange(matrices, 1, matrices.length));
-    }
-
-    @Override
-    public DoubleMatrix last() {
-        return matrices.length == 0? None.DOUBLE_MATRIX : matrices[matrices.length - 1];
-    }
-
-    @Override
-    public DoubleMatrix init() {
-        return matrices.length == 1? None.DOUBLE_MATRIX : matrices.length == 2? matrices[0] : new UnderDoubleMatrix(Arrays.copyOfRange(matrices, 0, matrices.length - 1));
-    }
 }
