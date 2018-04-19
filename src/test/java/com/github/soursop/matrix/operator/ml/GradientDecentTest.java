@@ -12,7 +12,7 @@ public class GradientDecentTest {
 
     @Test
     public void testSingle() throws IOException {
-        double[] data = read("ml/1x_house.txt");
+        double[] data = read("ml/1x_house.csv");
         DenseDoubleMatrix matrix = new DenseDoubleMatrix(2, data);
         Next input = new DoubleOperator(1d).next(matrix.head());
         DoubleMatrix output = matrix.tail();
@@ -30,7 +30,7 @@ public class GradientDecentTest {
 
     @Test
     public void testMulti() throws IOException {
-        double[] data = read("ml/2x_house.txt");
+        double[] data = read("ml/2x_house.csv");
         DenseDoubleMatrix matrix = new DenseDoubleMatrix(3, data);
         Next input = new DoubleOperator(1d).next(Normalized.of(matrix.init()));
         DoubleMatrix output = matrix.last();
@@ -41,7 +41,6 @@ public class GradientDecentTest {
         DoubleMatrix decent = hypothesis.repeat(400).theta(theta).decent(ratio);
         print("Expected theta values (approx) :");
         print("334300\t100090\t3673.5 : %f\t%f\t%f", decent.valueOf(0), decent.valueOf(1), decent.valueOf(2));
-
         print("Expected cost value (approx) 2108900000 : %f", hypothesis.error(decent));
     }
 
