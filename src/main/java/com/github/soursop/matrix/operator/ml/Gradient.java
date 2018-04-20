@@ -11,11 +11,11 @@ public class Gradient extends Cost implements Derivative {
     }
 
     @Override
-    public Operator invoke(DoubleMatrix theta) {
+    public DoubleMatrix invoke(DoubleMatrix theta) {
         Product hypothesis = input.product(theta);
         Plus error = hypothesis.minus(output);
         Product update = error.product(ratio);
-        return input.transpose().product(update);
+        return theta.minus(input.transpose().product(update)).invoke();
     }
 
 }
