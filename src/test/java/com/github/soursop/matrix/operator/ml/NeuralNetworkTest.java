@@ -23,7 +23,6 @@ public class NeuralNetworkTest {
         DenseDoubleMatrix theta2 = new DenseDoubleMatrix(theta1.height(), read("ml/400_mnist_theta02.csv"));
         DenseDoubleMatrix[] thetas = asArray(theta1, theta2);
 
-        Hypothesis hypothesis = new Hypothesis(input, output);
 
     }
 }
