@@ -26,7 +26,7 @@ public class Until {
 
         public DoubleMatrix by(Derivative gradient) {
             for (int i = 0; i < repeat; i++) {
-                theta = gradient.invoke(theta);
+                theta = gradient.gradient(theta);
             }
             return theta;
         }
