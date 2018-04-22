@@ -29,7 +29,11 @@ public class DoubleRandomIterator extends AbstractDoubleMatrix {
 
     @Override
     public double valueOf(int height, int width) {
-        Assert.assertIndexException(height, width, this);
+        return random.nextDouble();
+    }
+
+    @Override
+    public double valueOf(int idx) {
         return random.nextDouble();
     }
 

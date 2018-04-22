@@ -25,6 +25,11 @@ class LazyDoubleMatrix<T extends DoubleMatrix> extends AbstractDoubleMatrix {
     }
 
     @Override
+    public double valueOf(int idx) {
+        return function.apply(origin.valueOf(idx));
+    }
+
+    @Override
     public DoubleMatrix head() {
         return origin.head().isNone()? origin.head() : create(origin.head());
     }

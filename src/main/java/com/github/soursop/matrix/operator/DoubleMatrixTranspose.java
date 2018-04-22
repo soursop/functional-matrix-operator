@@ -1,45 +1,21 @@
 package com.github.soursop.matrix.operator;
 
-class DoubleMatrixTranspose<T extends DoubleMatrix> extends AbstractDoubleMatrix implements Sign.Transpose {
-    private final T origin;
-    DoubleMatrixTranspose(T origin) {
-        this.origin = origin;
+class DoubleMatrixTranspose extends DenseDoubleMatrix implements Sign.Transpose {
+
+    public static DoubleMatrixTranspose of(DoubleMatrix origin) {
+        double[] values = new double[origin.size()];
+        int width = origin.width();
+        int height = origin.height();
+        for (int h = 0; h < height; h++) {
+            for (int w = 0; w < width; w++) {
+                values[w * height + h] = origin.valueOf(h, w);
+            }
+        }
+        return new DoubleMatrixTranspose(origin.height(), values);
     }
 
-    @Override
-    public double valueOf(int height, int width) {
-        return origin.valueOf(width, height);
+    private DoubleMatrixTranspose(int width, double... values) {
+        super(width, values);
     }
 
-    @Override
-    public int height() {
-        return origin.width();
-    }
-
-    @Override
-    public int width() {
-        return origin.height();
-    }
-
-    @Override
-    public double valueOf(int idx) {
-        int w = idx / origin.height();
-        int h = idx % origin.height();
-        return origin.valueOf(origin.width() * h + w);
-    }
-
-    @Override
-    public T transpose() {
-        return origin;
-    }
-
-    @Override
-    public DoubleMatrix head() {
-        return new DoubleMatrixTranspose<>(origin.head());
-    }
-
-    @Override
-    public DoubleMatrix tail() {
-        return new DoubleMatrixTranspose<>(origin.tail());
-    }
 }

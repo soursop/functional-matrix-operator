@@ -33,17 +33,19 @@ public class NeuralNetworkTest {
         long s2 = System.currentTimeMillis();
         System.out.println(s2 - s1);
 
-        double lambda = 0.01d;
-        DoubleMatrix decent = hypothesis.minus(output).invoke();
-        for (int i = forwards.length - 1; i > -1; i--) {
-            if (i > 0) {
-                DoubleMatrix sigma = forwards[i].backward(decent, forwards[i - 1].z());
-                forwards[i].gradient(decent, lambda, input.height());
-                decent = sigma;
-            } else {
-                forwards[i].gradient(decent.tail(), lambda, input.height());
+//        for (int j = 0; j < 200; j++) {
+            double lambda = 0.01d;
+            DoubleMatrix decent = hypothesis.minus(output).invoke();
+            for (int i = forwards.length - 1; i > -1; i--) {
+                if (i > 0) {
+                    DoubleMatrix sigma = forwards[i].backward(decent, forwards[i - 1].z());
+                    forwards[i].gradient(decent, lambda, input.height());
+                    decent = sigma;
+                } else {
+                    forwards[i].gradient(decent.tail(), lambda, input.height());
+                }
             }
-        }
+//        }
 
         System.out.println(System.currentTimeMillis() - s2);
     }

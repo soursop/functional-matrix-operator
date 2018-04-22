@@ -1,5 +1,7 @@
 package com.github.soursop.matrix.operator;
 
+import java.util.Arrays;
+
 public class DenseDoubleMatrix extends AbstractDoubleMatrix {
     private final double[] values;
     private final int height;
@@ -35,8 +37,19 @@ public class DenseDoubleMatrix extends AbstractDoubleMatrix {
     }
 
     @Override
+    public double valueOf(int idx) {
+        return values[idx];
+    }
+
+    @Override
     public double valueOf(int height, int width) {
         return values[height * width() + width];
+    }
+
+    @Override
+    public double[] row(int height) {
+        int from = height * width();
+        return Arrays.copyOfRange(values, from, from + width());
     }
 
     String productAsDebug(DoubleMatrix matrix) {
@@ -50,5 +63,14 @@ public class DenseDoubleMatrix extends AbstractDoubleMatrix {
             }
         }
         return builder.toString();
+    }
+
+    public static class WithValues {
+        public final int width;
+        public final double[] values;
+        WithValues(int width, double[] values) {
+            this.width = width;
+            this.values = values;
+        }
     }
 }

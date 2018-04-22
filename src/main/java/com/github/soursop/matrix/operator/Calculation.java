@@ -30,7 +30,8 @@ abstract class Calculation implements With {
 
     protected DoubleMatrix elementWise(Calculation sign, DoubleMatrix one, DoubleOperator other) {
         double[] values = new double[one.height() * one.width()];
-        for (int i = 0; i < one.size(); i++) {
+        int size = one.size();
+        for (int i = 0; i < size; i++) {
             values[i] = sign.apply(one.valueOf(i), other.getValue());
         }
         return new DenseDoubleMatrix(one.width(), values);
@@ -39,7 +40,8 @@ abstract class Calculation implements With {
     protected DoubleMatrix elementWise(Calculation sign, DoubleMatrix one, DoubleMatrix other) {
         Assert.assertElementSize(sign, one, other);
         double[] values = new double[one.height() * other.width()];
-        for (int i = 0; i < one.size(); i++) {
+        int size = one.size();
+        for (int i = 0; i < size; i++) {
             values[i] = sign.apply(one.valueOf(i), other.valueOf(i));
         }
         return new DenseDoubleMatrix(other.width(), values);
@@ -48,10 +50,13 @@ abstract class Calculation implements With {
     protected DoubleMatrix innerProduct(Calculation sign, DoubleMatrix one, DoubleMatrix other) {
         Assert.assertProductSize(sign, one, other);
         double[] values = new double[one.height() * other.width()];
-        for (int h = 0; h < one.height(); h++) {
-            for (int by = 0; by < other.width(); by++) {
-                for (int w = 0; w < one.width(); w++) {
-                    values[h * other.width() + by] += sign.apply(one.valueOf(h, w), other.valueOf(w, by));
+        int width = one.width();
+        int height = one.height();
+        int until = other.width();
+        for (int w = 0; w < width; w++) {
+            for (int h = 0; h < height; h++) {
+                for (int to = 0; to < until; to++) {
+                    values[h * other.width() + to] += sign.apply(one.valueOf(h, w), other.valueOf(w, to));
                 }
             }
         }

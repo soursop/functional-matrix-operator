@@ -9,7 +9,12 @@ import com.github.soursop.matrix.operator.NextDoubleMatrix;
  * @created 2018. 4. 19.
  */
 public class Layer extends NextDoubleMatrix {
-    public Layer(DoubleMatrix origin) {
-        super(new DoubleIterator(1d, origin.height(), 1), origin);
+    private Layer(int width, double[] values) {
+        super(width, values);
+    }
+
+    public static Layer of(DoubleMatrix origin) {
+        WithValues combine = combine(new DoubleIterator(1d, origin.height(), 1), origin);
+        return new Layer(combine.width, combine.values);
     }
 }

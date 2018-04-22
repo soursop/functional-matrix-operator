@@ -32,7 +32,11 @@ public class DoubleIterator extends AbstractDoubleMatrix {
 
     @Override
     public double valueOf(int height, int width) {
-        Assert.assertIndexException(height, width, this);
+        return from;
+    }
+
+    @Override
+    public double valueOf(int idx) {
         return from;
     }
 

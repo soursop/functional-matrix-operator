@@ -128,4 +128,26 @@ public class OperatorsTest {
         Plus minus = one.divide().minus(other).plus(other);
         System.out.println(minus.asSimple(0));
     }
+
+    @Ignore
+    @Test
+    public void testProductElaps() {
+        DoubleRandomIterator a = new DoubleRandomIterator(5000, 25, 0);
+        DoubleRandomIterator b = new DoubleRandomIterator(25, 5000, 0);
+        DoubleRandomIterator c = new DoubleRandomIterator(5000, 401, 0);
+        DoubleMatrix d = new DoubleIterator(1, 25, 5000);
+        DoubleMatrix e = new DoubleIterator(1, 5000, 401);
+        DenseDoubleMatrix f = new DenseDoubleMatrix(a.width(), a.values());
+        DenseDoubleMatrix g = new DenseDoubleMatrix(b.width(), b.values());
+        DenseDoubleMatrix h = new DenseDoubleMatrix(c.width(), c.values());
+
+        long s1 = System.currentTimeMillis();
+        DoubleMatrix invoke1 = g.product(h).invoke();
+        System.out.println("elaps time 1: " + (System.currentTimeMillis() - s1) + " > " + invoke1.asSimple(0));
+        DoubleMatrix transpose = f.transpose();
+        long s2 = System.currentTimeMillis();
+        DoubleMatrix invoke2 = transpose.product(h).invoke();
+        System.out.println("elaps time 2: " + (System.currentTimeMillis() - s2) + " > " + invoke2.asSimple(0));
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.github.soursop.matrix.operator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -50,8 +51,17 @@ public abstract class AbstractDoubleMatrix extends AbstractOperator implements D
     }
 
     @Override
+    public double[] row(int height) {
+        double[] doubles = new double[width()];
+        for (int w = 0; w < width(); w++) {
+            doubles[w] = valueOf(height, w);
+        }
+        return doubles;
+    }
+
+    @Override
     public DoubleMatrix transpose() {
-        return new DoubleMatrixTranspose<>(this);
+        return DoubleMatrixTranspose.of(this);
     }
 
     @Override
@@ -100,11 +110,6 @@ public abstract class AbstractDoubleMatrix extends AbstractOperator implements D
     }
 
     @Override
-    public double valueOf(int idx) {
-        return valueOf(idx / width(), idx % width());
-    }
-
-    @Override
     public Iterator<Double> iterator() {
         return new DoubleMatrixIterator(this);
     }
@@ -123,7 +128,7 @@ public abstract class AbstractDoubleMatrix extends AbstractOperator implements D
         if (width() < 1) {
             return None.DOUBLE_MATRIX;
         }
-        return new VectorDoubleMatrix(0, 1, this);
+        return VectorDoubleMatrix.of(0, 1, this);
     }
 
     @Override
@@ -131,7 +136,7 @@ public abstract class AbstractDoubleMatrix extends AbstractOperator implements D
         if (width() < 2) {
             return None.DOUBLE_MATRIX;
         }
-        return new VectorDoubleMatrix(1, width(), this);
+        return VectorDoubleMatrix.of(1, width(), this);
     }
 
     @Override
@@ -139,7 +144,7 @@ public abstract class AbstractDoubleMatrix extends AbstractOperator implements D
         if (width() < 1) {
             return None.DOUBLE_MATRIX;
         }
-        return new VectorDoubleMatrix(width() - 1, width(), this);
+        return VectorDoubleMatrix.of(width() - 1, width(), this);
     }
 
     @Override
@@ -147,7 +152,7 @@ public abstract class AbstractDoubleMatrix extends AbstractOperator implements D
         if (width() < 2) {
             return None.DOUBLE_MATRIX;
         }
-        return new VectorDoubleMatrix(0, width() - 1, this);
+        return VectorDoubleMatrix.of(0, width() - 1, this);
     }
 
     @Override
@@ -156,66 +161,38 @@ public abstract class AbstractDoubleMatrix extends AbstractOperator implements D
         List<DoubleMatrix> list = new ArrayList<>();
         for (int i = 0; i < repeat; i++) {
             int next = (i + 1) * size;
-            list.add(new SplitDoubleMatrix(i * size, next >= height()? height() : next, this));
+            list.add(SplitDoubleMatrix.of(i * size, next >= height()? height() : next, this));
         }
         return list;
     }
 
-    private static class SplitDoubleMatrix extends AbstractDoubleMatrix {
-        private final DoubleMatrix parent;
-        private final int from;
-        private final int to;
-
-        private SplitDoubleMatrix(int from, int to, DoubleMatrix parent) {
-            this.parent = parent;
-            this.from = from;
-            this.to = to;
+    private static class SplitDoubleMatrix extends DenseDoubleMatrix {
+        private SplitDoubleMatrix(int width, double[] values) {
+            super(width, values);
         }
 
-        @Override
-        public int height() {
-            return to - from;
-        }
-
-        @Override
-        public int width() {
-            return parent.width();
-        }
-
-        @Override
-        public double valueOf(int height, int width) {
-            Assert.assertIndexException(height, width, this);
-            return parent.valueOf(height + from, width);
+        static SplitDoubleMatrix of(int from, int to, DoubleMatrix parent) {
+            return new SplitDoubleMatrix(parent.width(), Arrays.copyOfRange(parent.values(), parent.width() * from, parent.width() * to));
         }
     }
 
-    private static class VectorDoubleMatrix extends AbstractDoubleMatrix {
-        private final DoubleMatrix parent;
-        private final int from;
-        private final int to;
-
-        private VectorDoubleMatrix(int from, int to, DoubleMatrix parent) {
-            this.parent = parent;
-            this.from = from;
-            this.to = to;
+    private static class VectorDoubleMatrix extends DenseDoubleMatrix {
+        private VectorDoubleMatrix(int width, double[] values) {
+            super(width, values);
         }
 
-        @Override
-        public int height() {
-            return parent.height();
+        static double[] combine(int from, int to, DoubleMatrix parent) {
+            int width = to - from;
+            double[] values = new double[parent.height() * width];
+            for(int h = 0; h < parent.height(); h++) {
+                System.arraycopy(parent.row(h), from, values, h * width, width);
+            }
+            return values;
         }
 
-        @Override
-        public int width() {
-            return to - from;
+        static VectorDoubleMatrix of(int from, int to, DoubleMatrix parent) {
+            return new VectorDoubleMatrix(to - from, combine(from, to, parent));
         }
-
-        @Override
-        public double valueOf(int height, int width) {
-            Assert.assertIndexException(height, width, this);
-            return parent.valueOf(height, width + from);
-        }
-
     }
 
     private static class DoubleMatrixIterator implements Iterator<Double> {

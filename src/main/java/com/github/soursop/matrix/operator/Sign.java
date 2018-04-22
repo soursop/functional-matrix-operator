@@ -115,7 +115,7 @@ class Sign {
         Conjunction with = new Conjunction() {
             @Override
             protected DoubleMatrix some(DoubleMatrix one, DoubleMatrix other) {
-                return new NextDoubleMatrix(one, other);
+                return NextDoubleMatrix.of(one, other);
             }
 
             @Override
@@ -129,7 +129,7 @@ class Sign {
         Conjunction with = new Conjunction() {
             @Override
             protected DoubleMatrix some(DoubleMatrix one, DoubleMatrix other) {
-                return new UnderDoubleMatrix(one, other);
+                return UnderDoubleMatrix.of(one, other);
             }
 
             @Override

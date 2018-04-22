@@ -16,6 +16,7 @@ public class ConcurrentTest {
         List<DoubleMatrix> doubleMatrices = doubles.splitBy(2);
         for (DoubleMatrix m : doubleMatrices) {
             System.out.println(m);
+            System.out.println();
         }
     }
 

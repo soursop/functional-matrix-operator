@@ -38,4 +38,9 @@ public class UnderSum extends AbstractDoubleMatrix implements Sign.UnderSum {
         return values[height * width() + width];
     }
 
+    @Override
+    public double valueOf(int idx) {
+        return values[idx];
+    }
+
 }

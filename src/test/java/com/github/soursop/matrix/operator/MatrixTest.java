@@ -35,7 +35,7 @@ public class MatrixTest {
         DoubleMatrix one = new DenseDoubleMatrix(2, sample);
         DoubleMatrix another = new DenseDoubleMatrix(2, sample);
         DoubleMatrix invoke = head.next(one).next(another).invoke();
-        System.out.println(invoke.head().head());
+        System.out.println(invoke.head());
     }
 
     @Ignore
@@ -45,7 +45,7 @@ public class MatrixTest {
         DoubleMatrix one = new DenseDoubleMatrix(2, sample);
         DoubleMatrix another = new DenseDoubleMatrix(2, sample);
         DoubleMatrix invoke = head.under(one).under(another).invoke();
-        System.out.println(invoke.head().head());
+        System.out.println(invoke.head());
     }
 
     @Ignore
