@@ -18,8 +18,7 @@ public class NextDoubleMatrix extends DenseDoubleMatrix {
         }
         double[] values = new double[height * width];
         int to = 0;
-        for(int m = 0; m < matrices.length; m++) {
-            DoubleMatrix matrix = matrices[m];
+        for(DoubleMatrix matrix : matrices) {
             double[] value = matrix.values();
             System.arraycopy(value, 0, values, to, value.length);
             to = to + value.length;
