@@ -195,11 +195,10 @@ public abstract class AbstractDoubleMatrix extends AbstractOperator implements D
         static double[] combine(int from, int to, DoubleMatrix parent) {
             int width = to - from;
             int height = parent.height();
-            double[] values = new double[height * width];
-            for(int w = from; w < to; w++) {
-                System.arraycopy(parent.columns(w), 0, values, (w - from) * height, height);
-            }
-            return values;
+            double[] values = parent.values();
+            double[] slice = new double[height * width];
+            System.arraycopy(values, from * height, slice, 0, slice.length);
+            return slice;
         }
 
         static VectorDoubleMatrix of(int from, int to, DoubleMatrix parent) {

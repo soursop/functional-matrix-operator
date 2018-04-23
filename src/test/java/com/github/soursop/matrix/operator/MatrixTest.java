@@ -44,6 +44,12 @@ public class MatrixTest {
         assertThat(asList(invoke.head().values()), is(asList(
                 1d, 1d, 1d
         )));
+        assertThat(asList(invoke.tail().values()), is(asList(
+                1d, 3d, 5d
+                , 2d, 4d, 6d
+                , 1d, 3d, 5d
+                , 2d, 4d, 6d
+        )));
     }
 
     @Test
