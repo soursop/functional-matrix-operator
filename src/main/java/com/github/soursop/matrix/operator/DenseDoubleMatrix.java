@@ -55,7 +55,7 @@ public class DenseDoubleMatrix extends AbstractDoubleMatrix {
 
     @Override
     public double valueOf(int height, int width) {
-        return values[indexOf(height, width, height())];
+        return values[indexOf(height, width, this.height)];
     }
 
     @Override
