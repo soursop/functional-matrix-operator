@@ -5,8 +5,8 @@ import com.github.soursop.matrix.operator.NextDoubleMatrix;
 import com.github.soursop.matrix.operator.StdOperator;
 
 public class Normalized extends NextDoubleMatrix {
-    private Normalized(int width, double[] combine) {
-        super(width, combine);
+    private Normalized(int height, int width, double[] combine) {
+        super(height, width, combine);
     }
 
     public static Normalized of(DoubleMatrix one) {
@@ -18,7 +18,7 @@ public class Normalized extends NextDoubleMatrix {
             one = one.tail();
         }
         WithValues combine = combine(transformed);
-        return new Normalized(combine.width, combine.values);
+        return new Normalized(combine.height, combine.width, combine.values);
     }
 
 }

@@ -18,7 +18,13 @@ public class FeedForward implements Forward {
         DoubleOperator ratio = DoubleOperator.of(lambda / size);
         DoubleOperator m = DoubleOperator.of(size);
 
+//        DoubleIterator d1 = new DoubleIterator(1, sigma.height(), sigma.width());
+//        DoubleIterator d2 = new DoubleIterator(1, layer.height(), layer.width());
+//        long s = System.currentTimeMillis();
         DoubleMatrix delta = sigma.transpose().product(layer).invoke();
+//        DoubleMatrix delta = d1.transpose().product(d2).invoke();
+//        System.out.println(String.format("%s*%s {%d}", d1.asSimple(0), d2.asSimple(0), System.currentTimeMillis() - s));
+//        System.out.println(String.format("%s*%s {%d}", sigma.asSimple(0), layer.asSimple(0), System.currentTimeMillis() - s));
         Zero regularized = Zero.of(theta.tail().multiply(ratio).invoke());
 
         DoubleMatrix prev = this.theta;
@@ -45,13 +51,13 @@ public class FeedForward implements Forward {
     }
 
     static class Zero extends NextDoubleMatrix {
-        private Zero(int width, double[] values) {
-            super(width, values);
+        private Zero(int height, int width, double[] values) {
+            super(height, width, values);
         }
 
         public static Zero of(DoubleMatrix origin) {
             WithValues matrix = combine(new DoubleIterator(0d, origin.height(), 1), origin);
-            return new Zero(matrix.width, matrix.values);
+            return new Zero(matrix.height, matrix.width, matrix.values);
         }
     }
 

@@ -9,23 +9,24 @@ import com.github.soursop.matrix.operator.*;
 public class OneHotEncoding extends DenseDoubleMatrix {
 
     public static OneHotEncoding of(int size, double[] values) {
-        return of(size, new DenseDoubleMatrix(values));
+        return of(size, DenseDoubleMatrix.of(values));
     }
 
     public static OneHotEncoding of(int size, DoubleMatrix one) {
-        double[] values = new double[one.size() * size];
-        for (int h = 0; h < one.height(); h++) {
+        int height = one.size();
+        double[] values = new double[height * size];
+        for (int h = 0; h < height; h++) {
             double found = one.valueOf(h);
             for (int w = 0; w < size; w++) {
                 double v = w == found - 1 ? 1d : 0d;
-                values[h * size + w] = v;
+                values[indexOf(h, w, height)] = v;
             }
         }
-        return new OneHotEncoding(size, values);
+        return new OneHotEncoding(height, size, values);
     }
 
-    private OneHotEncoding(int width, double[] values) {
-        super(width, values);
+    private OneHotEncoding(int height, int width, double[] values) {
+        super(height, width, values);
     }
 
 }

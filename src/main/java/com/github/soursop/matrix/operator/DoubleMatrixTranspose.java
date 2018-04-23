@@ -6,16 +6,16 @@ class DoubleMatrixTranspose extends DenseDoubleMatrix implements Sign.Transpose 
         double[] values = new double[origin.size()];
         int width = origin.width();
         int height = origin.height();
-        for (int h = 0; h < height; h++) {
-            for (int w = 0; w < width; w++) {
-                values[w * height + h] = origin.valueOf(h, w);
+        for (int w = 0; w < width; w++) {
+            for (int h = 0; h < height; h++) {
+                values[indexOf(w, h, width)] = origin.valueOf(h, w);
             }
         }
-        return new DoubleMatrixTranspose(origin.height(), values);
+        return new DoubleMatrixTranspose(width, height, values);
     }
 
-    private DoubleMatrixTranspose(int width, double... values) {
-        super(width, values);
+    private DoubleMatrixTranspose(int height, int width, double... values) {
+        super(height, width, values);
     }
 
 }

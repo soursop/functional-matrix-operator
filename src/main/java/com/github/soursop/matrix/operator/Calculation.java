@@ -1,5 +1,7 @@
 package com.github.soursop.matrix.operator;
 
+import static com.github.soursop.matrix.operator.AbstractDoubleMatrix.indexOf;
+
 abstract class Calculation implements With {
 
     abstract double apply(double v1, double v2);
@@ -34,7 +36,7 @@ abstract class Calculation implements With {
         for (int i = 0; i < size; i++) {
             values[i] = sign.apply(one.valueOf(i), other.getValue());
         }
-        return new DenseDoubleMatrix(one.width(), values);
+        return new DenseDoubleMatrix(one.height(), one.width(), values);
     }
 
     protected DoubleMatrix elementWise(Calculation sign, DoubleMatrix one, DoubleMatrix other) {
@@ -44,22 +46,22 @@ abstract class Calculation implements With {
         for (int i = 0; i < size; i++) {
             values[i] = sign.apply(one.valueOf(i), other.valueOf(i));
         }
-        return new DenseDoubleMatrix(other.width(), values);
+        return new DenseDoubleMatrix(one.height(), other.width(), values);
     }
 
     protected DoubleMatrix innerProduct(Calculation sign, DoubleMatrix one, DoubleMatrix other) {
         Assert.assertProductSize(sign, one, other);
-        double[] values = new double[one.height() * other.width()];
         int width = one.width();
         int height = one.height();
         int until = other.width();
+        double[] values = new double[height * until];
         for (int w = 0; w < width; w++) {
             for (int h = 0; h < height; h++) {
                 for (int to = 0; to < until; to++) {
-                    values[h * other.width() + to] += sign.apply(one.valueOf(h, w), other.valueOf(w, to));
+                    values[indexOf(h, to, height)] += sign.apply(one.valueOf(h, w), other.valueOf(w, to));
                 }
             }
         }
-        return new DenseDoubleMatrix(other.width(), values);
+        return new DenseDoubleMatrix(height, until, values);
     }
 }

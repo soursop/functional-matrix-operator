@@ -12,7 +12,7 @@ public class ConcurrentTest {
     @Test
     public void testSplit() {
         double[] wideSample = new double[]{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
-        DenseDoubleMatrix doubles = new DenseDoubleMatrix(2, wideSample);
+        DenseDoubleMatrix doubles = DenseDoubleMatrix.of(2, wideSample);
         List<DoubleMatrix> doubleMatrices = doubles.splitBy(2);
         for (DoubleMatrix m : doubleMatrices) {
             System.out.println(m);
@@ -30,8 +30,8 @@ public class ConcurrentTest {
 
         double[] values1 = new DoubleRandomIterator(height, width, 0).values();
         double[] values2 = new DoubleRandomIterator(width, size, 0).values();
-        final DenseDoubleMatrix one = new DenseDoubleMatrix(width, values1);
-        final Product product = new Product(new DenseDoubleMatrix(size, values2));
+        final DenseDoubleMatrix one = DenseDoubleMatrix.of(width, values1);
+        final Product product = new Product(DenseDoubleMatrix.of(size, values2));
 
         long s1 = System.currentTimeMillis();
         DoubleMatrix resultAll = product.invoke(one);

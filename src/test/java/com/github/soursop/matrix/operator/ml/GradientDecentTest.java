@@ -13,7 +13,7 @@ public class GradientDecentTest {
     @Test
     public void testSingle() throws IOException {
         double[] data = read("ml/1x_house.csv");
-        DenseDoubleMatrix matrix = new DenseDoubleMatrix(2, data);
+        DenseDoubleMatrix matrix = DenseDoubleMatrix.of(2, data);
         Layer input = Layer.of(matrix.head());
         DoubleMatrix output = matrix.tail();
 
@@ -30,7 +30,7 @@ public class GradientDecentTest {
     @Test
     public void testMulti() throws IOException {
         double[] data = read("ml/2x_house.csv");
-        DenseDoubleMatrix matrix = new DenseDoubleMatrix(3, data);
+        DenseDoubleMatrix matrix = DenseDoubleMatrix.of(3, data);
         Layer input = Layer.of(Normalized.of(matrix.init()));
         DoubleMatrix output = matrix.last();
 

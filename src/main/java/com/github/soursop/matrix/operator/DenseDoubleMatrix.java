@@ -7,15 +7,27 @@ public class DenseDoubleMatrix extends AbstractDoubleMatrix {
     private final int height;
     private final int width;
 
-    public DenseDoubleMatrix(double... values) {
-        this(1, values);
+    public static DenseDoubleMatrix of(double... values) {
+        return of(1, values);
     }
 
-    public DenseDoubleMatrix(int width, double... values) {
-        this(Assert.assertHeight(values.length, width), width, values);
+    public static DenseDoubleMatrix of(int width, double... values) {
+        int height = Assert.assertHeight(values.length, width);
+        return new DenseDoubleMatrix(height, width, asVector(height, width, values));
     }
 
-    DenseDoubleMatrix(int height, int width, double... values) {
+    protected static double[] asVector(int height, int width, double[] values) {
+        if (width == 1) {
+            return values;
+        }
+        double[] doubles = new double[values.length];
+        for (int i = 0; i < values.length; i++) {
+            doubles[i] = values[(i % height) * width + i / height];
+        }
+        return doubles;
+    }
+
+    protected DenseDoubleMatrix(int height, int width, double... values) {
         this.height = height;
         this.width = width;
         this.values = values;
@@ -43,13 +55,17 @@ public class DenseDoubleMatrix extends AbstractDoubleMatrix {
 
     @Override
     public double valueOf(int height, int width) {
-        return values[height * width() + width];
+        return values[indexOf(height, width, height())];
     }
 
     @Override
-    public double[] row(int height) {
-        int from = height * width();
-        return Arrays.copyOfRange(values, from, from + width());
+    public double[] columns(int width) {
+        int from = width * height();
+        return Arrays.copyOfRange(values, from, from + height());
+    }
+
+    private String asIndex(int i) {
+        return String.format("%d: %d + %d = %d", i, (i % height) * width, i / height, (i % height) * width + i / height);
     }
 
     String productAsDebug(DoubleMatrix matrix) {
@@ -66,9 +82,11 @@ public class DenseDoubleMatrix extends AbstractDoubleMatrix {
     }
 
     public static class WithValues {
+        public final int height;
         public final int width;
         public final double[] values;
         WithValues(int width, double[] values) {
+            this.height = Assert.assertHeight(values.length, width);
             this.width = width;
             this.values = values;
         }

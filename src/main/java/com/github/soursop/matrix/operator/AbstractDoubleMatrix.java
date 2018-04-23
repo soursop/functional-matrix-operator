@@ -51,12 +51,16 @@ public abstract class AbstractDoubleMatrix extends AbstractOperator implements D
     }
 
     @Override
-    public double[] row(int height) {
-        double[] doubles = new double[width()];
-        for (int w = 0; w < width(); w++) {
-            doubles[w] = valueOf(height, w);
+    public double[] columns(int width) {
+        double[] columns = new double[height()];
+        for (int h = 0; h < height(); h++) {
+            columns[h] = valueOf(h, width);
         }
-        return doubles;
+        return columns;
+    }
+
+    protected static int indexOf(int h, int w, int height) {
+        return h + w * height;
     }
 
     @Override
@@ -167,31 +171,39 @@ public abstract class AbstractDoubleMatrix extends AbstractOperator implements D
     }
 
     private static class SplitDoubleMatrix extends DenseDoubleMatrix {
-        private SplitDoubleMatrix(int width, double[] values) {
-            super(width, values);
+        private SplitDoubleMatrix(int height, int width, double[] values) {
+            super(height, width, values);
         }
 
         static SplitDoubleMatrix of(int from, int to, DoubleMatrix parent) {
-            return new SplitDoubleMatrix(parent.width(), Arrays.copyOfRange(parent.values(), parent.width() * from, parent.width() * to));
+            int width = parent.width();
+            int range = to - from;
+            double[] values = new double[width * range];
+            for (int w = 0; w < width; w++) {
+                double[] columns = parent.columns(w);
+                System.arraycopy(columns, from, values, w * width, range);
+            }
+            return new SplitDoubleMatrix(range, parent.width(), values);
         }
     }
 
     private static class VectorDoubleMatrix extends DenseDoubleMatrix {
-        private VectorDoubleMatrix(int width, double[] values) {
-            super(width, values);
+        private VectorDoubleMatrix(int height, int width, double[] values) {
+            super(height, width, values);
         }
 
         static double[] combine(int from, int to, DoubleMatrix parent) {
             int width = to - from;
-            double[] values = new double[parent.height() * width];
-            for(int h = 0; h < parent.height(); h++) {
-                System.arraycopy(parent.row(h), from, values, h * width, width);
+            int height = parent.height();
+            double[] values = new double[height * width];
+            for(int w = from; w < to; w++) {
+                System.arraycopy(parent.columns(w), 0, values, (w - from) * height, height);
             }
             return values;
         }
 
         static VectorDoubleMatrix of(int from, int to, DoubleMatrix parent) {
-            return new VectorDoubleMatrix(to - from, combine(from, to, parent));
+            return new VectorDoubleMatrix(parent.height(), to - from, combine(from, to, parent));
         }
     }
 

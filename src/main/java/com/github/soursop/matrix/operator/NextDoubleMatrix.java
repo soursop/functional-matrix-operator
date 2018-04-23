@@ -5,7 +5,7 @@ public class NextDoubleMatrix extends DenseDoubleMatrix {
 
     public static NextDoubleMatrix of(DoubleMatrix... matrices) {
         WithValues combine = combine(matrices);
-        return new NextDoubleMatrix(combine.width, combine.values);
+        return new NextDoubleMatrix(combine.height, combine.width, combine.values);
     }
 
     protected static WithValues combine(DoubleMatrix... matrices) {
@@ -20,17 +20,15 @@ public class NextDoubleMatrix extends DenseDoubleMatrix {
         int to = 0;
         for(int m = 0; m < matrices.length; m++) {
             DoubleMatrix matrix = matrices[m];
-            for(int h = 0; h < height; h++) {
-                double[] value = matrix.row(h);
-                System.arraycopy(value, 0, values, to + h * width, value.length);
-            }
-            to = to + matrix.width();
+            double[] value = matrix.values();
+            System.arraycopy(value, 0, values, to, value.length);
+            to = to + value.length;
         }
         return new WithValues(width, values);
     }
 
-    protected NextDoubleMatrix(int width, double[] values) {
-        super(width, values);
+    protected NextDoubleMatrix(int height, int width, double[] values) {
+        super(height, width, values);
     }
 
 }
