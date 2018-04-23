@@ -55,10 +55,12 @@ abstract class Calculation implements With {
         int height = one.height();
         int until = other.width();
         double[] values = new double[height * until];
+        double[] left = one.values();
+        double[] right = other.values();
         for (int w = 0; w < width; w++) {
             for (int h = 0; h < height; h++) {
                 for (int to = 0; to < until; to++) {
-                    values[indexOf(h, to, height)] += sign.apply(one.valueOf(h, w), other.valueOf(w, to));
+                    values[indexOf(h, to, height)] += sign.apply(left[indexOf(h, w, height)], right[indexOf(w, to, width)]);
                 }
             }
         }
