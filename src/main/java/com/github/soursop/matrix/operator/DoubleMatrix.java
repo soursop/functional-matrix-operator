@@ -13,4 +13,5 @@ public interface DoubleMatrix extends Matrix, Operator, Transposable<DoubleMatri
     DoubleMatrix tail();
     DoubleMatrix last();
     DoubleMatrix init();
+    DoubleMatrix copy();
 }

@@ -109,6 +109,11 @@ public abstract class AbstractDoubleMatrix extends AbstractOperator implements D
     }
 
     @Override
+    public DoubleMatrix copy() {
+        return new DenseDoubleMatrix(height(), width(), values());
+    }
+
+    @Override
     public int size() {
         return height() * width();
     }
@@ -121,7 +126,7 @@ public abstract class AbstractDoubleMatrix extends AbstractOperator implements D
     @Override
     public double[] values() {
         double[] doubles = new double[size()];
-        for (int i = 0; i < size(); i++) {
+        for (int i = 0; i < doubles.length; i++) {
             doubles[i] = valueOf(i);
         }
         return doubles;
@@ -193,12 +198,17 @@ public abstract class AbstractDoubleMatrix extends AbstractOperator implements D
         }
 
         static double[] combine(int from, int to, DoubleMatrix parent) {
-            int width = to - from;
+//            int width = to - from;
             int height = parent.height();
             double[] values = parent.values();
-            double[] slice = new double[height * width];
-            System.arraycopy(values, from * height, slice, 0, slice.length);
-            return slice;
+//            double[] slice = new double[height * width];
+//            int start = from * height;
+//            int end = to * height;
+//            for (int i = start; i < end; i++) {
+//                slice[i - start] = parent.valueOf(i);
+//            }
+            return Arrays.copyOfRange(values, from * height, to * height);
+//            return slice;
         }
 
         static VectorDoubleMatrix of(int from, int to, DoubleMatrix parent) {
