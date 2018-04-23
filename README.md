@@ -22,7 +22,7 @@ Transforming
 ```java
 double[] sample = new double[]{ 1l, 2l, 3l, 4l, 5l, 6l };
 DoubleOperator head = DoubleOperator.of(1l);
-DoubleMatrix one = new DenseDoubleMatrix(2, sample);
+DoubleMatrix one = DenseDoubleMatrix.of(2, sample);
 ```
 result :
 ```
@@ -40,7 +40,7 @@ Subset
    - you can do the following:
 ```java
 double[] sample = new double[]{ 1l, 2l, 3l, 4l, 5l, 6l };
-DoubleMatrix one = new DenseDoubleMatrix(2, sample);
+DoubleMatrix one = DenseDoubleMatrix.of(2, sample);
 System.out.println(one.head());
 ```
 result :
@@ -63,8 +63,8 @@ Operations
 double[] sample = new double[]{ 1l, 2l, 3l, 4l, 5l, 6l };
 double[] transpose = new double[]{ 1l, 3l, 5l, 2l, 4l, 6l };
 
-DoubleMatrix one = new DenseDoubleMatrix(2, sample);
-DoubleMatrix other = new DenseDoubleMatrix(3, transpose);
+DoubleMatrix one = DenseDoubleMatrix.of(2, sample);
+DoubleMatrix other = DenseDoubleMatrix.of(3, transpose);
 DoubleMatrix result = one.multiply(other).invoke();
 System.out.println(result);
 ```
@@ -85,8 +85,8 @@ int split = 100_000;
 
 double[] values1 = new DoubleRandomIterator(height, width, 0).values();
 double[] values2 = new DoubleRandomIterator(width, size, 0).values();
-final DenseDoubleMatrix one = new DenseDoubleMatrix(width, values1);
-final Multiply multiply = new Multiply(new DenseDoubleMatrix(size, values2));
+final DenseDoubleMatrix one = DenseDoubleMatrix.of(width, values1);
+final Multiply multiply = new Multiply(DenseDoubleMatrix.of(size, values2));
 
 long s1 = System.currentTimeMillis();
 DoubleMatrix resultAll = multiply.invoke(one);
