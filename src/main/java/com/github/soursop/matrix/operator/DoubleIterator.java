@@ -1,5 +1,7 @@
 package com.github.soursop.matrix.operator;
 
+import java.util.Arrays;
+
 public class DoubleIterator extends AbstractDoubleMatrix {
     private final int height;
     private final int width;
@@ -40,4 +42,10 @@ public class DoubleIterator extends AbstractDoubleMatrix {
         return from;
     }
 
+    @Override
+    public double[] values() {
+        double[] values = new double[size()];
+        Arrays.fill(values, from);
+        return values;
+    }
 }
