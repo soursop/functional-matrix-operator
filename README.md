@@ -1,7 +1,7 @@
-distributed-matrix-operator
+functional-matrix-operator
 ========
 
-distributed-matrix-operator is a library for matrix operation in form of lazy evaluation.
+functional-matrix-operator is a library for matrix operation in form of lazy evaluation.
 It supports matrix operations(Multiply, Divide, Minus, Plus, Transpose).
 
  - Basic Featurs
