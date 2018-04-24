@@ -1,6 +1,9 @@
 package com.github.soursop.matrix.operator;
 
 public class DoubleOperator extends AbstractOperator {
+    public static DoubleOperator ONE = new DoubleOperator(1d);
+    public static DoubleOperator ZERO = new DoubleOperator(0d);
+
     private final double value;
 
     public DoubleOperator(double value) {

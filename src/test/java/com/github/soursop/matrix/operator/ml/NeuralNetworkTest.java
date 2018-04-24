@@ -1,7 +1,6 @@
 package com.github.soursop.matrix.operator.ml;
 
-import com.github.soursop.matrix.operator.DenseDoubleMatrix;
-import com.github.soursop.matrix.operator.DoubleMatrix;
+import com.github.soursop.matrix.operator.*;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -25,21 +24,25 @@ public class NeuralNetworkTest {
         FeedForward[] forwards = asArray(new FeedForward(theta1, Activation.SIGMOID), new FeedForward(theta2, Activation.SIGMOID));
 
         long s1 = System.currentTimeMillis();
+        double p = 0d;
+        double lambda = 0.00d;
         DoubleMatrix hypothesis = input;
         for (FeedForward forward : forwards) {
             hypothesis = forward.forward(hypothesis);
+            p += forward.penalty();
         }
+
+        double loss = LossFunction.LOG_LOSS.loss(output, hypothesis) + lambda * p / (2 * input.height());
+        System.out.println(loss);
 
         System.out.println(System.currentTimeMillis() - s1);
 
 //        for (int j = 0; j < 200; j++) {
             long s2 = System.currentTimeMillis();
-            double lambda = 0.01d;
             DoubleMatrix decent = hypothesis.minus(output).invoke();
             for (int i = forwards.length - 1; i > -1; i--) {
                 if (i > 0) {
                     DoubleMatrix sigma = forwards[i].backward(decent, forwards[i - 1].z());
-                    forwards[i].gradient(decent, lambda, input.height());
                     decent = sigma;
                 } else {
                     forwards[i].gradient(decent.tail(), lambda, input.height());

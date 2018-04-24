@@ -40,6 +40,16 @@ public class FeedForward implements Forward {
     }
 
     @Override
+    public DoubleMatrix theta() {
+        return theta;
+    }
+
+    @Override
+    public double penalty() {
+        return SumOperator.of(theta.tail().pow(2)).getValue();
+    }
+
+    @Override
     public DoubleMatrix z() {
         return z;
     }

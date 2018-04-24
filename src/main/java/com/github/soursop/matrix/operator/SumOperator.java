@@ -5,17 +5,18 @@ public class SumOperator extends DoubleOperator implements Sign.Sum {
     private final MaxOperator max;
     private final MinOperator min;
 
-    public static SumOperator of(DoubleMatrix origin) {
+    public static SumOperator of(Operator origin) {
         double max = Double.MIN_VALUE;
         double min = Double.MAX_VALUE;
         double result = 0d;
-        for (int i = 0; i < origin.size(); i++) {
-            double v = origin.valueOf(i);
+        DoubleMatrix matrix = origin.asDoubleMatrix();
+        for (int i = 0; i < matrix.size(); i++) {
+            double v = matrix.valueOf(i);
             result += v;
             max = Math.max(max, v);
             min = Math.min(min, v);
         }
-        return new SumOperator(origin, new MaxOperator(max), new MinOperator(min), result);
+        return new SumOperator(matrix, new MaxOperator(max), new MinOperator(min), result);
     }
 
     private SumOperator(DoubleMatrix origin, MaxOperator max, MinOperator min, double value) {
