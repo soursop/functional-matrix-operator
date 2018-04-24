@@ -11,7 +11,8 @@ public class Gradient extends Cost implements Derivative {
     }
 
     @Override
-    public DoubleMatrix gradient(DoubleMatrix theta) {
+    public DoubleMatrix gradient(DoubleMatrix ... thetas) {
+        DoubleMatrix theta = Assert.assertOnlyOne(thetas);
         Product hypothesis = input.product(theta);
         Plus error = hypothesis.minus(output);
         Product update = error.product(ratio);
