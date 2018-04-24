@@ -19,11 +19,12 @@ public class NextDoubleMatrix extends DenseDoubleMatrix {
         double[] values = new double[height * width];
         int to = 0;
         for(DoubleMatrix matrix : matrices) {
+            double[] value = matrix.values();
+            int _width = matrix.width();
             for(int h = 0; h < height; h++) {
-                double[] row = matrix.row(h);
-                System.arraycopy(row, 0, values, indexOf(h, to, width), row.length);
+                System.arraycopy(value, indexOf(h, _width), values, indexOf(h, to, width), _width);
             }
-            to = to + matrix.width();
+            to = to + _width;
         }
         return new WithValues(width, values);
     }

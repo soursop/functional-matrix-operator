@@ -59,12 +59,6 @@ public class DenseDoubleMatrix extends AbstractDoubleMatrix {
         return values[indexOf(height, width, this.width)];
     }
 
-    @Override
-    public double[] row(int height) {
-        int from = height * width;
-        return Arrays.copyOfRange(values, from, from + this.width);
-    }
-
     String productAsDebug(DoubleMatrix matrix) {
         StringBuilder builder = new StringBuilder();
         for (int h = 0; h < height(); h++) {

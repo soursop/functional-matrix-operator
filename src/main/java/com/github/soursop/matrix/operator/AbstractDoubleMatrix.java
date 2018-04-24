@@ -54,13 +54,8 @@ public abstract class AbstractDoubleMatrix extends AbstractOperator implements D
         return h * width + w;
     }
 
-    @Override
-    public double[] row(int height) {
-        double[] doubles = new double[width()];
-        for (int w = 0; w < width(); w++) {
-            doubles[w] = valueOf(height, w);
-        }
-        return doubles;
+    protected static int indexOf(int h, int width) {
+        return h * width;
     }
 
     @Override
@@ -166,11 +161,13 @@ public abstract class AbstractDoubleMatrix extends AbstractOperator implements D
 
     @Override
     public List<DoubleMatrix> splitBy(int size) {
-        int repeat = height() / size;
+        int repeat = height() / size + (height() % size == 0? 0 : 1);
         List<DoubleMatrix> list = new ArrayList<>();
+        double[] values = values();
+        int width = width();
         for (int i = 0; i < repeat; i++) {
             int next = (i + 1) * size;
-            list.add(SplitDoubleMatrix.of(i * size, next >= height()? height() : next, this));
+            list.add(SplitDoubleMatrix.of(i * size, next >= height()? height() : next, width, values));
         }
         return list;
     }
@@ -180,8 +177,9 @@ public abstract class AbstractDoubleMatrix extends AbstractOperator implements D
             super(height, width, values);
         }
 
-        static SplitDoubleMatrix of(int from, int to, DoubleMatrix parent) {
-            return new SplitDoubleMatrix(to - from, parent.width(), Arrays.copyOfRange(parent.values(), parent.width() * from, parent.width() * to));
+        static SplitDoubleMatrix of(int from, int to, int width, double[] values) {
+            return new SplitDoubleMatrix(to - from, width
+                    , Arrays.copyOfRange(values, indexOf(from, width), indexOf(to, width)));
         }
     }
 
@@ -191,11 +189,13 @@ public abstract class AbstractDoubleMatrix extends AbstractOperator implements D
         }
 
         static double[] combine(int from, int to, DoubleMatrix parent) {
-            int width = to - from;
+            int subtract = to - from;
+            int width = parent.width();
             int height = parent.height();
-            double[] values = new double[height * width];
+            double[] values = new double[height * subtract];
+            double[] origin = parent.values();
             for(int h = 0; h < height; h++) {
-                System.arraycopy(parent.row(h), from, values, h * width, width);
+                System.arraycopy(origin, indexOf(h, from, width), values, indexOf(h, subtract), subtract);
             }
             return values;
         }
