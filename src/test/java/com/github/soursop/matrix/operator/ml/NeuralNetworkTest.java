@@ -32,7 +32,7 @@ public class NeuralNetworkTest {
             p += forward.penalty();
         }
 
-        double loss = LossFunction.LOG_LOSS.loss(output, hypothesis) + lambda * p / (2 * input.height());
+        double loss = LossFunction.LOGISTIC.loss(output, hypothesis) + lambda * p / (2 * input.height());
         System.out.println(loss);
 
         System.out.println(System.currentTimeMillis() - s1);

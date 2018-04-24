@@ -5,7 +5,7 @@ import org.apache.commons.math3.util.FastMath;
 public interface Function {
     double apply(double v);
 
-    Function LOG = new Function() {
+    Function LOGISTIC = new Function() {
         @Override
         public double apply(double input) {
             if (Double.isNaN(input) || Double.isInfinite(input)) {
