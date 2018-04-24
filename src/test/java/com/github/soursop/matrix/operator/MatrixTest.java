@@ -8,9 +8,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 public class MatrixTest {
-    private double[] sample = new double[]{ 1l, 2l, 3l, 4l, 5l, 6l };
-    private double[] wideSample = new double[]{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
-    private double[] transpose = new double[]{ 1l, 3l, 5l, 2l, 4l, 6l };
+    private double[] sample = new double[]{ 1d, 2d, 3d, 4d, 5d, 6d };
+    private double[] wideSample = new double[]{ 1d, 2d, 3d, 4d, 5d, 6d, 7d, 8d, 9d, 10d, 11d, 12d };
+    private double[] transpose = new double[]{ 1d, 3d, 5d, 2d, 4d, 6d };
 
     @Ignore
     @Test

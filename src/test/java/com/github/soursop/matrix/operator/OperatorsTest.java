@@ -13,8 +13,8 @@ import static org.hamcrest.core.Is.is;
  * @created 2018. 4. 3.
  */
 public class OperatorsTest {
-    private double[] sample = new double[]{ 1l, 2l, 3l, 4l, 5l, 6l };
-    private double[] transpose = new double[]{ 2l, 4l, 6l, 3l, 5l, 7l };
+    private double[] sample = new double[]{ 1d, 2d, 3d, 4d, 5d, 6d };
+    private double[] transpose = new double[]{ 2d, 4d, 6d, 3d, 5d, 7d };
 
     @Test
     public void testProductWithMatrix() {
