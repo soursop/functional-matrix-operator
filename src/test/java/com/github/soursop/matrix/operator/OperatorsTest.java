@@ -23,13 +23,13 @@ public class OperatorsTest {
         DoubleMatrix result = one.product(other).invoke();
         assertThat(asList(result.values()), is(asList(
                 1d * 2d + 2d * 3d
-                , 3d * 2d + 4d * 3d
-                , 5d * 2d + 6d * 3d
                 , 1d * 4d + 2d * 5d
-                , 3d * 4d + 4d * 5d
-                , 5d * 4d + 6d * 5d
                 , 1d * 6d + 2d * 7d
+                , 3d * 2d + 4d * 3d
+                , 3d * 4d + 4d * 5d
                 , 3d * 6d + 4d * 7d
+                , 5d * 2d + 6d * 3d
+                , 5d * 4d + 6d * 5d
                 , 5d * 6d + 6d * 7d
         )));
     }
@@ -40,10 +40,10 @@ public class OperatorsTest {
         DoubleMatrix result = one.multiply(one).invoke();
         assertThat(asList(result.values()), is(asList(
                 1d * 1d
-                , 3d * 3d
-                , 5d * 5d
                 , 2d * 2d
+                , 3d * 3d
                 , 4d * 4d
+                , 5d * 5d
                 , 6d * 6d
         )));
     }
@@ -55,10 +55,10 @@ public class OperatorsTest {
         DoubleMatrix result = one.plus(other).invoke();
         assertThat(asList(result.values()), is(asList(
                 1d + 1d
-                , 3d + 3d
-                , 5d + 5d
                 , 2d + 2d
+                , 3d + 3d
                 , 4d + 4d
+                , 5d + 5d
                 , 6d + 6d
         )));
     }
@@ -70,10 +70,10 @@ public class OperatorsTest {
         DoubleMatrix result = one.minus(other).invoke();
         assertThat(asList(result.values()), is(asList(
                 1d - 1d
-                , 3d - 3d
-                , 5d - 5d
                 , 2d - 2d
+                , 3d - 3d
                 , 4d - 4d
+                , 5d - 5d
                 , 6d - 6d
         )));
     }
@@ -84,10 +84,10 @@ public class OperatorsTest {
         DoubleMatrix result = one.divide(new DoubleOperator(2)).invoke();
         assertThat(asList(result.values()), is(asList(
                 1d / 2d
-                , 3d / 2d
-                , 5d / 2d
                 , 2d / 2d
+                , 3d / 2d
                 , 4d / 2d
+                , 5d / 2d
                 , 6d / 2d
         )));
     }
@@ -98,10 +98,10 @@ public class OperatorsTest {
         DoubleMatrix result = one.minus();
         assertThat(asList(result.values()), is(asList(
                 -1d
-                , -3d
-                , -5d
                 , -2d
+                , -3d
                 , -4d
+                , -5d
                 , -6d
         )));
     }
@@ -112,10 +112,10 @@ public class OperatorsTest {
         DoubleMatrix result = one.divide();
         assertThat(asList(result.values()), is(asList(
                 1/1d
-                , 1/3d
-                , 1/5d
                 , 1/2d
+                , 1/3d
                 , 1/4d
+                , 1/5d
                 , 1/6d
         )));
     }

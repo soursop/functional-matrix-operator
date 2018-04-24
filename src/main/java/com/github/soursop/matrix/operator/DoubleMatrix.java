@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface DoubleMatrix extends Matrix, Operator, Transposable<DoubleMatrix> {
     double valueOf(int height, int width);
-    double[] columns(int width);
+    double[] row(int height);
     double valueOf(int idx);
     double[] values();
     DoubleMatrix transpose();

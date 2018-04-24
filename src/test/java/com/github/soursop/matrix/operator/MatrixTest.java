@@ -27,11 +27,9 @@ public class MatrixTest {
         DoubleMatrix another = DenseDoubleMatrix.of(2, sample);
         DoubleMatrix next = head.next(one).next(another).invoke();
         assertThat(asList(next.values()), is(asList(
-                1d, 1d, 1d
-                , 1d, 3d, 5d
-                , 2d, 4d, 6d
-                , 1d, 3d, 5d
-                , 2d, 4d, 6d
+                1d, 1d, 2d, 1d, 2d
+                , 1d, 3d, 4d, 3d, 4d
+                , 1d, 5d, 6d, 5d, 6d
         )));
     }
 
@@ -42,13 +40,14 @@ public class MatrixTest {
         DoubleMatrix another = DenseDoubleMatrix.of(2, sample);
         DoubleMatrix invoke = head.next(one).next(another).invoke();
         assertThat(asList(invoke.head().values()), is(asList(
-                1d, 1d, 1d
+                1d
+                , 1d
+                , 1d
         )));
         assertThat(asList(invoke.tail().values()), is(asList(
-                1d, 3d, 5d
-                , 2d, 4d, 6d
-                , 1d, 3d, 5d
-                , 2d, 4d, 6d
+                1d, 2d, 1d, 2d
+                , 3d, 4d, 3d, 4d
+                , 5d, 6d, 5d, 6d
         )));
     }
 
@@ -59,8 +58,13 @@ public class MatrixTest {
         DoubleMatrix another = DenseDoubleMatrix.of(2, sample);
         DoubleMatrix invoke = head.under(one).under(another).invoke();
         assertThat(asList(invoke.values()), is(asList(
-                1d, 1d, 3d, 5d, 1d, 3d, 5d
-                , 1d, 2d, 4d, 6d, 2d, 4d, 6d
+                1d, 1d
+                , 1d, 2d
+                , 3d, 4d
+                , 5d, 6d
+                , 1d, 2d
+                , 3d, 4d
+                , 5d, 6d
         )));
         assertThat(asList(invoke.head().values()), is(asList(
                 1d, 1d, 3d, 5d, 1d, 3d, 5d
@@ -74,9 +78,11 @@ public class MatrixTest {
         DoubleMatrix another = DenseDoubleMatrix.of(2, sample);
         DoubleMatrix transpose = head.next(one).next(another).invoke().transpose();
         assertThat(asList(transpose.values()), is(asList(
-        1d, 1d, 2d, 1d, 2d
-            , 1d, 3d, 4d, 3d, 4d
-            , 1d, 5d, 6d, 5d, 6d
+        1d, 1d, 1d
+            , 1d, 3d, 5d
+            , 2d, 4d, 6d
+            , 1d, 3d, 5d
+            , 2d, 4d, 6d
         )));
     }
 
@@ -86,9 +92,9 @@ public class MatrixTest {
         DoubleMatrix one = DenseDoubleMatrix.of(2, sample);
         DoubleMatrix next = one.next(last).invoke();
         assertThat(asList(next.values()), is(asList(
-                1d, 3d, 5d
-                , 2d, 4d, 6d
-                , 1d, 1d, 1d
+                1d, 2d, 1d
+                , 3d, 4d, 1d
+                , 5d, 6d, 1d
         )));
     }
 

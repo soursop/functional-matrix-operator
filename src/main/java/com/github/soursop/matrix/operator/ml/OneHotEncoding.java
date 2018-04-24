@@ -19,7 +19,7 @@ public class OneHotEncoding extends DenseDoubleMatrix {
             double found = one.valueOf(h);
             for (int w = 0; w < size; w++) {
                 double v = w == found - 1 ? 1d : 0d;
-                values[indexOf(h, w, height)] = v;
+                values[indexOf(h, w, size)] = v;
             }
         }
         return new OneHotEncoding(height, size, values);

@@ -31,8 +31,8 @@ abstract class Calculation implements With {
     }
 
     protected DoubleMatrix elementWise(Calculation sign, DoubleMatrix one, DoubleOperator other) {
-        double[] values = new double[one.height() * one.width()];
         int size = one.size();
+        double[] values = new double[size];
         for (int i = 0; i < size; i++) {
             values[i] = sign.apply(one.valueOf(i), other.getValue());
         }
@@ -41,8 +41,8 @@ abstract class Calculation implements With {
 
     protected DoubleMatrix elementWise(Calculation sign, DoubleMatrix one, DoubleMatrix other) {
         Assert.assertElementSize(sign, one, other);
-        double[] values = new double[one.height() * other.width()];
         int size = one.size();
+        double[] values = new double[size];
         for (int i = 0; i < size; i++) {
             values[i] = sign.apply(one.valueOf(i), other.valueOf(i));
         }
@@ -57,10 +57,10 @@ abstract class Calculation implements With {
         double[] values = new double[height * until];
         double[] left = one.values();
         double[] right = other.values();
-        for (int w = 0; w < width; w++) {
-            for (int h = 0; h < height; h++) {
+        for (int h = 0; h < height; h++) {
+            for (int w = 0; w < width; w++) {
                 for (int to = 0; to < until; to++) {
-                    values[indexOf(h, to, height)] += sign.apply(left[indexOf(h, w, height)], right[indexOf(w, to, width)]);
+                    values[indexOf(h, to, until)] += sign.apply(left[indexOf(h, w, width)], right[indexOf(w, to, until)]);
                 }
             }
         }

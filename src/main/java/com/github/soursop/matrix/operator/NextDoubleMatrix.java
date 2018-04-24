@@ -19,9 +19,11 @@ public class NextDoubleMatrix extends DenseDoubleMatrix {
         double[] values = new double[height * width];
         int to = 0;
         for(DoubleMatrix matrix : matrices) {
-            double[] value = matrix.values();
-            System.arraycopy(value, 0, values, to, value.length);
-            to = to + value.length;
+            for(int h = 0; h < height; h++) {
+                double[] row = matrix.row(h);
+                System.arraycopy(row, 0, values, indexOf(h, to, width), row.length);
+            }
+            to = to + matrix.width();
         }
         return new WithValues(width, values);
     }

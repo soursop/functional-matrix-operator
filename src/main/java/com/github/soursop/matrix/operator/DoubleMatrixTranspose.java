@@ -8,7 +8,7 @@ class DoubleMatrixTranspose extends DenseDoubleMatrix implements Sign.Transpose 
         int height = origin.height();
         for (int w = 0; w < width; w++) {
             for (int h = 0; h < height; h++) {
-                values[indexOf(w, h, width)] = origin.valueOf(h, w);
+                values[indexOf(w, h, height)] = origin.valueOf(h, w);
             }
         }
         return new DoubleMatrixTranspose(width, height, values);

@@ -32,7 +32,7 @@ public class NeuralNetworkTest {
 
         System.out.println(System.currentTimeMillis() - s1);
 
-        for (int j = 0; j < 200; j++) {
+//        for (int j = 0; j < 200; j++) {
             long s2 = System.currentTimeMillis();
             double lambda = 0.01d;
             DoubleMatrix decent = hypothesis.minus(output).invoke();
@@ -46,7 +46,7 @@ public class NeuralNetworkTest {
                 }
             }
             System.out.println(System.currentTimeMillis() - s2);
-        }
+//        }
 
     }
 }
