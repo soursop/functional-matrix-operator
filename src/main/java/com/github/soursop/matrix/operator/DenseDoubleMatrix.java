@@ -1,7 +1,6 @@
 package com.github.soursop.matrix.operator;
 
 
-import java.util.Arrays;
 
 public class DenseDoubleMatrix extends AbstractDoubleMatrix {
     private final double[] values;

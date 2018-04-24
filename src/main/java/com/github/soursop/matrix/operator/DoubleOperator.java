@@ -1,6 +1,6 @@
 package com.github.soursop.matrix.operator;
 
-public class DoubleOperator extends AbstractOperator {
+public class DoubleOperator extends AbstractOperator<DoubleOperator> {
     public static DoubleOperator ONE = new DoubleOperator(1d);
     public static DoubleOperator ZERO = new DoubleOperator(0d);
 
@@ -39,12 +39,12 @@ public class DoubleOperator extends AbstractOperator {
     }
 
     @Override
-    public Operator pow(int pow) {
+    public DoubleOperator pow(int pow) {
         return new DoubleOperator(Math.pow(value, pow));
     }
 
     @Override
-    public Operator apply(Function function) {
+    public DoubleOperator apply(Function function) {
         return new DoubleOperator(function.apply(value));
     }
 

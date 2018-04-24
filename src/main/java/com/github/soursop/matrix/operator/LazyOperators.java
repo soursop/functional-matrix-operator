@@ -23,22 +23,22 @@ abstract class LazyOperators extends AbstractOperators {
     }
 
     @Override
-    public Operator minus() {
+    public Operators minus() {
         return orgin.minus();
     }
 
     @Override
-    public Operator divide() {
+    public Operators divide() {
         return orgin.divide();
     }
 
     @Override
-    public Operator pow(int pow) {
+    public Operators pow(int pow) {
         return orgin.pow(pow);
     }
 
     @Override
-    public Operator apply(Function function) {
+    public Operators apply(Function function) {
         return orgin.apply(function);
     }
 

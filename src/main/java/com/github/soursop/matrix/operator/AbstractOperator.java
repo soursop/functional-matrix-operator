@@ -1,6 +1,6 @@
 package com.github.soursop.matrix.operator;
 
-abstract class AbstractOperator implements Operator {
+abstract class AbstractOperator<O extends Operator> implements Operator<O> {
     private StringBuilder builder;
     private int depth = 0;
 
@@ -17,11 +17,6 @@ abstract class AbstractOperator implements Operator {
     @Override
     public Product product(Operator operator) {
         return new Product(this, operator);
-    }
-
-    @Override
-    public <T extends Operator> T as(T t) {
-        return (T) this;
     }
 
     @Override

@@ -46,7 +46,7 @@ public class FeedForward implements Forward {
 
     @Override
     public double penalty() {
-        return SumOperator.of(theta.tail().pow(2)).getValue();
+        return theta.tail().pow(2).sum().getValue();
     }
 
     @Override

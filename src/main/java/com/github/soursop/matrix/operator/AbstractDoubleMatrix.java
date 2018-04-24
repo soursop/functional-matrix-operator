@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-public abstract class AbstractDoubleMatrix extends AbstractOperator implements DoubleMatrix, Iterable<Double> {
+public abstract class AbstractDoubleMatrix extends AbstractOperator<DoubleMatrix> implements DoubleMatrix, Iterable<Double> {
 
     @Override
     public CharSequence asSimple(int depth) {

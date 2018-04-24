@@ -3,7 +3,7 @@ package com.github.soursop.matrix.operator;
 import java.util.Iterator;
 import java.util.Stack;
 
-abstract class AbstractOperators extends AbstractOperator implements Operators {
+abstract class AbstractOperators extends AbstractOperator<Operators> implements Operators {
 
     @Override
     public Operators asOperators() {

@@ -2,7 +2,7 @@ package com.github.soursop.matrix.operator;
 
 import java.io.Serializable;
 
-public interface Operator extends Printable, Serializable {
+public interface Operator<O extends Operator> extends Printable, Serializable {
     Operators asOperators();
     DoubleMatrix asDoubleMatrix();
     DoubleOperator asDoubleOperator();
@@ -13,11 +13,10 @@ public interface Operator extends Printable, Serializable {
     Plus minus(Operator other);
     Product divide(DoubleOperator other);
     Under under(Operator other);
-    Operator minus();
-    Operator divide();
-    Operator pow(int pow);
-    Operator apply(Function function);
-    <T extends Operator> T as(T t);
+    O minus();
+    O divide();
+    O pow(int pow);
+    O apply(Function function);
     boolean isNone();
     boolean isSome();
 }
