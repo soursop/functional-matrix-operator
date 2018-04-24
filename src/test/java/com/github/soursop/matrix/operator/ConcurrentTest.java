@@ -26,7 +26,7 @@ public class ConcurrentTest {
         int height = 1_000_000;
         int width = 20;
         int size = 30;
-        int split = 100_000;
+        int split = height / 4;
 
         double[] values1 = new DoubleRandomIterator(height, width, 0).values();
         double[] values2 = new DoubleRandomIterator(width, size, 0).values();
