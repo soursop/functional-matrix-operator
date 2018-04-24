@@ -4,7 +4,7 @@ import com.github.soursop.matrix.operator.DoubleMatrix;
 import com.github.soursop.matrix.operator.Plus;
 import com.github.soursop.matrix.operator.Product;
 
-public class Cost implements Measurable {
+public class Cost implements Assessed {
     protected static int DERIVATIVE_OF_POW = 2;
     protected final DoubleMatrix input;
     protected final DoubleMatrix output;
