@@ -1,33 +1,31 @@
 package com.github.soursop.matrix.operator.ml;
 
-
 public class Until<T> {
     private T theta;
 
-    public static <T> Until<T> of(T theta) {
-        return new Until<>(theta);
-    }
-
-    private Until(T theta) {
+    public Until(T theta) {
         this.theta = theta;
     }
 
-    public Repeat repeat(int size) {
-        return new Repeat(size);
+    public Repeat<T> repeat(int size) {
+        return new Repeat<>(theta, size);
     }
 
-    public class Repeat {
+    public static class Repeat<T> {
         private final int repeat;
+        private T theta;
 
-        private Repeat(int repeat) {
+        private Repeat(T theta, int repeat) {
             this.repeat = repeat;
+            this.theta = theta;
         }
 
-        public T by(Derivative<T> gradient) {
+        public Assessed<T> by(Derivative<T> gradient) {
+            Assessed<T> assessed = gradient.init(theta);
             for (int i = 0; i < repeat; i++) {
-                theta = gradient.gradient(theta);
+                assessed = gradient.gradient(assessed);
             }
-            return theta;
+            return assessed;
         }
     }
 }

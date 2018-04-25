@@ -14,20 +14,6 @@ public class FeedForward implements Forward {
     }
 
     @Override
-    public DoubleMatrix gradient(DoubleMatrix sigma, double lambda, int size) {
-        DoubleOperator ratio = DoubleOperator.of(lambda / size);
-        DoubleOperator m = DoubleOperator.of(size);
-
-        DoubleMatrix delta = sigma.transpose().product(layer).invoke();
-        Zero regularized = Zero.of(theta.tail().multiply(ratio).invoke());
-
-        DoubleMatrix prev = this.theta;
-        this.theta = delta.divide(m).plus(regularized).invoke();
-
-        return prev;
-    }
-
-    @Override
     public DoubleMatrix forward(DoubleMatrix input) {
         layer = Layer.of(input);
         z = layer.product(theta.transpose()).invoke();
@@ -36,7 +22,26 @@ public class FeedForward implements Forward {
 
     @Override
     public DoubleMatrix backward(DoubleMatrix sigma, DoubleMatrix z) {
-        return sigma.product(theta).multiply(Layer.of(z).apply(function.gradient())).invoke();
+        // sigma, theta layer까지 정상
+        DoubleMatrix layer = Layer.of(z).apply(function.gradient());
+        // invoke도 정상 확인
+        return sigma.product(theta).multiply(layer).invoke();
+    }
+
+    @Override
+    public DoubleMatrix gradient(DoubleMatrix sigma, double lambda, int size) {
+        DoubleOperator ratio = DoubleOperator.of(lambda / size);
+        DoubleOperator m = DoubleOperator.of(size);
+
+        DoubleMatrix delta = sigma.transpose().product(layer).invoke();
+        // sigma layer delta theta 값도 맞음
+        System.out.println(theta.tail().head());
+        Zero regularized = Zero.of(theta.tail().multiply(ratio).invoke());
+
+        DoubleMatrix prev = this.theta;
+        this.theta = delta.divide(m).plus(regularized).invoke();
+
+        return prev;
     }
 
     @Override
