@@ -18,7 +18,7 @@ public class GradientDecentTest {
         DoubleMatrix output = matrix.tail();
 
         Cost cost = new Cost(input, output);
-        DoubleIterator theta = new DoubleIterator(0d, 2, 1);
+        DoubleMatrix theta = new DoubleIterator(0d, 2, 1);
         print("Expected cost value (approx) 32.07 : %f", cost.cost(theta));
 
         Gradient gradient = new Gradient(input, output, 0.01d);

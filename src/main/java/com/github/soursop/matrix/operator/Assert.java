@@ -14,13 +14,6 @@ public class Assert {
         }
     }
 
-    public static <T> T assertOnlyOne(T[] t) {
-        if (t.length > 1 || t.length == 0) {
-            throw new ArrayIndexOutOfBoundsException(String.format("Could't support values of size:%d", t.length));
-        }
-        return t[0];
-    }
-
     public static int assertSameHeightExceptZero(int one, int another) {
         if (one != 0 && another != 0 && one != another) {
             throw new IllegalArgumentException(String.format("Illegal matrix height size %d != %d", one, another));

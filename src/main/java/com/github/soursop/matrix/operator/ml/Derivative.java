@@ -1,7 +1,6 @@
 package com.github.soursop.matrix.operator.ml;
 
-import com.github.soursop.matrix.operator.DoubleMatrix;
 
-public interface Derivative extends Assessed {
-    DoubleMatrix gradient(DoubleMatrix ... thetas);
+public interface Derivative<T> extends Assessed<T> {
+    T gradient(T thetas);
 }
