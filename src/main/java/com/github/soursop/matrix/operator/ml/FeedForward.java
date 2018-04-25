@@ -22,9 +22,7 @@ public class FeedForward implements Forward {
 
     @Override
     public DoubleMatrix backward(DoubleMatrix sigma, DoubleMatrix z) {
-        // sigma, theta layer까지 정상
         DoubleMatrix layer = Layer.of(z).apply(function.gradient());
-        // invoke도 정상 확인
         return sigma.product(theta).multiply(layer).invoke();
     }
 
@@ -34,10 +32,7 @@ public class FeedForward implements Forward {
         DoubleOperator m = DoubleOperator.of(size);
 
         DoubleMatrix delta = sigma.transpose().product(layer).invoke();
-        // sigma layer delta theta 값도 맞음
         Zero regularized = Zero.of(theta.tail().multiply(ratio).invoke());
-        System.out.println(lambda);
-        System.out.println(size);
 
         DoubleMatrix prev = this.theta;
         this.theta = delta.divide(m).plus(regularized).invoke();

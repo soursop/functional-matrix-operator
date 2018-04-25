@@ -37,13 +37,9 @@ public class NeuralNetwork implements Derivative<Network> {
         cost.cost(LossFunction.LOGISTIC.loss(output, hypothesis) + lambda * p / (2 * size));
 
         DoubleMatrix decent = hypothesis.minus(output).invoke();
-        // decent 여기까지는 맞음
         for (int i = forwards.length - 1; i > -1; i--) {
-            System.out.println("idx:" + i);
             if (i > 0) {
-                // decent, forwards[i - 1].z()까진 맞음
                 DoubleMatrix sigma = forwards[i].backward(decent, forwards[i - 1].z());
-                // sigma 이상
                 forwards[i].gradient(decent, lambda, size);
                 decent = sigma;
             } else {
