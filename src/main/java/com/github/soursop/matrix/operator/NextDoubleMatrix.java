@@ -11,8 +11,7 @@ public class NextDoubleMatrix extends DenseDoubleMatrix {
     protected static WithValues combine(DoubleMatrix... matrices) {
         int width = 0;
         int height = 0;
-        for(int i = 0; i < matrices.length; i++) {
-            DoubleMatrix matrix = matrices[i];
+        for(DoubleMatrix matrix : matrices) {
             width = width + matrix.width();
             height = Assert.assertSameHeightExceptZero(height, matrix.height());
         }
