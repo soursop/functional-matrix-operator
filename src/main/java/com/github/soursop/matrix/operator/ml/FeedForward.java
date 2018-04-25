@@ -35,8 +35,9 @@ public class FeedForward implements Forward {
 
         DoubleMatrix delta = sigma.transpose().product(layer).invoke();
         // sigma layer delta theta 값도 맞음
-        System.out.println(theta.tail().head());
         Zero regularized = Zero.of(theta.tail().multiply(ratio).invoke());
+        System.out.println(lambda);
+        System.out.println(size);
 
         DoubleMatrix prev = this.theta;
         this.theta = delta.divide(m).plus(regularized).invoke();

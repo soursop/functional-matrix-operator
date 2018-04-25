@@ -16,7 +16,7 @@ public class NeuralNetwork implements Derivative<Network> {
         this.input = input;
         this.output = output;
         this.lambda = lambda;
-        size = input.size();
+        size = input.height();
     }
 
     @Override
