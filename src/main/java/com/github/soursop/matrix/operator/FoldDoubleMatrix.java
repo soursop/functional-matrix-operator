@@ -1,6 +1,8 @@
 package com.github.soursop.matrix.operator;
 
 
+import java.util.Arrays;
+
 /**
  * @author soursop
  * @created 2018. 4. 26.
@@ -29,6 +31,20 @@ public class FoldDoubleMatrix extends DenseDoubleMatrix {
     protected FoldDoubleMatrix(int height, int width, double[] values, int[] pos) {
         super(height, width, values);
         this.pos = pos;
+    }
+
+    public static DoubleMatrix[] unfold(DoubleMatrix matrix, int[] pos) {
+        double[] values = matrix.values();
+        DoubleMatrix[] matrices = new DoubleMatrix[pos.length / 2];
+        int from = 0;
+        for (int i = 0; i < pos.length; i = i + 2) {
+            int height = pos[i];
+            int width = pos[i + 1];
+            int size = height * width;
+            matrices[i / 2] = new DenseDoubleMatrix(height, width, Arrays.copyOfRange(values, from, from + size));
+            from += size;
+        }
+        return matrices;
     }
 
     @Override

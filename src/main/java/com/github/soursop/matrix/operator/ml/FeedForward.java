@@ -4,49 +4,39 @@ import com.github.soursop.matrix.operator.*;
 
 public class FeedForward implements Forward {
     private final Activation function;
-    private DoubleMatrix theta;
     private DoubleMatrix layer = None.DOUBLE_MATRIX;
     private DoubleMatrix z = None.DOUBLE_MATRIX;
 
-    public FeedForward(DoubleMatrix theta, Activation function) {
-        this.theta = theta;
+    public FeedForward(Activation function) {
         this.function = function;
     }
 
     @Override
-    public DoubleMatrix forward(DoubleMatrix input) {
+    public DoubleMatrix forward(DoubleMatrix theta, DoubleMatrix input) {
         layer = Layer.of(input);
         z = layer.product(theta.transpose()).invoke();
         return z.apply(function.active()).asDoubleMatrix();
     }
 
     @Override
-    public DoubleMatrix backward(DoubleMatrix sigma, DoubleMatrix z) {
+    public DoubleMatrix backward(DoubleMatrix theta, DoubleMatrix sigma, DoubleMatrix z) {
         DoubleMatrix layer = Layer.of(z).apply(function.gradient());
         return sigma.product(theta).multiply(layer).invoke();
     }
 
     @Override
-    public DoubleMatrix gradient(DoubleMatrix sigma, double lambda, int size) {
+    public DoubleMatrix gradient(DoubleMatrix theta, DoubleMatrix sigma, double lambda, int size) {
         DoubleOperator ratio = DoubleOperator.of(lambda / size);
         DoubleOperator m = DoubleOperator.of(size);
 
         DoubleMatrix delta = sigma.transpose().product(layer).invoke();
         Zero regularized = Zero.of(theta.tail().multiply(ratio).invoke());
 
-        DoubleMatrix prev = this.theta;
-        this.theta = delta.divide(m).plus(regularized).invoke();
-
-        return prev;
+        return delta.divide(m).plus(regularized).invoke();
     }
 
     @Override
-    public DoubleMatrix theta() {
-        return theta;
-    }
-
-    @Override
-    public double penalty() {
+    public double penalty(DoubleMatrix theta) {
         return theta.tail().pow(2).sum().getValue();
     }
 

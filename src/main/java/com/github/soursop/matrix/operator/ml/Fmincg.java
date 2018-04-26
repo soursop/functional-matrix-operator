@@ -6,7 +6,6 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 public class Fmincg {
-
     private static final Logger LOG = LogManager.getLogger(Fmincg.class);
 
     // extrapolate maximum 3 times the current bracket.
@@ -25,7 +24,7 @@ public class Fmincg {
     private static final int RATIO = 100;
     private static DoubleOperator MINUS = DoubleOperator.of(-1.0d);
 
-    public final DoubleMatrix minimize(Derivative<DoubleMatrix> f, DoubleMatrix theta,
+    public static DoubleMatrix minimize(Derivative f, DoubleMatrix theta,
                                        int length, boolean verbose) {
 
         DoubleMatrix input = theta;
@@ -33,9 +32,7 @@ public class Fmincg {
         int i = 0; // zero the run length counter
         int red = 1; // starting point
         int ls_failed = 0; // no previous line search has failed
-        Assessed<DoubleMatrix> init = f.init(theta);
-        final Assessed<DoubleMatrix> evaluateCost =
-                f.gradient(init);
+        final Cost evaluateCost = f.gradient(input);
         double f1 = evaluateCost.cost();
         DoubleMatrix df1 = evaluateCost.theta();
         i = i + (length < 0 ? 1 : 0);
@@ -53,7 +50,7 @@ public class Fmincg {
             DoubleMatrix df0 = df1.copy();
             // begin line search
             input = input.plus(s.product(DoubleOperator.of(z1))).invoke();
-            final Assessed<DoubleMatrix> evaluateCost2 = f.gradient(init);
+            final Cost evaluateCost2 = f.gradient(input);
             double f2 = evaluateCost2.cost();
             DoubleMatrix df2 = evaluateCost2.theta();
 
@@ -98,7 +95,7 @@ public class Fmincg {
                     // update the step
                     z1 = z1 + z2;
                     input = input.plus(s.product(DoubleOperator.of(z2))).invoke();
-                    final Assessed<DoubleMatrix> evaluateCost3 = f.gradient(init);
+                    final Cost evaluateCost3 = f.gradient(input);
                     f2 = evaluateCost3.cost();
                     df2 = evaluateCost3.theta();
                     M = M - 1;
@@ -148,7 +145,7 @@ public class Fmincg {
                 z1 = z1 + z2;
                 // update current estimates
                 input = input.plus(s.product(DoubleOperator.of(z2))).invoke();
-                final Assessed<DoubleMatrix> evaluateCost3 = f.gradient(init);
+                final Cost evaluateCost3 = f.gradient(input);
                 f2 = evaluateCost3.cost();
                 df2 = evaluateCost3.theta();
                 M = M - 1;

@@ -1,94 +1,73 @@
 package com.github.soursop.matrix.operator.ml;
 
 import com.github.soursop.matrix.operator.DoubleMatrix;
+import com.github.soursop.matrix.operator.FoldDoubleMatrix;
 
 /**
  * @author soursop
  * @created 2018. 4. 24.
  */
-public class NeuralNetwork implements Derivative<Network> {
+public class NeuralNetwork implements Derivative {
     private final DoubleMatrix input;
     private final DoubleMatrix output;
     private final double lambda;
     private final int size;
+    private final int[] pos;
+    private final FeedForward[] forwards;
 
-    public NeuralNetwork(DoubleMatrix input, DoubleMatrix output, double lambda) {
+    public NeuralNetwork(DoubleMatrix input, DoubleMatrix output, Activation activation, int[] pos, double lambda) {
         this.input = input;
         this.output = output;
         this.lambda = lambda;
         size = input.height();
+        forwards = new FeedForward[pos.length / 2];
+        for (int i = 0; i < forwards.length; i++) {
+            forwards[i] = new FeedForward(activation);
+        }
+        this.pos = pos;
     }
 
     @Override
-    public Assessed<Network> init(Network network) {
-        return new Cost(0, network);
-    }
-
-    @Override
-    public Assessed<Network> gradient(Assessed<Network> cost) {
+    public Cost gradient(DoubleMatrix thetas) {
+        DoubleMatrix[] unfold = FoldDoubleMatrix.unfold(thetas, pos);
         DoubleMatrix hypothesis = input;
-        FeedForward[] forwards = cost.theta().getForwards();
         double p = 0d;
-        for (FeedForward forward : forwards) {
-            hypothesis = forward.forward(hypothesis);
-            p += forward.penalty();
+        for (int i = 0; i < forwards.length; i++) {
+            FeedForward forward = forwards[i];
+            DoubleMatrix theta = unfold[i];
+            hypothesis = forward.forward(theta, hypothesis);
+            p += forward.penalty(theta);
         }
 
-        cost.cost(LossFunction.LOGISTIC.loss(output, hypothesis) + lambda * p / (2 * size));
+        double loss = LossFunction.LOGISTIC.loss(output, hypothesis) + lambda * p / (2 * size);
 
         DoubleMatrix decent = hypothesis.minus(output).invoke();
+        DoubleMatrix[] gradient = new DoubleMatrix[unfold.length];
         for (int i = forwards.length - 1; i > -1; i--) {
             if (i > 0) {
-                DoubleMatrix sigma = forwards[i].backward(decent, forwards[i - 1].z());
-                forwards[i].gradient(decent, lambda, size);
+                DoubleMatrix sigma = forwards[i].backward(unfold[i], decent, forwards[i - 1].z());
+                gradient[i] = forwards[i].gradient(unfold[i], decent, lambda, size);
                 decent = sigma;
             } else {
-                forwards[i].gradient(decent.tail(), lambda, size);
+                gradient[i] = forwards[i].gradient(unfold[i], decent.tail(), lambda, size);
             }
         }
-        return cost;
+        return new Cost(loss, FoldDoubleMatrix.of(gradient));
     }
 
     @Override
-    public double cost(Network network) {
+    public double cost(DoubleMatrix thetas) {
+        DoubleMatrix[] unfold = FoldDoubleMatrix.unfold(thetas, pos);
         DoubleMatrix hypothesis = input;
         double p = 0d;
-        FeedForward[] forwards = network.getForwards();
-        for (FeedForward forward : forwards) {
-            hypothesis = forward.forward(hypothesis);
-            p += forward.penalty();
+        for (int i = 0; i < forwards.length; i++) {
+            FeedForward forward = forwards[i];
+            DoubleMatrix theta = unfold[i];
+            hypothesis = forward.forward(theta, hypothesis);
+            p += forward.penalty(theta);
         }
         return LossFunction.LOGISTIC.loss(output, hypothesis) + lambda * p / (2 * size);
     }
 
-    public static class Cost implements Assessed<Network> {
-        private double cost;
-        private Network network;
-
-        public Cost(double cost, Network network) {
-            this.cost = cost;
-            this.network = network;
-        }
-
-        @Override
-        public double cost() {
-            return cost;
-        }
-
-        @Override
-        public Network theta() {
-            return network;
-        }
-
-        @Override
-        public void cost(double cost) {
-            this.cost =  cost;
-        }
-
-        @Override
-        public void theta(Network network) {
-            this.network = network;
-        }
-    }
 }
 

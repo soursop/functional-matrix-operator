@@ -1,8 +1,9 @@
 package com.github.soursop.matrix.operator.ml;
 
 
-public interface Derivative<T> {
-    Assessed<T> init(T theta);
-    Assessed<T> gradient(Assessed<T> cost);
-    double cost(T theta);
+import com.github.soursop.matrix.operator.DoubleMatrix;
+
+public interface Derivative {
+    Cost gradient(DoubleMatrix theta);
+    double cost(DoubleMatrix theta);
 }
