@@ -6,6 +6,7 @@ public interface DoubleMatrix extends Matrix, Transposable<DoubleMatrix> {
     double valueOf(int height, int width);
     double valueOf(int idx);
     double[] values();
+    int[] pos();
     DoubleMatrix transpose();
     List<DoubleMatrix> splitBy(int size);
     DoubleMatrix head();

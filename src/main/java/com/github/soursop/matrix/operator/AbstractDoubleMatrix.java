@@ -128,6 +128,11 @@ public abstract class AbstractDoubleMatrix extends AbstractOperator<DoubleMatrix
     }
 
     @Override
+    public int[] pos() {
+        return new int[]{height(), width()};
+    }
+
+    @Override
     public DoubleMatrix head() {
         if (width() < 1) {
             return None.DOUBLE_MATRIX;
