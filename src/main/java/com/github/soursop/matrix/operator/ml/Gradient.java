@@ -32,6 +32,11 @@ public class Gradient implements Derivative {
     }
 
     @Override
+    public DoubleMatrix predict(DoubleMatrix theta) {
+        return input.product(theta).invoke();
+    }
+
+    @Override
     public double cost(DoubleMatrix theta) {
         Product hypothesis = input.product(theta);
         Plus error = hypothesis.minus(output);

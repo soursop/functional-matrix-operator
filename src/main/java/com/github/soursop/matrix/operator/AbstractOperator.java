@@ -45,6 +45,11 @@ abstract class AbstractOperator<O extends Operator> implements Operator<O> {
     }
 
     @Override
+    public DoubleOperator dot(Operator other) {
+        return multiply(other).sum();
+    }
+
+    @Override
     public Under under(Operator other) {
         return new Under(this, other);
     }

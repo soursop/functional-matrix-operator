@@ -69,5 +69,17 @@ public class NeuralNetwork implements Derivative {
         return LossFunction.LOGISTIC.loss(output, hypothesis) + lambda * p / (2 * size);
     }
 
+    @Override
+    public DoubleMatrix predict(DoubleMatrix thetas) {
+        DoubleMatrix[] unfold = FoldDoubleMatrix.unfold(thetas, pos);
+        DoubleMatrix hypothesis = input;
+        for (int i = 0; i < forwards.length; i++) {
+            FeedForward forward = forwards[i];
+            DoubleMatrix theta = unfold[i];
+            hypothesis = forward.forward(theta, hypothesis);
+        }
+        return hypothesis;
+    }
+
 }
 

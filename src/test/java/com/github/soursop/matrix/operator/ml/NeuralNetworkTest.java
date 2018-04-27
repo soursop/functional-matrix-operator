@@ -13,6 +13,7 @@ import static com.github.soursop.matrix.operator.utils.Utils.*;
  */
 public class NeuralNetworkTest {
     private int size = 400;
+    double[] label;
     DenseDoubleMatrix input;
     DenseDoubleMatrix output;
     DenseDoubleMatrix theta1;
@@ -21,8 +22,8 @@ public class NeuralNetworkTest {
     @Before
     public void before() throws IOException {
         input = DenseDoubleMatrix.of(size, gzip("ml/400_mnist.csv.gz"));
-        output = OneHotEncoding.of(10, read("ml/400_mnist_label.csv"));
-
+        label = read("ml/400_mnist_label.csv");
+        output = OneHotEncoding.of(10, label);
         theta1 = DenseDoubleMatrix.of(size + 1, read("ml/400_mnist_theta01.csv"));
         theta2 = DenseDoubleMatrix.of(theta1.height() + 1, read("ml/400_mnist_theta02.csv"));
     }
@@ -65,7 +66,23 @@ public class NeuralNetworkTest {
         DoubleMatrix theta2 = new DoubleEpsilonIterator(this.theta2.height(), this.theta2.width(), 0.12d);
         FoldDoubleMatrix thetas = FoldDoubleMatrix.of(theta1, theta2);
         NeuralNetwork gradient = new NeuralNetwork(input, output, Activation.SIGMOID, thetas.pos(), 1d);
-        DoubleMatrix minimize = Fmincg.minimize(gradient, thetas, 50, true);
-
+        DoubleMatrix minimize = Fmincg.asMinimize(gradient, thetas, 50, true);
+        DoubleMatrix predict = gradient.predict(minimize);
+        int height = predict.height();
+        int width = predict.width();
+        int hit = 0;
+        for (int h = 0; h < height; h++) {
+            double max = Double.MIN_VALUE;
+            double index = 0;
+            for (int w = 0; w < width; w++) {
+                double v = predict.valueOf(h, w);
+                if (max < v) {
+                    max = v;
+                    index = w;
+                }
+            }
+            hit += (label[h] == index + 1)? 1 : 0;
+        }
+        System.out.println("Training Set Accuracy:" + (double) hit / predict.size());
     }
 }

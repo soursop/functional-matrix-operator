@@ -5,6 +5,59 @@ import com.github.soursop.matrix.operator.DoubleOperator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+/**
+ * Minimize a continuous differentialble multivariate function. Starting point <br/>
+ * is given by "X" (D by 1), and the function named in the string "f", must<br/>
+ * return a function value and a vector of partial derivatives. The Polack-<br/>
+ * Ribiere flavour of conjugate gradients is used to compute search directions,<br/>
+ * and a line search using quadratic and cubic polynomial approximations and the<br/>
+ * Wolfe-Powell stopping criteria is used together with the slope ratio method<br/>
+ * for guessing initial step sizes. Additionally a bunch of checks are made to<br/>
+ * make sure that exploration is taking place and that extrapolation will not<br/>
+ * be unboundedly large. The "length" gives the length of the run: if it is<br/>
+ * positive, it gives the maximum number of line searches, if negative its<br/>
+ * absolute gives the maximum allowed number of function evaluations. You can<br/>
+ * (optionally) give "length" a second component, which will indicate the<br/>
+ * reduction in function value to be expected in the first line-search (defaults<br/>
+ * to 1.0). The function returns when either its length is up, or if no further<br/>
+ * progress can be made (ie, we are at a minimum, or so close that due to<br/>
+ * numerical problems, we cannot get any closer). If the function terminates<br/>
+ * within a few iterations, it could be an indication that the function value<br/>
+ * and derivatives are not consistent (ie, there may be a bug in the<br/>
+ * implementation of your "f" function). The function returns the found<br/>
+ * solution "X", a vector of function values "fX" indicating the progress made<br/>
+ * and "i" the number of iterations (line searches or function evaluations,<br/>
+ * depending on the sign of "length") used.<br/>
+ * <br/>
+ * Usage: [X, fX, i] = fmincg(f, X, options, P1, P2, P3, P4, P5)<br/>
+ * <br/>
+ * See also: checkgrad <br/>
+ * <br/>
+ * Copyright (C) 2001 and 2002 by Carl Edward Rasmussen. Date 2002-02-13<br/>
+ * <br/>
+ * <br/>
+ * (C) Copyright 1999, 2000 & 2001, Carl Edward Rasmussen <br/>
+ * Permission is granted for anyone to copy, use, or modify these<br/>
+ * programs and accompanying documents for purposes of research or<br/>
+ * education, provided this copyright notice is retained, and note is<br/>
+ * made of any changes that have been made.<br/>
+ * <br/>
+ * These programs and documents are distributed without any warranty,<br/>
+ * express or implied. As the programs were written for research<br/>
+ * purposes only, they have not been tested to the degree that would be<br/>
+ * advisable in any important application. All use of these programs is<br/>
+ * entirely at the user's own risk.<br/>
+ * <br/>
+ * [ml-class] Changes Made:<br/>
+ * 1) Function name and argument specifications<br/>
+ * 2) Output display<br/>
+ * <br/>
+ * [tjungblut] Changes Made: <br/>
+ * 1) translated from octave to java<br/>
+ * 2) added an interface to exchange minimizers more easily <br/>
+ * 3) in preparation for the c++ translation, I removed unused fields<br/>
+ * BTW "fmincg" stands for Function minimize nonlinear conjugate gradient
+ */
 public class Fmincg {
     private static final Logger LOG = LogManager.getLogger(Fmincg.class);
 
@@ -22,9 +75,27 @@ public class Fmincg {
     private static final int MAX = 20;
     // maximum allowed slope ratio
     private static final int RATIO = 100;
-    private static DoubleOperator MINUS = DoubleOperator.of(-1.0d);
 
-    public static DoubleMatrix minimize(Derivative f, DoubleMatrix theta,
+    private static final DoubleOperator MINUS = DoubleOperator.of(-1.0d);
+
+    /**
+     * Minimizes the given Derivative with Nonlinear conjugate gradient method. <br/>
+     * It uses the Polack-Ribiere (PR) to calculate the conjugate direction. See <br/>
+     * {@link http://en.wikipedia.org/wiki/Nonlinear_conjugate_gradient_method} <br/>
+     * for more information.
+     *
+     * @param f the cost function to minimize.
+     * @param theta the input vector, also called starting point
+     * @param maxIterations the number of iterations to make
+     * @param verbose output the progress to STDOUT
+     * @return a vector containing the optimized input
+     */
+    public static DoubleMatrix asMinimize(Derivative f,
+                                                DoubleMatrix theta, int maxIterations, boolean verbose) {
+        return new Fmincg().minimize(f, theta, maxIterations, verbose);
+    }
+
+    public final DoubleMatrix minimize(Derivative f, DoubleMatrix theta,
                                        int length, boolean verbose) {
 
         DoubleMatrix input = theta;
@@ -37,9 +108,9 @@ public class Fmincg {
         DoubleMatrix df1 = evaluateCost.theta();
         i = i + (length < 0 ? 1 : 0);
         // search direction is steepest
-        DoubleMatrix s = df1.product(MINUS).invoke();
+        DoubleMatrix s = df1.multiply(MINUS).invoke();
 
-        double d1 = s.product(MINUS).multiply(s).sum().getValue(); // this is the slope
+        double d1 = s.multiply(MINUS).dot(s).getValue(); // this is the slope
         double z1 = red / (1.0 - d1); // initial step is red/(|s|+1)
 
         while (i < Math.abs(length)) {// while not finished
@@ -49,13 +120,13 @@ public class Fmincg {
             double f0 = f1;
             DoubleMatrix df0 = df1.copy();
             // begin line search
-            input = input.plus(s.product(DoubleOperator.of(z1))).invoke();
+            input = input.plus(s.multiply(DoubleOperator.of(z1))).invoke();
             final Cost evaluateCost2 = f.gradient(input);
             double f2 = evaluateCost2.cost();
             DoubleMatrix df2 = evaluateCost2.theta();
 
             i = i + (length < 0 ? 1 : 0); // count epochs
-            double d2 = df2.multiply(s).sum().getValue();
+            double d2 = df2.dot(s).getValue();
             // initialize point 3 equal to point 1
             double f3 = f1;
             double d3 = d1;
@@ -94,13 +165,13 @@ public class Fmincg {
                     z2 = Math.max(Math.min(z2, INT * z3), (1 - INT) * z3);
                     // update the step
                     z1 = z1 + z2;
-                    input = input.plus(s.product(DoubleOperator.of(z2))).invoke();
+                    input = input.plus(s.multiply(DoubleOperator.of(z2))).invoke();
                     final Cost evaluateCost3 = f.gradient(input);
                     f2 = evaluateCost3.cost();
                     df2 = evaluateCost3.theta();
                     M = M - 1;
                     i = i + (length < 0 ? 1 : 0); // count epochs
-                    d2 = df2.multiply(s).sum().getValue();
+                    d2 = df2.dot(s).getValue();
                     // z3 is now relative to the location of z2
                     z3 = z3 - z2;
                 }
@@ -144,13 +215,13 @@ public class Fmincg {
                 z3 = -z2;
                 z1 = z1 + z2;
                 // update current estimates
-                input = input.plus(s.product(DoubleOperator.of(z2))).invoke();
+                input = input.plus(s.multiply(DoubleOperator.of(z2))).invoke();
                 final Cost evaluateCost3 = f.gradient(input);
                 f2 = evaluateCost3.cost();
                 df2 = evaluateCost3.theta();
                 M = M - 1;
                 i = i + (length < 0 ? 1 : 0); // count epochs?!
-                d2 = df2.multiply(s).sum().getValue();
+                d2 = df2.dot(s).getValue();
             }// end of line search
 
             DoubleMatrix tmp = null;
@@ -158,21 +229,22 @@ public class Fmincg {
             if (success == 1) { // if line search succeeded
                 f1 = f2;
                 if (verbose) {
-                    LOG.info("Iteration " + i + " | Cost: " + f1);
+//                    LOG.info("Iteration " + i + " | Cost: " + f1);
+                    System.out.println("Iteration " + i + " | Cost: " + f1);
                 }
 //                onIterationFinished(i, f1, input);
 
                 // Polack-Ribiere direction: s =
                 // (df2'*df2-df1'*df2)/(df1'*df1)*s - df2;
-                final double numerator = (df2.multiply(df2).sum().getValue() - df1.multiply(df2).sum().getValue()) / df1.multiply(df1).sum().getValue();
-                s = s.product(DoubleOperator.of(numerator)).minus(df2).invoke();
+                final double numerator = (df2.dot(df2).getValue() - df1.dot(df2).getValue()) / df1.dot(df1).getValue();
+                s = s.multiply(DoubleOperator.of(numerator)).minus(df2).invoke();
                 tmp = df1;
                 df1 = df2;
                 df2 = tmp; // swap derivatives
-                d2 = df1.multiply(s).sum().getValue();
+                d2 = df1.dot(s).getValue();
                 if (d2 > 0) { // new slope must be negative
-                    s = df1.product(MINUS).invoke(); // otherwise use steepest direction
-                    d2 = s.product(MINUS).multiply(s).sum().getValue();
+                    s = df1.multiply(MINUS).invoke(); // otherwise use steepest direction
+                    d2 = s.multiply(MINUS).dot(s).getValue();
                 }
                 // realmin in octave = 2.2251e-308
                 // slope ratio but max RATIO
@@ -190,8 +262,8 @@ public class Fmincg {
                 tmp = df1;
                 df1 = df2;
                 df2 = tmp; // swap derivatives
-                s = df1.product(MINUS).invoke(); // try steepest
-                d1 = s.product(MINUS).multiply(s).sum().getValue();
+                s = df1.multiply(MINUS).invoke(); // try steepest
+                d1 = s.multiply(MINUS).dot(s).getValue();
                 z1 = 1.0d / (1.0d - d1);
                 ls_failed = 1; // this line search failed
             }
@@ -200,11 +272,4 @@ public class Fmincg {
 
         return input;
     }
-
-//    protected final void onIterationFinished(int iteration, double cost,
-//                                             DoubleVector currentWeights) {
-//        for (IterationCompletionListener list : listenerList) {
-//            list.onIterationFinished(iteration, cost, currentWeights);
-//        }
-//    }
 }

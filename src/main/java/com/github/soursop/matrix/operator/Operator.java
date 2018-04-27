@@ -17,6 +17,7 @@ public interface Operator<O extends Operator> extends Printable, Serializable {
     O divide();
     O pow(int pow);
     O apply(Function function);
+    DoubleOperator dot(Operator other);
     boolean isNone();
     boolean isSome();
 }
