@@ -20,7 +20,7 @@ public class Until {
             this.repeat = repeat;
         }
 
-        public Cost by(Derivative gradient) {
+        public Cost by(Gradient gradient) {
             Cost cost = new Cost(0, theta);
             for (int i = 0; i < repeat; i++) {
                 cost = gradient.gradient(cost.theta());

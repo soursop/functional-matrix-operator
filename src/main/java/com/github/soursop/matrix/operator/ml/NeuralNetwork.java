@@ -7,7 +7,7 @@ import com.github.soursop.matrix.operator.FoldDoubleMatrix;
  * @author soursop
  * @created 2018. 4. 24.
  */
-public class NeuralNetwork implements Derivative {
+public class NeuralNetwork implements Gradient {
     private final DoubleMatrix input;
     private final DoubleMatrix output;
     private final double lambda;

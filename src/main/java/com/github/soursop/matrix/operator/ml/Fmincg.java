@@ -2,8 +2,10 @@ package com.github.soursop.matrix.operator.ml;
 
 import com.github.soursop.matrix.operator.DoubleMatrix;
 import com.github.soursop.matrix.operator.DoubleOperator;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 /**
  * Minimize a continuous differentialble multivariate function. Starting point <br/>
@@ -58,8 +60,8 @@ import org.apache.log4j.Logger;
  * 3) in preparation for the c++ translation, I removed unused fields<br/>
  * BTW "fmincg" stands for Function minimize nonlinear conjugate gradient
  */
-public class Fmincg {
-    private static final Logger LOG = LogManager.getLogger(Fmincg.class);
+public class Fmincg extends AbstractMinimizer {
+    private static final Log LOG = LogFactory.getLog(Fmincg.class);
 
     // extrapolate maximum 3 times the current bracket.
     // this can be set higher for bigger extrapolations
@@ -87,16 +89,15 @@ public class Fmincg {
      * @param f the cost function to minimize.
      * @param theta the input vector, also called starting point
      * @param maxIterations the number of iterations to make
-     * @param verbose output the progress to STDOUT
      * @return a vector containing the optimized input
      */
-    public static DoubleMatrix asMinimize(Derivative f,
-                                                DoubleMatrix theta, int maxIterations, boolean verbose) {
-        return new Fmincg().minimize(f, theta, maxIterations, verbose);
+    public static DoubleMatrix asMinimize(Gradient f, DoubleMatrix theta, int maxIterations) {
+        return new Fmincg().minimize(f, theta, maxIterations);
     }
 
-    public final DoubleMatrix minimize(Derivative f, DoubleMatrix theta,
-                                       int length, boolean verbose) {
+    @Override
+    public final DoubleMatrix minimize(Gradient f, DoubleMatrix theta,
+                                       int length) {
 
         DoubleMatrix input = theta;
         int M = 0;
@@ -228,11 +229,10 @@ public class Fmincg {
 
             if (success == 1) { // if line search succeeded
                 f1 = f2;
-                if (verbose) {
-//                    LOG.info("Iteration " + i + " | Cost: " + f1);
-                    System.out.println("Iteration " + i + " | Cost: " + f1);
+                if (LOG.isInfoEnabled()) {
+                    LOG.info("Iteration " + i + " | Cost: " + f1);
                 }
-//                onIterationFinished(i, f1, input);
+                onFinished(i, f1, input);
 
                 // Polack-Ribiere direction: s =
                 // (df2'*df2-df1'*df2)/(df1'*df1)*s - df2;

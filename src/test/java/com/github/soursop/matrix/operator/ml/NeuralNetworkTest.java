@@ -66,7 +66,7 @@ public class NeuralNetworkTest {
         DoubleMatrix theta2 = new DoubleEpsilonIterator(this.theta2.height(), this.theta2.width(), 0.12d);
         FoldDoubleMatrix thetas = FoldDoubleMatrix.of(theta1, theta2);
         NeuralNetwork gradient = new NeuralNetwork(input, output, Activation.SIGMOID, thetas.pos(), 1d);
-        DoubleMatrix minimize = Fmincg.asMinimize(gradient, thetas, 50, true);
+        DoubleMatrix minimize = Fmincg.asMinimize(gradient, thetas, 50);
         DoubleMatrix predict = gradient.predict(minimize);
         int height = predict.height();
         int width = predict.width();

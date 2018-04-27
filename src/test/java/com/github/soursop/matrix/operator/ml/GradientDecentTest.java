@@ -17,7 +17,7 @@ public class GradientDecentTest {
         Layer input = Layer.of(matrix.head());
         DoubleMatrix output = matrix.tail();
 
-        Gradient gradient = new Gradient(input, output, 0.01d);
+        GradientDecent gradient = new GradientDecent(input, output, 0.01d);
         DoubleMatrix theta = new DoubleIterator(0d, 2, 1);
         print("Expected cost value (approx) 32.07 : %f", gradient.cost(theta));
 
@@ -34,7 +34,7 @@ public class GradientDecentTest {
         DoubleMatrix output = matrix.last();
 
         DoubleMatrix theta = new DoubleIterator(0d, 3, 1);
-        Gradient gradient = new Gradient(input, output, 0.01d);
+        GradientDecent gradient = new GradientDecent(input, output, 0.01d);
         DoubleMatrix decent = new Until(theta).repeat(400).by(gradient).theta();
         print("Expected theta values (approx) :");
         print("334300\t100090\t3673.5 : %f\t%f\t%f", decent.valueOf(0), decent.valueOf(1), decent.valueOf(2));
