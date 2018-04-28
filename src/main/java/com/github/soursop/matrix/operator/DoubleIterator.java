@@ -12,15 +12,6 @@ public class DoubleIterator extends AbstractDoubleMatrix {
         this.height = height;
         this.width = width;
     }
-    @Override
-    public DoubleMatrix head() {
-        return None.DOUBLE_MATRIX;
-    }
-
-    @Override
-    public DoubleMatrix tail() {
-        return None.DOUBLE_MATRIX;
-    }
 
     @Override
     public int height() {

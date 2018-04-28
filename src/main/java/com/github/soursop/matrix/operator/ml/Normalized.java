@@ -14,7 +14,11 @@ public class Normalized extends NextDoubleMatrix {
         for (int i = 0; one.isSome(); i++) {
             DoubleMatrix head = one.head();
             StdOperator std = head.std();
-            transformed[i] = head.minus(std.avg()).divide(std).invoke();
+            if (std.getValue() == 0) {
+                transformed[i] = head;
+            } else {
+                transformed[i] = head.minus(std.avg()).divide(std).invoke();
+            }
             one = one.tail();
         }
         WithValues combine = combine(transformed);

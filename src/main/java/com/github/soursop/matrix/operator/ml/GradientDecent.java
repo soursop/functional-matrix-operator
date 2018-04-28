@@ -5,6 +5,7 @@ import com.github.soursop.matrix.operator.*;
 public class GradientDecent implements Gradient {
     private static int DERIVATIVE_OF_POW = 2;
     private final DoubleMatrix input;
+    private final int size;
     private final DoubleMatrix output;
     private final DoubleOperator ratio;
 
@@ -15,6 +16,7 @@ public class GradientDecent implements Gradient {
     public GradientDecent(DoubleMatrix input, DoubleMatrix output, double alpha) {
         this.input = input;
         this.output = output;
+        size = input.height();
         ratio = DoubleOperator.of(alpha / input.height());
     }
 
@@ -23,7 +25,7 @@ public class GradientDecent implements Gradient {
         Product hypothesis = input.product(theta);
         Plus error = hypothesis.minus(output);
 
-        double penalty = error.pow(DERIVATIVE_OF_POW).avg().getValue() / DERIVATIVE_OF_POW;
+        double penalty = error.pow(DERIVATIVE_OF_POW).sum().getValue() / (size * DERIVATIVE_OF_POW);
 
         Product update = error.product(ratio);
         DoubleMatrix gradient = theta.minus(input.transpose().product(update)).invoke();
@@ -41,6 +43,6 @@ public class GradientDecent implements Gradient {
         Product hypothesis = input.product(theta);
         Plus error = hypothesis.minus(output);
 
-        return error.pow(DERIVATIVE_OF_POW).avg().getValue() / DERIVATIVE_OF_POW;
+        return error.pow(DERIVATIVE_OF_POW).sum().getValue() / (size * DERIVATIVE_OF_POW);
     }
 }
