@@ -74,35 +74,3 @@ result :
 11.0,25.0,39.0
 17.0,39.0,61.0
 ```
-
-Concurrent
-========
-```java
-int height = 1_000_000;
-int width = 20;
-int size = 30;
-int split = 100_000;
-
-double[] values1 = new DoubleRandomIterator(height, width, 0).values();
-double[] values2 = new DoubleRandomIterator(width, size, 0).values();
-final DenseDoubleMatrix one = DenseDoubleMatrix.of(width, values1);
-final Multiply multiply = new Multiply(DenseDoubleMatrix.of(size, values2));
-
-long s1 = System.currentTimeMillis();
-DoubleMatrix resultAll = multiply.invoke(one);
-System.out.println("single result size: " + resultAll.size());
-System.out.println("single elaps time: " + (System.currentTimeMillis() - s1));
-
-long s2 = System.currentTimeMillis();
-ForkJoinPool pool = new ForkJoinPool(4);
-DoubleMatrix resultBySplit = pool.invoke(new SplitDoubleMatrix(one, multiply, split));
-System.out.println("thread result size: " + resultBySplit.size());
-System.out.println("thread elaps time: " + (System.currentTimeMillis() - s2));
-```
-result :
-```
-single result size: 30000000
-single elaps time: 909
-thread result size: 30000000
-thread elaps time: 578
-```
