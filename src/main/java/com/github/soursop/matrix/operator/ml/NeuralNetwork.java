@@ -11,6 +11,7 @@ public class NeuralNetwork implements Gradient {
     private final DoubleMatrix input;
     private final DoubleMatrix output;
     private final double lambda;
+    private final LossFunction lossFunction;
     private final int size;
     private final int[] pos;
     private final FeedForward[] forwards;
@@ -24,6 +25,7 @@ public class NeuralNetwork implements Gradient {
         for (int i = 0; i < forwards.length; i++) {
             forwards[i] = new FeedForward(activation);
         }
+        lossFunction = activation.loss();
         this.pos = pos;
     }
 
@@ -39,7 +41,7 @@ public class NeuralNetwork implements Gradient {
             p += forward.penalty(theta);
         }
 
-        double loss = LossFunction.LOGISTIC.loss(output, hypothesis) + lambda * p / (2 * size);
+        double loss = lossFunction.loss(output, hypothesis) + lambda * p / (2 * size);
 
         DoubleMatrix decent = hypothesis.minus(output).invoke();
         DoubleMatrix[] gradient = new DoubleMatrix[unfold.length];
@@ -66,7 +68,7 @@ public class NeuralNetwork implements Gradient {
             hypothesis = forward.forward(theta, hypothesis);
             p += forward.penalty(theta);
         }
-        return LossFunction.LOGISTIC.loss(output, hypothesis) + lambda * p / (2 * size);
+        return lossFunction.loss(output, hypothesis) + lambda * p / (2 * size);
     }
 
     @Override

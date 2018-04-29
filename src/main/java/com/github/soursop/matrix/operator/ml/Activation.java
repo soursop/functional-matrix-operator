@@ -6,6 +6,7 @@ import org.apache.commons.math3.util.FastMath;
 public interface Activation {
     Function active();
     Function gradient();
+    LossFunction loss();
 
     Activation SIGMOID = new Activation() {
         private static final double CLIP = 30d;
@@ -32,6 +33,11 @@ public interface Activation {
         @Override
         public Function gradient() {
             return GRADIENT;
+        }
+
+        @Override
+        public LossFunction loss() {
+            return LossFunction.LOGISTIC;
         }
     }
     ;

@@ -56,17 +56,17 @@ public class SplitTest {
 
         DoubleMatrix theta = new DoubleEpsilonIterator(1, normalized.width() + 1, 0.2d);
 
-        LinearRegression function = new LinearRegression(normalized, output, 0.9d);
-        Cost cost = new Until(theta).repeat(30).by(function);
+//        Regression function = new Regression(normalized, output, 0.9d);
+//        Cost cost = new Until(theta).repeat(30).by(function);
 //        DoubleMatrix matrix = Fmincg.asMinimize(function, theta, 50);
         StdOperator std = input.head().std();
         double in = ((8 / height - std.avg().getValue()) / std.getValue());
         DenseDoubleMatrix test = DenseDoubleMatrix.of(w + 1, new double[]{1, in, height, parallelism});
         Normalized of = Normalized.of(test);
-        DoubleMatrix result = of.product(cost.theta().transpose()).invoke();
-        System.out.println(result);
+//        DoubleMatrix result = of.product(cost.theta().transpose()).invoke();
+//        System.out.println(result);
 
-        System.out.println(cost.theta());
+//        System.out.println(cost.theta());
 //        System.out.println(matrix);
     }
 }
