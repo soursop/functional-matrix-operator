@@ -41,4 +41,18 @@ public class GradientDecentTest {
         print("Expected cost value (approx) 2108900000 : %f", gradient.cost(decent));
     }
 
+    @Test
+    public void testRegularization() throws IOException {
+        double[] data = read("ml/2x_house.csv");
+        DenseDoubleMatrix matrix = DenseDoubleMatrix.of(3, data);
+        DoubleMatrix input = Normalized.of(matrix.init());
+        DoubleMatrix output = matrix.last();
+        DoubleMatrix theta = new DoubleIterator(0, 1, 3);
+        Regression regression = new Regression(input, output, Activation.DEFAULT, 0.01d);
+//        DoubleMatrix matrix1 = Fmincg.asMinimize(regression, theta, 40);
+        Cost cost = new Until(theta).repeat(20).by(regression);
+        System.out.println(cost.theta());
+
+    }
+
 }

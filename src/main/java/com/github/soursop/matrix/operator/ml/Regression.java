@@ -28,7 +28,7 @@ public class Regression implements Gradient {
         double loss = activation.loss().loss(output, hypothesis) + lambda * p / (DERIVATIVE_OF_POW * size);
 
         DoubleMatrix delta = error.transpose().product(layer).invoke();
-        Multiply regularized = zero.multiply(DoubleOperator.of(lambda));
+        Multiply regularized = DoubleOperator.of(lambda).multiply(zero);
         DoubleMatrix gradient = delta.plus(regularized).divide(DoubleOperator.of(size)).invoke();
 
         return new Cost(loss, gradient);

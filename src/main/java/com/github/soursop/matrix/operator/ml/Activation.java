@@ -8,6 +8,23 @@ public interface Activation {
     Function gradient();
     LossFunction loss();
 
+    Activation DEFAULT = new Activation() {
+        @Override
+        public Function active() {
+            return Function.DEFAULT;
+        }
+
+        @Override
+        public Function gradient() {
+            return Function.DEFAULT;
+        }
+
+        @Override
+        public LossFunction loss() {
+            return LossFunction.DEFAULT;
+        }
+    }
+    ;
     Activation SIGMOID = new Activation() {
         private static final double CLIP = 30d;
         Function ACTIVE = new Function() {

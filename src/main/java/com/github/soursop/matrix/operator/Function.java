@@ -5,6 +5,14 @@ import org.apache.commons.math3.util.FastMath;
 public interface Function {
     double apply(double v);
 
+    Function DEFAULT = new Function() {
+
+        @Override
+        public double apply(double v) {
+            return v;
+        }
+    }
+    ;
     Function LOGISTIC = new Function() {
         @Override
         public double apply(double input) {
