@@ -4,14 +4,17 @@ import com.github.soursop.matrix.operator.*;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.concurrent.ForkJoinPool;
+
+import static com.github.soursop.matrix.operator.utils.Utils.read;
 
 public class SplitTest {
 
     @Ignore
     @Test
     public void testForkAndJoin() throws InterruptedException {
-        int height = 1_00_000;
+        int height = 500_000;
         int width = 20;
         int size = 30;
         double[] values1 = new DoubleRandomIterator(height, width, 0).values();
@@ -25,7 +28,8 @@ public class SplitTest {
         int from = 4;
         int to = 8;
         int until = to - from;
-        int repeat = 5;
+        int repeat = 20;
+        int warmup = 5;
         double[] data = new double[w * until * repeat];
         double[] out = new double[until * repeat];
 
@@ -34,6 +38,9 @@ public class SplitTest {
         for (int i = 0; i < until; i++) {
             int split = height / (i + from);
             for (int r = 0; r < repeat; r++) {
+                for (int f = 0; f < warmup; f++) {
+                    pool.invoke(new SplitDoubleMatrix(one, product, split));
+                }
                 long s2 = System.currentTimeMillis();
                 pool.invoke(new SplitDoubleMatrix(one, product, split));
                 double elaps = System.currentTimeMillis() - s2;
@@ -42,31 +49,45 @@ public class SplitTest {
 //                data[idx + 1] = height;
 //                data[idx + 2] = parallelism;
                 out[idx / w] = elaps;
-//                System.out.println("thread result size: " + resultBySplit.size());
-//                System.out.println("thread elaps time: " + elaps);
+                System.out.println(split + "," + elaps);
             }
         }
         DenseDoubleMatrix input = DenseDoubleMatrix.of(w, data);
         DenseDoubleMatrix output = DenseDoubleMatrix.of(out);
-        System.out.println(input);
-        System.out.println();
-        System.out.println(output);
         DenseDoubleMatrix normalized = Normalized.of(input);
 
+//        DoubleMatrix theta = new DoubleEpsilonIterator(normalized.width() + 1, 1, 0.2d);
+        DoubleMatrix theta = new DoubleIterator(0,normalized.width() + 1, 1);
 
-        DoubleMatrix theta = new DoubleEpsilonIterator(normalized.width() + 1, 1, 0.2d);
-
-        GradientDecent function = new GradientDecent(Layer.of(normalized), output, 0.9d);
+        GradientDecent function = new GradientDecent(Layer.of(input), output, 1d);
         Cost cost = new Until(theta).repeat(30).by(function);
-//        DoubleMatrix matrix = Fmincg.asMinimize(function, theta, 50);
-        StdOperator std = input.head().std();
-        double in = ((8 / height - std.avg().getValue()) / std.getValue());
-        DenseDoubleMatrix test = DenseDoubleMatrix.of(w + 1, new double[]{1, in});
-//        DenseDoubleMatrix test = DenseDoubleMatrix.of(w + 1, new double[]{1, in, height, parallelism});
-        DoubleMatrix result = test.product(cost.theta()).invoke();
-        System.out.println("result:" + result);
+//        DoubleMatrix expect = Fmincg.asMinimize(function, theta, 50);
+        expect(4, height, w, input, cost.theta());
+        expect(8, height, w, input, cost.theta());
 
-        System.out.println("theta:" + cost.theta());
-//        System.out.println(matrix);
+    }
+
+    private void expect(int size, int height, int w, DenseDoubleMatrix input, DoubleMatrix expect) {
+        StdOperator std = input.head().std();
+        double in = ((size / height - std.avg().getValue()) / std.getValue());
+        DenseDoubleMatrix test = DenseDoubleMatrix.of(w + 1, new double[]{1, size});
+//        DenseDoubleMatrix test = DenseDoubleMatrix.of(w + 1, new double[]{1, in, height, parallelism});
+        DoubleMatrix result = test.product(expect).invoke();
+        System.out.println(in + " result:" + result);
+        System.out.println(expect);
+    }
+
+    @Test
+    public void testSplit() throws IOException {
+        double[] data = read("ml/split");
+        DenseDoubleMatrix matrix = DenseDoubleMatrix.of(2, data);
+        Layer input = Layer.of(matrix.head());
+        DoubleMatrix output = matrix.tail();
+
+        GradientDecent gradient = new GradientDecent(input, output, 1d);
+        DoubleMatrix theta = new DoubleIterator(0d, 2, 1);
+
+        DoubleMatrix decent = new Until(theta).repeat(50).by(gradient).theta();
+        System.out.println(decent);
     }
 }
