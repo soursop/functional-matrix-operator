@@ -43,16 +43,29 @@ public class GradientDecentTest {
 
     @Test
     public void testRegularization() throws IOException {
-        double[] data = read("ml/2x_house.csv");
-        DenseDoubleMatrix matrix = DenseDoubleMatrix.of(3, data);
-        DoubleMatrix input = Normalized.of(matrix.init());
-        DoubleMatrix output = matrix.last();
-        DoubleMatrix theta = new DoubleIterator(0, 1, 3);
-        Regression regression = new Regression(input, output, Activation.DEFAULT, 0.01d);
-//        DoubleMatrix matrix1 = Fmincg.asMinimize(regression, theta, 40);
-        Cost cost = new Until(theta).repeat(20).by(regression);
-        System.out.println(cost.theta());
+        double[] x = read("ml/1x_liner.csv");
+        double[] y = read("ml/1y_liner.csv");
+        DenseDoubleMatrix input = DenseDoubleMatrix.of(1, x);
+        DenseDoubleMatrix output = DenseDoubleMatrix.of(1, y);
+        DoubleMatrix theta = new DoubleIterator(1, 1, 2);
+        Regression regression = new Regression(input, output, Activation.DEFAULT, 1d);
+        Cost gradient = regression.gradient(theta);
+        print("[Cost at theta = [1 ; 1]: %f ...\n" +
+                "         (this value should be about 303.993192)], J", gradient.cost());
+        print("[Gradient at theta = [1 ; 1]:  [%f; %f] ...\n" +
+                "         (this value should be about [-15.303016; 598.250744])]", gradient.theta().valueOf(0), gradient.theta().valueOf(1));
+    }
 
+    @Test
+    public void testFmincgRegularization() throws IOException {
+        double[] x = read("ml/1x_liner.csv");
+        double[] y = read("ml/1y_liner.csv");
+        DenseDoubleMatrix input = DenseDoubleMatrix.of(1, x);
+        DenseDoubleMatrix output = DenseDoubleMatrix.of(1, y);
+        DoubleMatrix theta = new DoubleIterator(0, 1, 2);
+        Regression regression = new Regression(input, output, Activation.DEFAULT, 0);
+        DoubleMatrix result = Fmincg.asMinimize(regression, theta, 200);
+        System.out.println(result);
     }
 
 }
