@@ -85,4 +85,24 @@ public class NeuralNetworkTest {
         }
         System.out.println("Training Set Accuracy:" + (double) hit / predict.size());
     }
+
+    @Test
+    public void testGradientChecking() {
+        int inputLayer = 3;
+        int hiddenLayer = 5;
+        int numLebels = 3;
+        int m = 5;
+
+        int seed = 0;
+        DoubleMatrix theta1 = new DoubleEpsilonIterator(hiddenLayer, inputLayer, seed,0.12d);
+        DoubleMatrix theta2 = new DoubleEpsilonIterator(numLebels, hiddenLayer, seed, 0.12d);
+        FoldDoubleMatrix thetas = FoldDoubleMatrix.of(theta1, theta2);
+        DoubleMatrix x = new DoubleEpsilonIterator(m, inputLayer - 1, seed,0.12d);
+        DenseDoubleMatrix y = DenseDoubleMatrix.of(new double[]{2, 3, 1, 2, 3});
+        NeuralNetwork neuralNetwork = new NeuralNetwork(x, y, Activation.SIGMOID, thetas.pos(), 0d);
+        GradientChecking checking = new GradientChecking(thetas);
+        DoubleMatrix gradient = checking.gradient(thetas, neuralNetwork);
+        System.out.println(gradient);
+
+    }
 }

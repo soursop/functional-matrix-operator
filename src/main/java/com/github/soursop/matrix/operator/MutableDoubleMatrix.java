@@ -44,6 +44,10 @@ public class MutableDoubleMatrix extends AbstractDoubleMatrix {
         return values;
     }
 
+    public void set(int idx, double v) {
+        values[idx] = v;
+    }
+
     @Override
     public double valueOf(int height, int width) {
         return values[height * width() + width];
