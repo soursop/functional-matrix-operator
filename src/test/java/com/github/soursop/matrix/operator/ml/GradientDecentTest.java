@@ -27,6 +27,23 @@ public class GradientDecentTest {
     }
 
     @Test
+    public void testSingleMr() throws IOException {
+        // BYTES_READ,DAY_OF_MONTH,DAY_OF_WEEK,HOUR_OF_DAY,TOTAL_LAUNCHED_REDUCES
+        double[] data = read("ml/mr_reducer_time.csv");
+        DenseDoubleMatrix matrix = DenseDoubleMatrix.of(6, data);
+        Layer input = Layer.of(Normalized.of(matrix.init()));
+        DoubleMatrix output = matrix.last();
+
+        GradientDecent gradient = new GradientDecent(input, output, 0.01d);
+        DoubleMatrix theta = new DoubleIterator(0d, 6, 1);
+        print("Expected cost value (approx) 715081549147.849600 : %f", gradient.cost(theta));
+
+        DoubleMatrix decent = new Until(theta).repeat(1000).by(gradient).theta();
+        print("Expected theta values (approx) :");
+        System.out.println(decent);
+    }
+
+    @Test
     public void testMulti() throws IOException {
         double[] data = read("ml/2x_house.csv");
         DenseDoubleMatrix matrix = DenseDoubleMatrix.of(3, data);
