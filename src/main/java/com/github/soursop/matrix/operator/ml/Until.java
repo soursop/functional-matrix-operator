@@ -28,7 +28,7 @@ public class Until {
             for (int i = 0; i < repeat; i++) {
                 cost = gradient.gradient(cost.theta());
                 if (LOG.isInfoEnabled()) {
-                    LOG.info("Iteration " + i + " | Cost: " + cost.cost());
+                    LOG.info("Iteration " + i + String.format(" | Cost: %.5f", cost.cost()));
                 }
             }
             return cost;
