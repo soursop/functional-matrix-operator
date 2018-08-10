@@ -5,6 +5,7 @@ import java.util.List;
 public interface DoubleMatrix extends Matrix, Transposable<DoubleMatrix> {
     double valueOf(int height, int width);
     double valueOf(int idx);
+    double[] row(int row);
     double[] values();
     int[] pos();
     DoubleMatrix transpose();

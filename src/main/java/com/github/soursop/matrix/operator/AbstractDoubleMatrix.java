@@ -128,6 +128,16 @@ public abstract class AbstractDoubleMatrix extends AbstractOperator<DoubleMatrix
     }
 
     @Override
+    public double[] row(int row) {
+        double[] doubles = new double[width()];
+        int from = row * width();
+        for (int i = 0; i < doubles.length; i++) {
+            doubles[i] = valueOf(from + i);
+        }
+        return doubles;
+    }
+
+    @Override
     public int[] pos() {
         return new int[]{height(), width()};
     }
