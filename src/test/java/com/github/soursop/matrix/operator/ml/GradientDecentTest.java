@@ -4,9 +4,14 @@ import com.github.soursop.matrix.operator.*;
 
 import static com.github.soursop.matrix.operator.utils.Utils.*;
 
+import com.google.common.collect.Lists;
+import com.google.common.primitives.Doubles;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.math3.util.DoubleArray;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class GradientDecentTest {
 
@@ -26,26 +31,6 @@ public class GradientDecentTest {
         print("-3.6303\t1.1664 : %f\t%f", decent.valueOf(0), decent.valueOf(1));
     }
 
-    /**
-     * features : BYTES_READ,DAY_OF_MONTH,DAY_OF_WEEK,HOUR_OF_DAY,SEGMENT_SIZE,TOTAL_LAUNCHED_REDUCES,ELAPSED_MILLISECONDS
-     * @throws IOException
-     */
-    @Test
-    public void testSingleMr() throws IOException {
-        double[] data = read("ml/mr_reducer_time.csv");
-        DenseDoubleMatrix matrix = DenseDoubleMatrix.of(7, data);
-        Layer input = Layer.of(Normalized.of(matrix.init()));
-        DoubleMatrix output = matrix.last();
-
-        GradientDecent gradient = new GradientDecent(input, output, 0.01d);
-        DoubleMatrix theta = new DoubleIterator(0d, 7, 1);
-        print("Expected cost value (approx) 715081549147.849600 : %f", gradient.cost(theta));
-
-        DoubleMatrix decent = new Until(theta).repeat(1000).by(gradient).theta();
-        print("Expected theta values (approx) :");
-        System.out.println(decent);
-    }
-
     @Test
     public void testMulti() throws IOException {
         double[] data = read("ml/2x_house.csv");
@@ -59,6 +44,30 @@ public class GradientDecentTest {
         print("Expected theta values (approx) :");
         print("334300\t100090\t3673.5 : %f\t%f\t%f", decent.valueOf(0), decent.valueOf(1), decent.valueOf(2));
         print("Expected cost value (approx) 2108900000 : %f", gradient.cost(decent));
+    }
+
+    /**
+     * features : BYTES_READ,DAY_OF_MONTH,DAY_OF_WEEK,HOUR_OF_DAY,SEGMENT_SIZE^2,SEGMENT_SIZE,TOTAL_LAUNCHED_REDUCES,ELAPSED_MILLISECONDS
+     * @throws IOException
+     */
+    @Test
+    public void testSingleMr() throws IOException {
+        int idx = 0;
+        double[] data = read("ml/mr_reducer_time.csv");
+        DenseDoubleMatrix matrix = DenseDoubleMatrix.of(8, data);
+        Normalized normalized = Normalized.of(matrix.init());
+        Layer input = Layer.of(normalized);
+        DoubleMatrix output = matrix.last();
+        System.out.println(Doubles.asList(matrix.row(idx)));
+        System.out.println(Doubles.asList(normalized.row(idx)));
+
+        GradientDecent gradient = new GradientDecent(input, output, 0.01d);
+        DoubleMatrix theta = new DoubleIterator(0d, 8, 1);
+        print("Expected cost value (approx) 715081549147.849600 : %f", gradient.cost(theta));
+
+        DoubleMatrix decent = new Until(theta).repeat(1000).by(gradient).theta();
+        print("Expected theta values (approx) :");
+        System.out.println(decent);
     }
 
     @Test
